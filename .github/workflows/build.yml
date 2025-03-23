@@ -38,12 +38,9 @@ jobs:
       with:
         name: fabric-${{ github.sha }}
         path: fabric/build/libs/*.jar
-        flatten: true
     
     - name: Upload NeoForge artifact
       uses: actions/upload-artifact@v4
       with:
         name: neoforge-${{ github.sha }}
         path: neoforge/build/libs/*.jar
-        flatten: true
-
