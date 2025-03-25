@@ -3,7 +3,7 @@
   "description": "haha debug",
   "behaviours": [
     {
-      "id": "votvevents:broadcastChatMessage",
+      "id": "votvevents:broadcast_chat_message",
       "properties": {
         "message": {
           "color": "yellow",
@@ -15,12 +15,12 @@
   ],
   "run_conditions": [
     {
-      "id": "votvevents:debugModeCondition"
+      "id": "votvevents:debug_mode_condition"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:debugModeCondition"
+      "id": "votvevents:debug_mode_condition"
     }
   ]
 }
