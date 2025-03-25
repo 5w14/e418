@@ -1,0 +1,25 @@
+{
+  "name": "Is Night",
+  "description": "Debug event that works only at night",
+  "behaviours": [
+    {
+      "id": "votvevents:broadcast_chat_message",
+      "properties": {
+        "message": {
+          "color": "green",
+          "text": "Event was started at night"
+        }
+      }
+    }
+  ],
+  "run_conditions": [
+    {
+      "id": "votvevents:is_night"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "id": "votvevents:is_night"
+    }
+  ]
+}
