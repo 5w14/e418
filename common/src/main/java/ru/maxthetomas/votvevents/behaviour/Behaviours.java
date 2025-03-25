@@ -4,8 +4,9 @@ import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.impl.BroadcastChatMessageBehaviour;
-import ru.maxthetomas.votvevents.behaviour.impl.MakeConsumable;
+import ru.maxthetomas.votvevents.behaviour.impl.MakeConsumableBehaviour;
 import ru.maxthetomas.votvevents.behaviour.impl.PlaySoundBehaviour;
+import ru.maxthetomas.votvevents.behaviour.impl.TeleportPlayerBehaviour;
 
 import java.util.HashMap;
 
@@ -16,7 +17,8 @@ public class Behaviours {
     });
     public static final Builder BROADCAST_CHAT_MESSAGE = register("broadcast_chat_message", BroadcastChatMessageBehaviour::new);
     public static final Builder PLAY_SOUND = register("play_sound", PlaySoundBehaviour::new);
-    public static final Builder MAKE_CONSUMABLE = register("make_consumable", MakeConsumable::new);
+    public static final Builder MAKE_CONSUMABLE = register("make_consumable", MakeConsumableBehaviour::new);
+    public static final Builder TELEPORT_PLAYER = register("teleport_player", TeleportPlayerBehaviour::new);
 
     public static IBehaviour createBehaviour(ResourceLocation name, JsonElement jsonObject) {
         return getBehaviourBuilder(name).apply(jsonObject);

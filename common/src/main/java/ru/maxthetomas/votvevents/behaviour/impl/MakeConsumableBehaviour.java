@@ -7,11 +7,11 @@ import net.minecraft.world.item.component.Consumable;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
 
-public class MakeConsumable implements IBehaviour {
+public class MakeConsumableBehaviour implements IBehaviour {
     private float consumeSeconds = 2;
     private boolean hasConsumeParticles = false;
 
-    public MakeConsumable(JsonElement properties) {
+    public MakeConsumableBehaviour(JsonElement properties) {
         if (properties.getAsJsonObject().has("consume_seconds")) {
             consumeSeconds = properties.getAsJsonObject().get("consume_seconds").getAsFloat();
         }
