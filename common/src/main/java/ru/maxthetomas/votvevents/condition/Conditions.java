@@ -3,6 +3,7 @@ package ru.maxthetomas.votvevents.condition;
 import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
+import ru.maxthetomas.votvevents.config.Config;
 
 import java.util.HashMap;
 
@@ -10,6 +11,7 @@ public class Conditions {
     private static final HashMap<ResourceLocation, Builder> conditions = new HashMap<>();
 
     public static final Builder ALWAYS = register("always", (json) -> (ctx) -> true);
+    public static final Builder DEBUG_MODE = register("debug_mode_condition", (json) -> (ctx) -> Config.isDebug());
 
     public static ICondition createCondition(ResourceLocation name, JsonElement jsonObject) {
         return getConditionBuilder(name).apply(jsonObject);
