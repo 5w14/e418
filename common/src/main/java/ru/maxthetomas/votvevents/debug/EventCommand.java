@@ -26,7 +26,7 @@ public class EventCommand {
             CommandBuildContext context, Commands.CommandSelection selection) {
 
         dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("event")
-                .then(forceExecuteEvent())
+                .then(startSubcommand())
                 .then(printEvents())
         );
 
@@ -36,7 +36,7 @@ public class EventCommand {
     /**
      * Creates a argument tree for the /event start command
      */
-    private static LiteralArgumentBuilder<CommandSourceStack> forceExecuteEvent() {
+    private static LiteralArgumentBuilder<CommandSourceStack> startSubcommand() {
         return LiteralArgumentBuilder.<CommandSourceStack>literal("start")
                 .then(
                         RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("event", ResourceLocationArgument.id())
@@ -85,8 +85,12 @@ public class EventCommand {
         context.getSource().sendSuccess(
                 () -> Component.translatable("votvevents.commands.event.start.success" + (isForced ? ".force" : ""),
                         Component.literal(event.getName()).withStyle(style ->
-                                style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                        Component.literal(event.getDescription()))))),
+                                style.withUnderlined(true)
+                                        .withHoverEvent(
+                                                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                                        Component.literal(event.getDescription()))
+                                        )
+                        )),
                 true);
 
 
@@ -101,7 +105,7 @@ public class EventCommand {
                 () -> Component.translatable("votvevents.commands.event.print",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getRegisteredEvents(),
                                 (e) -> Component.literal(" - " + e))),
-                true);
+                false);
 
         return 1;
     }

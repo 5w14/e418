@@ -15,7 +15,7 @@ import java.util.List;
  * Event resource.
  */
 public class EventResource {
-    List<IBehaviour> behaviourList;
+    List<PreActiveBehaviour> behaviourList;
     List<ICondition> runConditions;
     List<ICondition> queueConditions;
 
@@ -31,7 +31,7 @@ public class EventResource {
      * @param runConditions   Run conditions of event
      * @param queueConditions Queue conditions of event
      */
-    public EventResource(String name, String description, List<IBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
+    public EventResource(String name, String description, List<PreActiveBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
         this.name = name;
         this.description = description;
         this.behaviourList = behaviourList;
@@ -50,14 +50,14 @@ public class EventResource {
             var description = json.get("description").getAsString();
 
             // Setup behaviours from JSON
-            List<IBehaviour> behaviours = new ArrayList<>();
+            List<PreActiveBehaviour> behaviours = new ArrayList<>();
             var jsonBehaviours = json.get("behaviours").getAsJsonArray();
             for (JsonElement jsonElement : jsonBehaviours) {
                 var jsonBehaviour = jsonElement.getAsJsonObject();
                 var id = jsonBehaviour.get("id").getAsString();
                 var nullableProperties = jsonBehaviour.get("properties");
-                var behaviour = Behaviours.createBehaviour(ResourceLocation.tryParse(id), nullableProperties);
-                behaviours.add(behaviour);
+                var behaviour = Behaviours.getBehaviourBuilder(ResourceLocation.tryParse(id));
+                behaviours.add(new PreActiveBehaviour(behaviour, nullableProperties));
             }
 
             // Setup run conditions from JSON
@@ -101,10 +101,11 @@ public class EventResource {
                 }
             }
         }
-        
+
         // Check if all behaviours can run
-        for (IBehaviour behaviour : behaviourList) {
-            if (!behaviour.canRun(context)) {
+        for (PreActiveBehaviour preActiveBehaviour : behaviourList) {
+            // todo find a better way to check if behaviour can run
+            if (!preActiveBehaviour.create().canRun(context)) {
                 return false;
             }
         }
@@ -139,5 +140,11 @@ public class EventResource {
 
     public String getDescription() {
         return description;
+    }
+
+    public record PreActiveBehaviour(Behaviours.Builder behaviour, JsonElement properties) {
+        public IBehaviour create() {
+            return behaviour.apply(properties);
+        }
     }
 }

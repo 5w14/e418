@@ -55,8 +55,10 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
 
         LOGGER.info("Started event {}", resource.name);
 
-        for (IBehaviour behaviour : activeEvent.resource.behaviourList) {
+        for (var preActiveBehaviour : activeEvent.resource.behaviourList) {
+            var behaviour = preActiveBehaviour.create();
             behaviour.execute(context);
+            activeEvent.activeBehaviours.add(behaviour);
         }
 
         activeEvent.updateState();
@@ -72,7 +74,7 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
     public void endEvent(ActiveEvent event) {
         LOGGER.info("Ended event {}", event.resource.name);
 
-        for (IBehaviour behaviour : event.resource.behaviourList) {
+        for (IBehaviour behaviour : event.activeBehaviours) {
             behaviour.dispose(event.context);
         }
 
