@@ -1,6 +1,5 @@
 package ru.maxthetomas.votvevents.event;
 
-import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -9,26 +8,33 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.util.ResourceUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EventManager extends SimplePreparableReloadListener<List<JsonElement>> {
+public class EventManager extends SimplePreparableReloadListener<List<EventResource>> {
     private static final Logger LOGGER = LogUtils.getLogger();
-    List<JsonElement> registeredEvents;
+    private List<EventResource> registeredEvents;
 
     @Override
-    protected @NotNull List<JsonElement> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        var event = ResourceUtil.getJsonResource(resourceManager, "events/test_event.json");
+    protected @NotNull List<EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        var events = new ArrayList<EventResource>();
 
-        if (event == null) {
-            LOGGER.warn("Could not load event file!");
-            return List.of();
-        }
+        resourceManager.listResources("events", (path) -> path.getPath().endsWith(".json")).forEach((a, b) -> {
+            var evt = ResourceUtil.getJsonResource(resourceManager, a);
 
-        return List.of(event);
+            if (evt == null || !evt.isJsonObject())
+                return;
+
+            // TODO: change constructor to a static generator method
+            var res = new EventResource(evt.getAsJsonObject());
+            events.add(res);
+        });
+
+        return events;
     }
 
     @Override
-    protected void apply(List<JsonElement> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected void apply(List<EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         this.registeredEvents = object;
         LOGGER.info("Successfully reloaded events!");
     }
