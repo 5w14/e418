@@ -26,7 +26,11 @@ public class EventManager extends SimplePreparableReloadListener<List<EventResou
                 return;
 
             // TODO: change constructor to a static generator method
-            var res = new EventResource(evt.getAsJsonObject());
+            var res = EventResource.buildEventResourceFromJson(evt.getAsJsonObject());
+
+            if (res == null)
+                return;
+
             events.add(res);
         });
 

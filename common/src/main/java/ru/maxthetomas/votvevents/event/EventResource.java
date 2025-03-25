@@ -2,6 +2,8 @@ package ru.maxthetomas.votvevents.event;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.condition.ICondition;
 
@@ -11,6 +13,8 @@ import java.util.List;
  * Event resource.
  */
 public class EventResource {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     List<IBehaviour> behaviourList;
     List<ICondition> runConditions;
     List<ICondition> queueConditions;
@@ -40,64 +44,76 @@ public class EventResource {
      * Constructs event from JSON
      * @param json JSON to use for construction
      */
-    public EventResource(JsonObject json)
+    public static EventResource buildEventResourceFromJson(JsonObject json)
     {
-        this.name = json.get("name").getAsString();
-        this.description = json.get("description").getAsString();
+        try {
+            var name = json.get("name").getAsString();
+            var description = json.get("description").getAsString();
 
-        // Setup behaviours from JSON
-        var jsonBehaviours = json.get("behaviours").getAsJsonArray();
-        for (JsonElement jsonElement : jsonBehaviours)
+            // Setup behaviours from JSON
+            List<IBehaviour> behaviours = List.of();
+            var jsonBehaviours = json.get("behaviours").getAsJsonArray();
+            for (JsonElement jsonElement : jsonBehaviours)
+            {
+                var jsonBehaviour = jsonElement.getAsJsonObject();
+                var id = jsonBehaviour.get("id").getAsString();
+                var nullableProperties = jsonBehaviour.get("properties");
+
+                // TODO: actually add behaviours
+                if (nullableProperties != null){
+                    var properties = nullableProperties.getAsJsonObject();
+                    // initialization with properties
+                }
+                else {
+                    // empty initialization
+                }
+            }
+
+            // Setup run conditions from JSON
+            List<ICondition> runConditions = List.of();
+            var jsonRunConditions = json.get("run_conditions").getAsJsonArray();
+            for (JsonElement jsonElement : jsonRunConditions)
+            {
+                var jsonBehaviour = jsonElement.getAsJsonObject();
+                var id = jsonBehaviour.get("id").getAsString();
+                var nullableProperties = jsonBehaviour.get("properties");
+
+                // TODO: actually add behaviours
+                if (nullableProperties != null){
+                    var properties = nullableProperties.getAsJsonObject();
+                    // initialization with properties
+                }
+                else {
+                    // empty initialization
+                }
+            }
+
+            // Setup queue conditions from JSON
+            List<ICondition> queueConditions = List.of();
+            var jsonQueueConditions = json.get("run_conditions").getAsJsonArray();
+            for (JsonElement jsonElement : jsonQueueConditions)
+            {
+                var jsonBehaviour = jsonElement.getAsJsonObject();
+                var id = jsonBehaviour.get("id").getAsString();
+                var nullableProperties = jsonBehaviour.get("properties");
+
+                // TODO: actually add behaviours
+                if (nullableProperties != null){
+                    var properties = nullableProperties.getAsJsonObject();
+                    // initialization with properties
+                }
+                else {
+                    // empty initialization
+                }
+            }
+            return new EventResource(name, description, behaviours, runConditions, queueConditions);
+        }
+        catch (IllegalStateException | UnsupportedOperationException | NullPointerException e)
         {
-            var jsonBehaviour = jsonElement.getAsJsonObject();
-            var id = jsonBehaviour.get("id").getAsString();
-            var nullableProperties = jsonBehaviour.get("properties");
-
-            // TODO: actually add behaviours
-            if (nullableProperties != null){
-                var properties = nullableProperties.getAsJsonObject();
-                // initialization with properties
-            }
-            else {
-                // empty initialization
-            }
+            return null;
         }
 
-        // Setup run conditions from JSON
-        var jsonRunConditions = json.get("run_conditions").getAsJsonArray();
-        for (JsonElement jsonElement : jsonRunConditions)
-        {
-            var jsonBehaviour = jsonElement.getAsJsonObject();
-            var id = jsonBehaviour.get("id").getAsString();
-            var nullableProperties = jsonBehaviour.get("properties");
 
-            // TODO: actually add behaviours
-            if (nullableProperties != null){
-                var properties = nullableProperties.getAsJsonObject();
-                // initialization with properties
-            }
-            else {
-                // empty initialization
-            }
-        }
-
-        // Setup queue conditions from JSON
-        var jsonQueueConditions = json.get("run_conditions").getAsJsonArray();
-        for (JsonElement jsonElement : jsonQueueConditions)
-        {
-            var jsonBehaviour = jsonElement.getAsJsonObject();
-            var id = jsonBehaviour.get("id").getAsString();
-            var nullableProperties = jsonBehaviour.get("properties");
-
-            // TODO: actually add behaviours
-            if (nullableProperties != null){
-                var properties = nullableProperties.getAsJsonObject();
-                // initialization with properties
-            }
-            else {
-                // empty initialization
-            }
-        }
     }
 
     /**
