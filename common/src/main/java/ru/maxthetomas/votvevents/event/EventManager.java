@@ -29,7 +29,7 @@ public class EventManager extends SimplePreparableReloadListener<List<EventResou
 
             var res = EventResource.buildEventResourceFromJson(evt.getAsJsonObject());
 
-            if (res == null){
+            if (res == null) {
                 LOGGER.warn("Failed to parse event resource at location {}", a);
                 return;
             }

@@ -2,37 +2,38 @@ package ru.maxthetomas.votvevents.event;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import ru.maxthetomas.votvevents.VotvEvents;
+import ru.maxthetomas.votvevents.behaviour.Behaviours;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.condition.Conditions;
 import ru.maxthetomas.votvevents.condition.ICondition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Event resource.
  */
 public class EventResource {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     List<IBehaviour> behaviourList;
     List<ICondition> runConditions;
     List<ICondition> queueConditions;
 
-    // TODO: cool minecraft formatted strings
-    String name;
-    String description;
+    Component name;
+    Component description;
 
     /**
      * Constructs event
-     * @param name Name of event
-     * @param description Description of event
-     * @param behaviourList Behaviour of event
-     * @param runConditions Run conditions of event
+     *
+     * @param name            Name of event
+     * @param description     Description of event
+     * @param behaviourList   Behaviour of event
+     * @param runConditions   Run conditions of event
      * @param queueConditions Queue conditions of event
      */
-    public EventResource(String name, String description, List<IBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions)
-    {
+    public EventResource(Component name, Component description, List<IBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
         this.name = name;
         this.description = description;
         this.behaviourList = behaviourList;
@@ -42,98 +43,73 @@ public class EventResource {
 
     /**
      * Constructs event from JSON
+     *
      * @param json JSON to use for construction
      */
-    public static EventResource buildEventResourceFromJson(JsonObject json)
-    {
+    public static EventResource buildEventResourceFromJson(JsonObject json) {
         try {
-            var name = json.get("name").getAsString();
-            var description = json.get("description").getAsString();
+            var nameObj = json.get("name").getAsString();
+            var descriptionObj = json.get("description").getAsString();
+
+            var name = Component.Serializer.fromJson(nameObj,
+                    VotvEvents.getCurrentServer().orElseThrow().registryAccess());
+            var description = Component.Serializer.fromJson(descriptionObj,
+                    VotvEvents.getCurrentServer().orElseThrow().registryAccess());
 
             // Setup behaviours from JSON
-            List<IBehaviour> behaviours = List.of();
+            List<IBehaviour> behaviours = new ArrayList<>();
             var jsonBehaviours = json.get("behaviours").getAsJsonArray();
-            for (JsonElement jsonElement : jsonBehaviours)
-            {
+            for (JsonElement jsonElement : jsonBehaviours) {
                 var jsonBehaviour = jsonElement.getAsJsonObject();
                 var id = jsonBehaviour.get("id").getAsString();
                 var nullableProperties = jsonBehaviour.get("properties");
-
-                // TODO: actually add behaviours
-                if (nullableProperties != null){
-                    var properties = nullableProperties.getAsJsonObject();
-                    // initialization with properties
-                }
-                else {
-                    // empty initialization
-                }
+                var behaviour = Behaviours.createBehaviour(ResourceLocation.tryParse(id), nullableProperties);
+                behaviours.add(behaviour);
             }
 
             // Setup run conditions from JSON
-            List<ICondition> runConditions = List.of();
+            List<ICondition> runConditions = new ArrayList<>();
             var jsonRunConditions = json.get("run_conditions").getAsJsonArray();
-            for (JsonElement jsonElement : jsonRunConditions)
-            {
+            for (JsonElement jsonElement : jsonRunConditions) {
                 var jsonBehaviour = jsonElement.getAsJsonObject();
                 var id = jsonBehaviour.get("id").getAsString();
                 var nullableProperties = jsonBehaviour.get("properties");
-
-                // TODO: actually add behaviours
-                if (nullableProperties != null){
-                    var properties = nullableProperties.getAsJsonObject();
-                    // initialization with properties
-                }
-                else {
-                    // empty initialization
-                }
+                var condition = Conditions.createCondition(ResourceLocation.tryParse(id), nullableProperties);
+                runConditions.add(condition);
             }
 
             // Setup queue conditions from JSON
-            List<ICondition> queueConditions = List.of();
+            List<ICondition> queueConditions = new ArrayList<>();
             var jsonQueueConditions = json.get("run_conditions").getAsJsonArray();
-            for (JsonElement jsonElement : jsonQueueConditions)
-            {
+            for (JsonElement jsonElement : jsonQueueConditions) {
                 var jsonBehaviour = jsonElement.getAsJsonObject();
                 var id = jsonBehaviour.get("id").getAsString();
                 var nullableProperties = jsonBehaviour.get("properties");
-
-                // TODO: actually add behaviours
-                if (nullableProperties != null){
-                    var properties = nullableProperties.getAsJsonObject();
-                    // initialization with properties
-                }
-                else {
-                    // empty initialization
-                }
+                var condition = Conditions.createCondition(ResourceLocation.tryParse(id), nullableProperties);
+                runConditions.add(condition);
             }
             return new EventResource(name, description, behaviours, runConditions, queueConditions);
-        }
-        catch (IllegalStateException | UnsupportedOperationException | NullPointerException e)
-        {
+        } catch (IllegalStateException | UnsupportedOperationException | NullPointerException e) {
             return null;
         }
-
-
     }
 
     /**
      * Checks if this event can run.
+     *
      * @return Is event can run at this moment
      */
-    public boolean canRun()
-    {
+    public boolean canRun(EventContext context) {
         // Check if conditions to run are met
-        for (ICondition condition : runConditions){
-            if (!condition.check())
-            {
+        for (ICondition condition : runConditions) {
+            if (!condition.check(context)) {
                 return false;
             }
         }
 
         // Check if all behaviours can run
-        for (IBehaviour behaviour : behaviourList){
-            if (!behaviour.canRun())
-            {
+        for (IBehaviour behaviour : behaviourList) {
+            if (!behaviour.canRun(context)) {
                 return false;
             }
         }
@@ -144,20 +120,17 @@ public class EventResource {
     /**
      * Checks if this event can be queued.
      * If event can't run, it will usually be queued to wait when it can run.
+     *
      * @return Is event can be queued at this moment
      */
-    public boolean canQueue()
-    {
+    public boolean canQueue(EventContext context) {
         // Check if conditions to queue are met
-        for (ICondition condition : queueConditions){
-            if (!condition.check())
-            {
+        for (ICondition condition : queueConditions) {
+            if (!condition.check(context)) {
                 return false;
             }
         }
 
         return true;
     }
-
-
 }
