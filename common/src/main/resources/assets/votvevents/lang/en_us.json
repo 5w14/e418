@@ -1,0 +1,5 @@
+{
+  "votvevents.commands.event.start.not_found": "Event not found",
+  "votvevents.commands.event.start.success": "Started %s",
+  "votvevents.commands.event.start.success.force": "Forcefully started %s"
+}

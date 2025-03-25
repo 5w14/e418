@@ -6,13 +6,16 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.util.ResourceUtil;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class EventManager extends SimplePreparableReloadListener<HashMap<ResourceLocation, EventResource>> {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -39,7 +42,10 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
                 return;
             }
 
-            events.put(loc, res);
+            var ns = loc.getNamespace();
+            var p = loc.getPath().replace(".json", "").replace("events/", "");
+
+            events.put(ResourceLocation.fromNamespaceAndPath(ns, p), res);
         });
 
         return events;
@@ -94,5 +100,13 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
 
     public boolean isNotDisposed(ActiveEvent event) {
         return activeEvents.contains(event);
+    }
+
+    public @Nullable EventResource getEvent(ResourceLocation location) {
+        return this.registeredEvents.getOrDefault(location, null);
+    }
+
+    public Set<ResourceLocation> getRegisteredEvents() {
+        return registeredEvents.keySet();
     }
 }
