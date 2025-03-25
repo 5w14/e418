@@ -21,4 +21,8 @@ public interface IBehaviour {
     }
 
     void execute(EventContext context);
+
+    default void dispose(EventContext context) {
+
+    }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 public class EventManager extends SimplePreparableReloadListener<List<EventResource>> {
     private static final Logger LOGGER = LogUtils.getLogger();
     private List<EventResource> registeredEvents;
+    public List<ActiveEvent> activeEvents = new ArrayList<>();
 
     @Override
     protected @NotNull List<EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
@@ -44,5 +45,13 @@ public class EventManager extends SimplePreparableReloadListener<List<EventResou
     protected void apply(List<EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         this.registeredEvents = object;
         LOGGER.info("Successfully reloaded events!");
+    }
+
+    public ActiveEvent runEvent(EventResource resource, EventContext context, boolean forced) {
+        if (resource.canRun(context, forced))
+            return null;
+
+
+        return null;
     }
 }

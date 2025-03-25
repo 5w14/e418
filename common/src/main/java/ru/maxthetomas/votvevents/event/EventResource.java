@@ -99,14 +99,16 @@ public class EventResource {
      *
      * @return Is event can run at this moment
      */
-    public boolean canRun(EventContext context) {
-        // Check if conditions to run are met
-        for (ICondition condition : runConditions) {
-            if (!condition.check(context)) {
-                return false;
+    public boolean canRun(EventContext context, boolean ignoreRunConditions) {
+        if (!ignoreRunConditions) {
+            // Check if conditions to run are met
+            for (ICondition condition : runConditions) {
+                if (!condition.check(context)) {
+                    return false;
+                }
             }
         }
-
+        
         // Check if all behaviours can run
         for (IBehaviour behaviour : behaviourList) {
             if (!behaviour.canRun(context)) {
@@ -115,6 +117,10 @@ public class EventResource {
         }
 
         return true;
+    }
+
+    public boolean canRun(EventContext context) {
+        return canRun(context, false);
     }
 
     /**
