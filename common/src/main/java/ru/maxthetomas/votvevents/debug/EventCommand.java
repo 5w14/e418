@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
+import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -51,7 +52,7 @@ public class EventCommand {
      */
     private static int executeStartSubommand(CommandContext<CommandSourceStack> context) {
         var eventLoc = ResourceLocationArgument.getId(context, "event");
-        var isForce = context.getNodes().getLast().getNode().getName().equals("force");
+        var isForced = context.getNodes().getLast().getNode().getName().equals("force");
 
         var manager = VotvEvents.getEventManager();
         var event = manager.getEvent(eventLoc);
@@ -64,11 +65,15 @@ public class EventCommand {
             return 0;
         }
 
-        // TODO implement event
+        var eventContext = new EventContext(context.getSource().getServer())
+                .withPlayer(context.getSource().getPlayer());
+
+        // TODO: handle if event failed (it would be null)
+        var activeEvent = VotvEvents.getEventManager().runEvent(event, eventContext, isForced);
 
         // Sends a success message, with the event name and description as hover text
         context.getSource().sendSuccess(
-                () -> Component.translatable("votvevents.commands.event.start.success" + (isForce ? ".force" : ""),
+                () -> Component.translatable("votvevents.commands.event.start.success" + (isForced ? ".force" : ""),
                         Component.literal(event.getName()).withStyle(style ->
                                 style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         Component.literal(event.getDescription()))))),

@@ -53,6 +53,8 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
 
         activeEvents.add(activeEvent);
 
+        LOGGER.info("Started event {}", resource.name);
+
         for (IBehaviour behaviour : activeEvent.resource.behaviourList) {
             behaviour.execute(context);
         }
@@ -68,6 +70,8 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
      * @param event Event to stop.
      */
     public void endEvent(ActiveEvent event) {
+        LOGGER.info("Disposed event {}", event.resource.name);
+
         for (IBehaviour behaviour : event.resource.behaviourList) {
             behaviour.dispose(event.context);
         }
