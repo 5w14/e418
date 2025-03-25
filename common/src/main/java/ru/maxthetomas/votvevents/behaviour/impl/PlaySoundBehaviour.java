@@ -26,6 +26,8 @@ public class PlaySoundBehaviour implements IBehaviour {
             pitch = properties.getAsJsonObject().get("pitch").getAsFloat();
         }
 
+        // TODO: add sound source (category)
+        // TODO: add range
     }
 
     @Override

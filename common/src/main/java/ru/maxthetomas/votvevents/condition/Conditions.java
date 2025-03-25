@@ -3,6 +3,7 @@ package ru.maxthetomas.votvevents.condition;
 import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
+import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
 import ru.maxthetomas.votvevents.config.Config;
 
 import java.util.HashMap;

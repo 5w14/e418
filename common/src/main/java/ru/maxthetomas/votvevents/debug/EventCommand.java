@@ -121,9 +121,8 @@ public class EventCommand {
 
         VotvEvents.getEventManager().getRegisteredEvents()
                 .stream()
-                .map(ResourceLocation::toString)
-                .filter(e -> e.startsWith(input))
-                .forEach(builder::suggest);
+                .filter(e -> e.toString().startsWith(input))
+                .forEach((e) -> builder.suggest(e.toString(), Component.literal(VotvEvents.getEventManager().getEvent(e).getDescription())));
 
         return builder.buildFuture();
     }
