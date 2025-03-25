@@ -1,10 +1,12 @@
 package ru.maxthetomas.votvevents;
 
+import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.ReloadListenerRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
+import ru.maxthetomas.votvevents.debug.EventCommand;
 import ru.maxthetomas.votvevents.event.EventManager;
 
 import java.util.Optional;
@@ -23,8 +25,14 @@ public final class VotvEvents {
             }
         });
 
+        CommandRegistrationEvent.EVENT.register(EventCommand::register);
+
 
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
+    }
+
+    public static EventManager getEventManager() {
+        return EventManager;
     }
 
     public static Optional<MinecraftServer> getCurrentServer() {
