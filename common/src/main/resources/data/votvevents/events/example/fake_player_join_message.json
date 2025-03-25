@@ -1,0 +1,26 @@
+{
+  "name": "Example fake player join message event",
+  "description": "An example event",
+  "behaviours": [
+    {
+      "id": "votvevents:broadcast_chat_message",
+      "properties": {
+        "message": {
+          "color": "yellow",
+          "translate": "multiplayer.player.joined",
+          "with": [
+            {
+              "text": "CSQRB",
+              "clickEvent": {
+                "action": "suggest_command",
+                "value": "/tell CSQRB"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

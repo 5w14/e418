@@ -1,0 +1,30 @@
+{
+  "name": "Example fake whisper message event",
+  "description": "An example event",
+  "behaviours": [
+    {
+      "id": "votvevents:broadcast_chat_message",
+      "properties": {
+        "message": {
+          "color": "gray",
+          "italic": true,
+          "translate": "commands.message.display.incoming",
+          "with": [
+            {
+              "text": "CSQRB",
+              "clickEvent": {
+                "action": "suggest_command",
+                "value": "/tell CSQRB"
+              }
+            },
+            {
+              "text": "hello!"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
