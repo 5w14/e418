@@ -7,8 +7,7 @@ public class EventContext {
     private final MinecraftServer server;
     private Player player;
     private ActiveEvent sourceEvent;
-    private long startTime;
-    
+
     // TODO add more fields here
 
     public EventContext(MinecraftServer server) {
@@ -27,17 +26,8 @@ public class EventContext {
         return player;
     }
 
-    public Player getStartTime() {
-        return player;
-    }
-
     public EventContext withSourceEvent(ActiveEvent sourceEvent) {
         this.sourceEvent = sourceEvent;
-        return this;
-    }
-
-    public EventContext withStartTime(long startTime) {
-        this.startTime = startTime;
         return this;
     }
 
