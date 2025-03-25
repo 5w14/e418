@@ -2,9 +2,7 @@ package ru.maxthetomas.votvevents.event;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.Behaviours;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.condition.Conditions;
@@ -21,8 +19,8 @@ public class EventResource {
     List<ICondition> runConditions;
     List<ICondition> queueConditions;
 
-    Component name;
-    Component description;
+    String name;
+    String description;
 
     /**
      * Constructs event
@@ -33,7 +31,7 @@ public class EventResource {
      * @param runConditions   Run conditions of event
      * @param queueConditions Queue conditions of event
      */
-    public EventResource(Component name, Component description, List<IBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
+    public EventResource(String name, String description, List<IBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
         this.name = name;
         this.description = description;
         this.behaviourList = behaviourList;
@@ -48,13 +46,8 @@ public class EventResource {
      */
     public static EventResource buildEventResourceFromJson(JsonObject json) {
         try {
-            var nameObj = json.get("name").getAsString();
-            var descriptionObj = json.get("description").getAsString();
-
-            var name = Component.Serializer.fromJson(nameObj,
-                    VotvEvents.getCurrentServer().orElseThrow().registryAccess());
-            var description = Component.Serializer.fromJson(descriptionObj,
-                    VotvEvents.getCurrentServer().orElseThrow().registryAccess());
+            var name = json.get("name").getAsString();
+            var description = json.get("description").getAsString();
 
             // Setup behaviours from JSON
             List<IBehaviour> behaviours = new ArrayList<>();

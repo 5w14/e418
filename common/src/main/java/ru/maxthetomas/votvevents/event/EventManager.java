@@ -1,6 +1,7 @@
 package ru.maxthetomas.votvevents.event;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -8,41 +9,41 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.util.ResourceUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-public class EventManager extends SimplePreparableReloadListener<List<EventResource>> {
+public class EventManager extends SimplePreparableReloadListener<HashMap<ResourceLocation, EventResource>> {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private List<EventResource> registeredEvents;
+
     public List<ActiveEvent> activeEvents = new ArrayList<>();
+    private HashMap<ResourceLocation, EventResource> registeredEvents;
 
     @Override
-    protected @NotNull List<EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        var events = new ArrayList<EventResource>();
+    protected @NotNull HashMap<ResourceLocation, EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        var events = new HashMap<ResourceLocation, EventResource>();
 
-        resourceManager.listResources("events", (path) -> path.getPath().endsWith(".json")).forEach((a, b) -> {
-            var evt = ResourceUtil.getJsonResource(resourceManager, a);
+        resourceManager.listResources("events", (path) -> path.getPath().endsWith(".json")).forEach((loc, resource) -> {
+            var evt = ResourceUtil.getJsonResource(resourceManager, loc);
 
             if (evt == null || !evt.isJsonObject()) {
-                LOGGER.warn("Failed to parse event resource at location {}", a);
+                LOGGER.warn("Failed to parse event resource at location {}", loc);
                 return;
             }
 
             var res = EventResource.buildEventResourceFromJson(evt.getAsJsonObject());
 
             if (res == null) {
-                LOGGER.warn("Failed to parse event resource at location {}", a);
+                LOGGER.warn("Failed to parse event resource at location {}", loc);
                 return;
             }
 
-            events.add(res);
+            events.put(loc, res);
         });
 
         return events;
     }
 
     @Override
-    protected void apply(List<EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected void apply(HashMap<ResourceLocation, EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         this.registeredEvents = object;
         LOGGER.info("Successfully reloaded events!");
     }
