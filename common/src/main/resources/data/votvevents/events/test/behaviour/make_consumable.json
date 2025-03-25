@@ -1,0 +1,23 @@
+{
+  "name": "Make Consumable Test",
+  "description": "Test making current item in hand consumable",
+  "behaviours": [
+    {
+      "id": "votvevents:make_consumable",
+      "properties": {
+        "consume_seconds": 2,
+        "has_consume_particles": true
+      }
+    }
+  ],
+  "run_conditions": [
+    {
+      "id": "votvevents:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "id": "votvevents:never"
+    }
+  ]
+}
