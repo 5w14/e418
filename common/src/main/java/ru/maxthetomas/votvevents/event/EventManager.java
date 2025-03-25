@@ -76,6 +76,8 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
             behaviour.execute(context);
         }
 
+        activeEvent.updateState();
+
         return activeEvent;
     }
 

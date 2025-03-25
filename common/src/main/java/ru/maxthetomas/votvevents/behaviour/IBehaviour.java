@@ -20,9 +20,28 @@ public interface IBehaviour {
         return true;
     }
 
+    /**
+     * Executes behaviour in event. Used if event with this behaviour starts.
+     *
+     * @param context Context of event.
+     */
     void execute(EventContext context);
 
+    /**
+     * Disposes behaviour in event. Used if event with this behaviour ends.
+     *
+     * @param context
+     */
     default void dispose(EventContext context) {
+    }
 
+    /**
+     * Is this behaviour done it's part. If all behaviours on event returns true, the event will be automatically disposed.
+     * Instant behaviours better to return true, while continuous only false to rely on ending behaviours.
+     *
+     * @return Is behaviour done.
+     */
+    default boolean isDone(EventContext context) {
+        return true;
     }
 }
