@@ -12,6 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
@@ -26,6 +27,7 @@ public class EventCommand {
 
         dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("event")
                 .then(forceExecuteEvent())
+                .then(printEvents())
         );
 
     }
@@ -45,6 +47,14 @@ public class EventCommand {
                                                 .executes(EventCommand::executeStartSubommand)
                                 )
                 );
+    }
+
+    /**
+     * Prints out all loaded commands
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> printEvents() {
+        return LiteralArgumentBuilder.<CommandSourceStack>literal("print")
+                .executes(EventCommand::executePrintEvents);
     }
 
     /**
@@ -79,6 +89,19 @@ public class EventCommand {
                                         Component.literal(event.getDescription()))))),
                 true);
 
+
+        return 1;
+    }
+
+    /**
+     * Executes the print command
+     */
+    private static int executePrintEvents(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(
+                () -> Component.translatable("votvevents.commands.event.print",
+                        ComponentUtils.formatList(VotvEvents.getEventManager().getRegisteredEvents(),
+                                (e) -> Component.literal(" - " + e))),
+                true);
 
         return 1;
     }
