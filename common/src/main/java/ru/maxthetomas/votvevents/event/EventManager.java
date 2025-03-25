@@ -22,14 +22,17 @@ public class EventManager extends SimplePreparableReloadListener<List<EventResou
         resourceManager.listResources("events", (path) -> path.getPath().endsWith(".json")).forEach((a, b) -> {
             var evt = ResourceUtil.getJsonResource(resourceManager, a);
 
-            if (evt == null || !evt.isJsonObject())
+            if (evt == null || !evt.isJsonObject()) {
+                LOGGER.warn("Failed to parse event resource at location {}", a);
                 return;
+            }
 
-            // TODO: change constructor to a static generator method
             var res = EventResource.buildEventResourceFromJson(evt.getAsJsonObject());
 
-            if (res == null)
+            if (res == null){
+                LOGGER.warn("Failed to parse event resource at location {}", a);
                 return;
+            }
 
             events.add(res);
         });
