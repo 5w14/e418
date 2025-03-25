@@ -70,7 +70,7 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
      * @param event Event to stop.
      */
     public void endEvent(ActiveEvent event) {
-        LOGGER.info("Disposed event {}", event.resource.name);
+        LOGGER.info("Ended event {}", event.resource.name);
 
         for (IBehaviour behaviour : event.resource.behaviourList) {
             behaviour.dispose(event.context);
