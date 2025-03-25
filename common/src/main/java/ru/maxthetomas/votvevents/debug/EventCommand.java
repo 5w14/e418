@@ -31,7 +31,6 @@ public class EventCommand {
                 .then(startSubcommand())
                 .then(printEvents())
         );
-
     }
 
 
