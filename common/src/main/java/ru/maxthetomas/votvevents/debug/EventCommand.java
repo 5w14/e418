@@ -27,6 +27,7 @@ public class EventCommand {
             CommandBuildContext context, Commands.CommandSelection selection) {
 
         dispatcher.register(LiteralArgumentBuilder.<CommandSourceStack>literal("event")
+                .requires(s -> s.hasPermission(2)) // "Game Master" (docs: https://minecraft.wiki/w/Permission_level)
                 .then(startSubcommand())
                 .then(printEvents())
         );
