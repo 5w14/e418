@@ -111,7 +111,9 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
             }
 
             var ns = loc.getNamespace();
-            var p = loc.getPath().replace(".json", "").replace("events/", "");
+            var p = loc.getPath()
+                    .replaceFirst(".json", "")
+                    .replaceFirst("events/", "");
 
             events.put(ResourceLocation.fromNamespaceAndPath(ns, p), res);
         });
