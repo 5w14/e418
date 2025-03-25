@@ -9,7 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.util.ResourceUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EventManager extends SimplePreparableReloadListener<HashMap<ResourceLocation, EventResource>> {
     private static final Logger LOGGER = LogUtils.getLogger();
