@@ -11,6 +11,7 @@ public class Conditions {
     private static final HashMap<ResourceLocation, Builder> conditions = new HashMap<>();
 
     public static final Builder ALWAYS = register("always", (json) -> (ctx) -> true);
+    public static final Builder NEVER = register("never", (json) -> (ctx) -> false);
     public static final Builder DEBUG_MODE = register("debug_mode_condition", (json) -> (ctx) -> Config.isDebug());
 
     public static ICondition createCondition(ResourceLocation name, JsonElement jsonObject) {

@@ -1,13 +1,13 @@
 {
-  "name": "DEBUG EVENT",
-  "description": "haha debug",
+  "name": "Always Fail Test",
+  "description": "Debug event that always fails",
   "behaviours": [
     {
       "id": "votvevents:broadcast_chat_message",
       "properties": {
         "message": {
-          "color": "yellow",
-          "text": "null joined the game"
+          "color": "green",
+          "text": "Event was forcefully started"
         }
       }
     }
@@ -15,11 +15,17 @@
   "run_conditions": [
     {
       "id": "votvevents:debug_mode_condition"
+    },
+    {
+      "id": "votvevents:never"
     }
   ],
   "queue_conditions": [
     {
       "id": "votvevents:debug_mode_condition"
+    },
+    {
+      "id": "votvevents:never"
     }
   ]
 }

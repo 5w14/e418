@@ -17,6 +17,7 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.EventResource;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -68,7 +69,7 @@ public class EventCommand {
         var event = manager.getEvent(eventLoc);
 
         if (event == null) {
-            context.getSource().sendSystemMessage(
+            context.getSource().sendFailure(
                     Component.translatable("votvevents.commands.event.start.not_found", eventLoc.toString())
                             .withStyle(ChatFormatting.RED)
             );
@@ -78,21 +79,21 @@ public class EventCommand {
         var eventContext = new EventContext(context.getSource().getServer())
                 .withPlayer(context.getSource().getPlayer());
 
-        // TODO: handle if event failed (it would be null)
         var activeEvent = VotvEvents.getEventManager().runEvent(event, eventContext, isForced);
+
+        if (activeEvent == null) {
+            context.getSource().sendFailure(
+                    Component.translatable("votvevents.commands.event.start.fail", formatEvent(event))
+                            .withStyle(ChatFormatting.RED)
+            );
+            return 0;
+        }
 
         // Sends a success message, with the event name and description as hover text
         context.getSource().sendSuccess(
-                () -> Component.translatable("votvevents.commands.event.start.success" + (isForced ? ".force" : ""),
-                        Component.literal(event.getName()).withStyle(style ->
-                                style.withUnderlined(true)
-                                        .withHoverEvent(
-                                                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                                        Component.literal(event.getDescription()))
-                                        )
-                        )),
-                true);
-
+                () -> Component.translatable("votvevents.commands.event.start.success" +
+                                (isForced ? ".force" : ""),
+                        formatEvent(event)), true);
 
         return 1;
     }
@@ -104,8 +105,9 @@ public class EventCommand {
         context.getSource().sendSuccess(
                 () -> Component.translatable("votvevents.commands.event.print",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getRegisteredEvents(),
-                                (e) -> Component.literal(" - " + e))),
-                false);
+                                Component.literal("\n"),
+                                (e) -> Component.literal(" - " + e.toString()))
+                ), false);
 
         return 1;
     }
@@ -124,6 +126,18 @@ public class EventCommand {
                 .forEach(builder::suggest);
 
         return builder.buildFuture();
+    }
+
+
+    // Util functions
+    private static Component formatEvent(EventResource event) {
+        return Component.literal(event.getName()).withStyle(style ->
+                style.withUnderlined(true)
+                        .withHoverEvent(
+                                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                        Component.literal(event.getDescription()))
+                        )
+        );
     }
 }
 
