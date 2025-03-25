@@ -6,18 +6,39 @@ import net.minecraft.world.entity.player.Player;
 public class EventContext {
     private final MinecraftServer server;
     private Player player;
+    private ActiveEvent sourceEvent;
+    private long startTime;
+    
     // TODO add more fields here
 
     public EventContext(MinecraftServer server) {
         this.server = server;
     }
 
-    public MinecraftServer server() {
+    public MinecraftServer getServer() {
         return server;
     }
 
-    public Player player() {
+    public ActiveEvent getSourceEvent() {
+        return sourceEvent;
+    }
+
+    public Player getPlayer() {
         return player;
+    }
+
+    public Player getStartTime() {
+        return player;
+    }
+
+    public EventContext withSourceEvent(ActiveEvent sourceEvent) {
+        this.sourceEvent = sourceEvent;
+        return this;
+    }
+
+    public EventContext withStartTime(long startTime) {
+        this.startTime = startTime;
+        return this;
     }
 
     public EventContext withPlayer(Player player) {

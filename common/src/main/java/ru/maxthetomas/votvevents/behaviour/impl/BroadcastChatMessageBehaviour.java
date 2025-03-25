@@ -14,7 +14,7 @@ public class BroadcastChatMessageBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
-        var message = Component.Serializer.fromJson(this.message, context.server().registryAccess());
-        context.server().sendSystemMessage(message);
+        var message = Component.Serializer.fromJson(this.message, context.getServer().registryAccess());
+        context.getServer().sendSystemMessage(message);
     }
 }
