@@ -1,3 +1,26 @@
 {
-  "name": "bruh"
+  "name": "DEBUG EVENT",
+  "description": "haha debug",
+  "behaviours": [
+    {
+      "id": "votvevents:broadcastChatMessage",
+      "properties": {
+        "message": {
+          "color": "yellow",
+          "text":"debug!!"
+        }
+      }
+    }
+
+  ],
+  "run_conditions": [
+    {
+      "id": "votvevents:debugModeCondition"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "id": "votvevents:debugModeCondition"
+    }
+  ]
 }
