@@ -16,12 +16,13 @@ public final class VotvEvents {
     private static EventManager EventManager = new EventManager();
 
     public static void init() {
-        LifecycleEvent.SERVER_STARTING.register(srv -> ManagedServer = srv);
+        LifecycleEvent.SERVER_BEFORE_START.register(srv -> ManagedServer = srv);
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
             if (srv == ManagedServer) {
                 ManagedServer = null;
             }
         });
+
 
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
     }
