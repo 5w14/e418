@@ -1,0 +1,31 @@
+{
+  "name": "Test Mutation Behaviour",
+  "description": "Test mutation behaviour",
+  "behaviours": [
+    {
+      "id": "votvevents:random_player_context_mutator",
+      "properties": {
+        "behaviours": [
+          {
+            "id": "votvevents:debug_print_context"
+          }
+        ],
+        "run_conditions": [
+          {
+            "id": "votvevents:never"
+          }
+        ]
+      }
+    }
+  ],
+  "run_conditions": [
+    {
+      "id": "votvevents:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "id": "votvevents:never"
+    }
+  ]
+}

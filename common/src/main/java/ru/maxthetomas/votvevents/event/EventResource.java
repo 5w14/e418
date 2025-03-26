@@ -92,8 +92,8 @@ public class EventResource {
      *
      * @return Is event can run at this moment
      */
-    public boolean canRun(EventContext context, boolean ignoreRunConditions) {
-        if (!ignoreRunConditions) {
+    public boolean canRun(EventContext context) {
+        if (!context.isForced()) {
             // Check if conditions to run are met
             for (ICondition condition : runConditions) {
                 if (!condition.check(context)) {
@@ -111,10 +111,6 @@ public class EventResource {
         }
 
         return true;
-    }
-
-    public boolean canRun(EventContext context) {
-        return canRun(context, false);
     }
 
     /**

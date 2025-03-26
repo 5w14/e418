@@ -23,7 +23,7 @@ public class ActiveEvent {
 
     public void updateState() {
         for (IBehaviour behaviour : this.activeBehaviours) {
-            if (!behaviour.isDone(context))
+            if (!behaviour.isDone())
                 return;
         }
         VotvEvents.getEventManager().endEvent(this);

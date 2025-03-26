@@ -7,6 +7,7 @@ public class EventContext {
     private final MinecraftServer server;
     private Player player;
     private ActiveEvent sourceEvent;
+    private boolean forced = false;
 
     // TODO add more fields here
 
@@ -26,6 +27,10 @@ public class EventContext {
         return player;
     }
 
+    public boolean isForced() {
+        return forced;
+    }
+
     public EventContext withSourceEvent(ActiveEvent sourceEvent) {
         this.sourceEvent = sourceEvent;
         return this;
@@ -36,11 +41,19 @@ public class EventContext {
         return this;
     }
 
+    public EventContext withForced(boolean forced) {
+        this.forced = forced;
+        return this;
+    }
+
     @Override
     public EventContext clone() {
         var newContext = new EventContext(server);
 
         newContext.player = player;
+        newContext.sourceEvent = sourceEvent;
+        newContext.forced = forced;
+
         // TODO add more fields here
 
         return newContext;

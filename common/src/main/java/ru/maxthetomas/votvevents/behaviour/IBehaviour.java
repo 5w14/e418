@@ -29,10 +29,8 @@ public interface IBehaviour {
 
     /**
      * Disposes behaviour in event. Used if event with this behaviour ends.
-     *
-     * @param context
      */
-    default void dispose(EventContext context) {
+    default void dispose() {
     }
 
     /**
@@ -41,7 +39,7 @@ public interface IBehaviour {
      *
      * @return Is behaviour done.
      */
-    default boolean isDone(EventContext context) {
+    default boolean isDone() {
         return true;
     }
 }

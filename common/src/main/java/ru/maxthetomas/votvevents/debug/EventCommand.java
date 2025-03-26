@@ -77,9 +77,10 @@ public class EventCommand {
         }
 
         var eventContext = new EventContext(context.getSource().getServer())
-                .withPlayer(context.getSource().getPlayer());
+                .withPlayer(context.getSource().getPlayer())
+                .withForced(isForced);
 
-        var activeEvent = VotvEvents.getEventManager().runEvent(event, eventContext, isForced);
+        var activeEvent = VotvEvents.getEventManager().runEvent(event, eventContext);
 
         if (activeEvent == null) {
             context.getSource().sendFailure(

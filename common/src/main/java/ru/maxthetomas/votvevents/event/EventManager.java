@@ -44,8 +44,8 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
      * @param forced   If true, event will run even if run conditions are not met. This doesn't bypass run conditions for behaviours.
      * @return New active event or null, if event wasn't launched.
      */
-    public ActiveEvent runEvent(EventResource resource, EventContext context, boolean forced) {
-        if (!resource.canRun(context, forced))
+    public ActiveEvent runEvent(EventResource resource, EventContext context) {
+        if (!resource.canRun(context))
             return null;
 
         var activeEvent = new ActiveEvent(resource, context, context.getServer().overworld().getGameTime());
@@ -75,7 +75,7 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
         LOGGER.info("Ended event {}", event.resource.name);
 
         for (IBehaviour behaviour : event.activeBehaviours) {
-            behaviour.dispose(event.context);
+            behaviour.dispose();
         }
 
         activeEvents.remove(event);
