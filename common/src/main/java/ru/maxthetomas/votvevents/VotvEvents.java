@@ -6,6 +6,7 @@ import dev.architectury.registry.ReloadListenerRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
+import org.spongepowered.asm.mixin.Mixins;
 import ru.maxthetomas.votvevents.debug.EventCommand;
 import ru.maxthetomas.votvevents.event.EventManager;
 
@@ -27,6 +28,7 @@ public final class VotvEvents {
 
         CommandRegistrationEvent.EVENT.register(EventCommand::register);
 
+        Mixins.addConfiguration(MOD_ID + ".mixins.json");
 
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
     }
