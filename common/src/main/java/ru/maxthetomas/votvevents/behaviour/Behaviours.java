@@ -19,6 +19,7 @@ public class Behaviours {
     public static final Builder TELEPORT_PLAYER = register("teleport_player", TeleportPlayerBehaviour::new);
     public static final Builder RANDOM_PLAYER_CONTEXT_MUTATOR = register("random_player_context_mutator", RandomPlayerContextMutatorBehaviour::new);
     public static final Builder DEBUG_PRINT_CONTEXT = register("debug_print_context", DebugPrintContextBehaviour::new);
+    public static final Builder EXECUTE_COMMAND = register("execute_command", ExecuteCommandBehaviour::new);
 
     public static IBehaviour createBehaviour(ResourceLocation name, JsonElement jsonObject) {
         return getBehaviourBuilder(name).apply(jsonObject);
