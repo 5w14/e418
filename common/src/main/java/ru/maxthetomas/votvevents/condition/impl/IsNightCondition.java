@@ -1,7 +1,5 @@
 package ru.maxthetomas.votvevents.condition.impl;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
@@ -9,8 +7,8 @@ import ru.maxthetomas.votvevents.condition.ICondition;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 public class IsNightCondition implements ICondition {
+    public static final MapCodec<IsNightCondition> CODEC = MapCodec.unit(IsNightCondition::new);
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "is_night");
-    public static final MapCodec<IsNightCondition> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(IsNightCondition::new));
 
     @Override
     public boolean check(EventContext context) {

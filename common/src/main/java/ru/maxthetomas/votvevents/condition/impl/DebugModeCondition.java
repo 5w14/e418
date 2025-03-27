@@ -4,15 +4,17 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.condition.ICondition;
+import ru.maxthetomas.votvevents.config.Config;
 import ru.maxthetomas.votvevents.event.EventContext;
 
-public class NeverCondition implements ICondition {
-    public static final MapCodec<NeverCondition> CODEC = MapCodec.unit(NeverCondition::new);
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "never");
+
+public class DebugModeCondition implements ICondition {
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "debug_mode");
+    public static MapCodec<DebugModeCondition> CODEC = MapCodec.unit(DebugModeCondition::new);
 
     @Override
     public boolean check(EventContext context) {
-        return false;
+        return Config.isDebug();
     }
 
     @Override

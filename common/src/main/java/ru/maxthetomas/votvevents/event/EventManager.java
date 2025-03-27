@@ -103,9 +103,9 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
             try {
                 BufferedReader reader = entry.getValue().openAsReader();
                 try {
-                    EventResource.CODEC.codec().parse(JsonOps.INSTANCE,
-                            JsonParser.parseReader(reader)).ifSuccess(object -> {
-                        if (eventMap.putIfAbsent(resourceLocation2, object) != null) {
+                    EventResource.CODEC.decoder().decode(JsonOps.INSTANCE,
+                            JsonParser.parseReader(reader)).ifSuccess(event -> {
+                        if (eventMap.putIfAbsent(resourceLocation2, event.getFirst()) != null) {
                             throw new IllegalStateException("Duplicate data file ignored with ID " + String.valueOf(resourceLocation2));
                         }
                     }).ifError(error -> LOGGER.error("Couldn't parse data file '{}' from '{}': {}", resourceLocation2, resourceLocation, error));
