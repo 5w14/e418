@@ -1,0 +1,21 @@
+{
+  "name": "Test Execute Command",
+  "description": "Test that executes a command",
+  "behaviours": [
+    {
+      "type": "votvevents:execute_command",
+      "execute_as_player": true,
+      "command": "/kill"
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "votvevents:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "votvevents:never"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Teleport Player Test",
+  "description": "Player teleportation test",
+  "behaviours": [
+    {
+      "type": "votvevents:teleport_player",
+      "relative": true,
+      "x": 0,
+      "y": -1,
+      "z": 0
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "votvevents:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "votvevents:never"
+    }
+  ]
+}

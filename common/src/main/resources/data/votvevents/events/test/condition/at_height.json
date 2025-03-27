@@ -1,0 +1,22 @@
+{
+  "name": "At Height",
+  "description": "Debug event that works only in defined range of height",
+  "behaviours": [
+  ],
+  "run_conditions": [
+    {
+      "type": "votvevents:at_height",
+      "need_both": true,
+      "above": -50,
+      "below": 50
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "votvevents:at_height",
+      "need_both": true,
+      "above": -50,
+      "below": 50
+    }
+  ]
+}
