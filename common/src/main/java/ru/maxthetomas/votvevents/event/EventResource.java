@@ -12,29 +12,16 @@ import java.util.List;
 /**
  * Event resource.
  */
-public class EventResource {
+public record EventResource(String name, String description, List<PreActiveBehaviour> behaviourList,
+                            List<ICondition> runConditions, List<ICondition> queueConditions) {
+
     public static final MapCodec<EventResource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("name").forGetter(EventResource::getName),
-            Codec.STRING.optionalFieldOf("description", "").forGetter(EventResource::getDescription),
-            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(EventResource::getBehaviourList),
-            Conditions.DISPATCH_CODEC.listOf().fieldOf("run_conditions").forGetter(EventResource::getRunConditions),
-            Conditions.DISPATCH_CODEC.listOf().fieldOf("queue_conditions").forGetter(EventResource::getQueueConditions)
+            Codec.STRING.fieldOf("name").forGetter(EventResource::name),
+            Codec.STRING.optionalFieldOf("description", "").forGetter(EventResource::description),
+            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(EventResource::behaviourList),
+            Conditions.DISPATCH_CODEC.listOf().fieldOf("run_conditions").forGetter(EventResource::runConditions),
+            Conditions.DISPATCH_CODEC.listOf().fieldOf("queue_conditions").forGetter(EventResource::queueConditions)
     ).apply(instance, EventResource::new));
-
-    private final String name;
-    private final String description;
-
-    private final List<PreActiveBehaviour> behaviourList;
-    private final List<ICondition> runConditions;
-    private final List<ICondition> queueConditions;
-
-    public EventResource(String name, String description, List<PreActiveBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
-        this.behaviourList = behaviourList;
-        this.runConditions = runConditions;
-        this.queueConditions = queueConditions;
-        this.name = name;
-        this.description = description;
-    }
 
     /**
      * Checks if this event can run.
@@ -77,26 +64,5 @@ public class EventResource {
         }
 
         return true;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<PreActiveBehaviour> getBehaviourList() {
-        return behaviourList;
-    }
-
-    public List<ICondition> getRunConditions() {
-        return runConditions;
-    }
-
-    public List<ICondition> getQueueConditions() {
-        return queueConditions;
     }
 }

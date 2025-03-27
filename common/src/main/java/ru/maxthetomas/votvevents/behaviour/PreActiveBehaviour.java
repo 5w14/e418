@@ -7,9 +7,14 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * This class represents behaviours before they are activated. Use {@code create()} to convert into an active behaviour.
+ *
+ * @see IBehaviour
+ */
 public class PreActiveBehaviour {
     public static Codec<PreActiveBehaviour> CODEC = new Codec<PreActiveBehaviour>() {
-        // The decode function is not really necessary, but it's here for completeness
+        // The encoding of the type and the rest of the data
         @Override
         public <T> DataResult<T> encode(PreActiveBehaviour input, DynamicOps<T> ops, T prefix) {
             T typeValue = ResourceLocation.CODEC.encode(input.type, ops, ops.empty()).getOrThrow();
@@ -27,7 +32,7 @@ public class PreActiveBehaviour {
             return DataResult.success(result);
         }
 
-        // Actual magic happens here
+        // Decoding into the type and the rest of the data
         @Override
         public <T> DataResult<Pair<PreActiveBehaviour, T>> decode(DynamicOps<T> dynamicOps, T t) {
             // We get a type from the input
@@ -70,6 +75,9 @@ public class PreActiveBehaviour {
         return data;
     }
 
+    /**
+     * Creates a new instance of {@link IBehaviour}, after parsing the stored data.
+     */
     public IBehaviour create() {
         return Behaviours.get(type).getOrThrow().decoder()
                 .decode(data).result().orElseThrow().getFirst();

@@ -123,7 +123,7 @@ public class EventCommand {
         VotvEvents.getEventManager().getRegisteredEvents()
                 .stream()
                 .filter(e -> e.toString().startsWith(input))
-                .forEach((e) -> builder.suggest(e.toString(), Component.literal(VotvEvents.getEventManager().getEvent(e).getDescription())));
+                .forEach((e) -> builder.suggest(e.toString(), Component.literal(VotvEvents.getEventManager().getEvent(e).description())));
 
         return builder.buildFuture();
     }
@@ -131,11 +131,11 @@ public class EventCommand {
 
     // Util functions
     private static Component formatEvent(EventResource event) {
-        return Component.literal(event.getName()).withStyle(style ->
+        return Component.literal(event.name()).withStyle(style ->
                 style.withUnderlined(true)
                         .withHoverEvent(
                                 new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                        Component.literal(event.getDescription()))
+                                        Component.literal(event.description()))
                         )
         );
     }

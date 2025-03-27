@@ -31,7 +31,6 @@ public class ExecuteCommandBehaviour implements IBehaviour {
 
     public String getCommand() {
         return command;
-
     }
 
     public boolean isAsPlayer() {

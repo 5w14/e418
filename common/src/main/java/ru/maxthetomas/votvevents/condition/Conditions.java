@@ -8,6 +8,9 @@ import ru.maxthetomas.votvevents.condition.impl.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A static {@linkplain ICondition} registry. Use <code>DISPATCH_CODEC</code> to create an instance of {@linkplain ICondition}.
+ */
 public class Conditions {
     public static Map<ResourceLocation, MapCodec<? extends ICondition>> REGISTRY = new HashMap<>();
 
@@ -20,8 +23,16 @@ public class Conditions {
     public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));
 
-    private static MapCodec<? extends ICondition> register(ResourceLocation key, MapCodec<? extends ICondition> reg) {
-        REGISTRY.put(key, reg);
-        return reg;
+
+    /**
+     * Registers the condition into internal registry.
+     *
+     * @param key   The type of the codec.
+     * @param codec The codec for condition.
+     * @return The <code>codec</code> parameter.
+     */
+    private static MapCodec<? extends ICondition> register(ResourceLocation key, MapCodec<? extends ICondition> codec) {
+        REGISTRY.put(key, codec);
+        return codec;
     }
 }

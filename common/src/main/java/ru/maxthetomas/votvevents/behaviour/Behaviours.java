@@ -9,6 +9,10 @@ import ru.maxthetomas.votvevents.behaviour.impl.context_mutator.SelectRandomPlay
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is the {@linkplain IBehaviour} registry.
+ * Every behaviour registers a {@linkplain com.mojang.serialization.MapCodec}, which is used for their deserialization.
+ */
 public class Behaviours {
     private static final Map<ResourceLocation, MapCodec<? extends IBehaviour>> REGISTRY = new HashMap<>();
 
@@ -22,6 +26,12 @@ public class Behaviours {
     // Mutators
     public static final MapCodec<? extends IBehaviour> CONTEXT_MUTATE_SELECT_RANDOM_PLAYER = register(SelectRandomPlayerBehaviour.ID, SelectRandomPlayerBehaviour.CODEC);
 
+    /**
+     * Gets a codec to create a {@linkplain IBehaviour} from the registry.
+     *
+     * @param id {@linkplain IBehaviour}'s id.
+     * @return A {@linkplain DataResult} with either a codec, or an error, if the behaviour is not found.
+     */
     public static DataResult<MapCodec<? extends IBehaviour>> get(ResourceLocation id) {
         if (REGISTRY.containsKey(id)) {
             return DataResult.success(REGISTRY.get(id));
@@ -30,6 +40,15 @@ public class Behaviours {
         return DataResult.error(() -> "Unknown behaviour: " + id);
     }
 
+
+    /**
+     * Register the codec for {@linkplain IBehaviour} into internal registry.
+     * Used within static contexts, before mod initialization.
+     *
+     * @param id    The id to register the codec to.
+     * @param codec The codec to register.
+     * @return The second param, {@code codec}.
+     */
     public static MapCodec<? extends IBehaviour> register(ResourceLocation id, MapCodec<? extends IBehaviour> codec) {
         REGISTRY.put(id, codec);
         return codec;

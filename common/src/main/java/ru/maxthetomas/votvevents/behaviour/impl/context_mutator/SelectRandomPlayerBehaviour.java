@@ -12,6 +12,9 @@ import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.List;
 
+/**
+ * Modify the context to select a random player from the server.
+ */
 public class SelectRandomPlayerBehaviour extends ContextMutatorBehaviour {
     public static final MapCodec<SelectRandomPlayerBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(ContextMutatorBehaviour::getBehaviours),

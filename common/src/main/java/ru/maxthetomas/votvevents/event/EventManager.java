@@ -54,9 +54,9 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
 
         activeEvents.add(activeEvent);
 
-        LOGGER.info("Started event {}", resource.getName());
+        LOGGER.info("Started event {}", resource.name());
 
-        for (var preActiveBehaviour : activeEvent.resource.getBehaviourList()) {
+        for (var preActiveBehaviour : activeEvent.resource.behaviourList()) {
             var behaviour = preActiveBehaviour.create();
             behaviour.execute(context);
             activeEvent.activeBehaviours.add(behaviour);
@@ -73,7 +73,7 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
      * @param event Event to stop.
      */
     public void endEvent(ActiveEvent event) {
-        LOGGER.info("Ended event {}", event.resource.getName());
+        LOGGER.info("Ended event {}", event.resource.name());
 
         for (IBehaviour behaviour : event.activeBehaviours) {
             behaviour.dispose();

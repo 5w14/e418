@@ -31,6 +31,6 @@ public class ActiveEvent {
 
     @Override
     public String toString() {
-        return String.format("ActiveEvent[%s] (started at: %s, active behaviours: %s)", resource.getName(), startTime, activeBehaviours.size());
+        return String.format("ActiveEvent[%s] (started at: %s, active behaviours: %s)", resource.name(), startTime, activeBehaviours.size());
     }
 }
