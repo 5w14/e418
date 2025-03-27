@@ -15,20 +15,6 @@ import java.util.Optional;
 public class PlaySoundBehaviour implements IBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "play_sound");
 
-    private final ResourceLocation soundEventId;
-    private final SoundSource source;
-    private final float volume;
-    private final float range;
-    private final float pitch;
-
-    @Override
-    public void execute(EventContext context) {
-        context.getPlayer().playNotifySound(
-                new SoundEvent(getSoundEventId(), Optional.of(getRange())),
-                getSoundSource(), getVolume(), getPitch()
-        );
-    }
-
     public static final MapCodec<PlaySoundBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     ResourceLocation.CODEC.fieldOf("sound").forGetter(PlaySoundBehaviour::getSoundEventId),
@@ -40,6 +26,11 @@ public class PlaySoundBehaviour implements IBehaviour {
             ).apply(instance, PlaySoundBehaviour::new)
     );
 
+    private final ResourceLocation soundEventId;
+    private final SoundSource source;
+    private final float volume;
+    private final float range;
+    private final float pitch;
 
     public PlaySoundBehaviour(ResourceLocation soundEventId, float volume, float range, float pitch, SoundSource source) {
         this.soundEventId = soundEventId;
@@ -47,6 +38,14 @@ public class PlaySoundBehaviour implements IBehaviour {
         this.volume = volume;
         this.range = range;
         this.pitch = pitch;
+    }
+
+    @Override
+    public void execute(EventContext context) {
+        context.getPlayer().playNotifySound(
+                new SoundEvent(getSoundEventId(), Optional.of(getRange())),
+                getSoundSource(), getVolume(), getPitch()
+        );
     }
 
     @Override

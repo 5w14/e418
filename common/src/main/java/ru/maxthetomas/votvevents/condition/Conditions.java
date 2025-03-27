@@ -1,23 +1,30 @@
 package ru.maxthetomas.votvevents.condition;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
+import ru.maxthetomas.votvevents.condition.impl.AlwaysCondition;
+import ru.maxthetomas.votvevents.condition.impl.AtHeightCondition;
+import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
+import ru.maxthetomas.votvevents.condition.impl.NeverCondition;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Conditions {
-    private static final Map<ResourceLocation, ICondition> REGISTRY = new HashMap<>();
-    public static Codec<ICondition> CODEC = ResourceLocation.CODEC.dispatch(ICondition::getTypeId,
-            (id) -> get(id).result().orElseThrow().getType());
+    public static Map<ResourceLocation, MapCodec<? extends ICondition>> REGISTRY = new HashMap<>();
 
-    public static DataResult<ICondition> get(ResourceLocation id) {
-        if (REGISTRY.containsKey(id)) {
-            return DataResult.success(REGISTRY.get(id));
-        }
+    public static MapCodec<? extends ICondition> ALWAYS = register(AlwaysCondition.ID, AlwaysCondition.CODEC);
+    public static MapCodec<? extends ICondition> NEVER = register(NeverCondition.ID, NeverCondition.CODEC);
+    public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
+    public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
 
-        return DataResult.error(() -> "Unknown condition: " + id);
+    // This just defines the dispatch codec, which is used to create class instances from the type.
+    public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
+            .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));
+
+    private static MapCodec<? extends ICondition> register(ResourceLocation key, MapCodec<? extends ICondition> reg) {
+        REGISTRY.put(key, reg);
+        return reg;
     }
-
 }

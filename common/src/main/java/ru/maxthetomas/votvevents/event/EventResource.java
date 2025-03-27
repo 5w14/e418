@@ -1,13 +1,10 @@
 package ru.maxthetomas.votvevents.event;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.behaviour.Behaviours;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.PreActiveBehaviour;
+import ru.maxthetomas.votvevents.condition.Conditions;
 import ru.maxthetomas.votvevents.condition.ICondition;
 
 import java.util.List;
@@ -19,34 +16,69 @@ public class EventResource {
     public static final MapCodec<EventResource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(EventResource::getName),
             Codec.STRING.optionalFieldOf("description", "").forGetter(EventResource::getDescription),
-            Codec.PASSTHROUGH.listOf().fieldOf("behaviour"),
-
+            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(EventResource::getBehaviourList),
+            Conditions.DISPATCH_CODEC.listOf().fieldOf("run_conditions").forGetter(EventResource::getRunConditions),
+            Conditions.DISPATCH_CODEC.listOf().fieldOf("queue_conditions").forGetter(EventResource::getQueueConditions)
     ).apply(instance, EventResource::new));
 
+    private final String name;
+    private final String description;
 
-    private List<PreActiveBehaviour> behaviourList;
-    private List<ICondition> runConditions;
-    private List<ICondition> queueConditions;
+    private final List<PreActiveBehaviour> behaviourList;
+    private final List<ICondition> runConditions;
+    private final List<ICondition> queueConditions;
 
-    private String name;
-    private String description;
-
-    /**
-     * Constructs event
-     *
-     * @param name            Name of event
-     * @param description     Description of event
-     * @param behaviourList   Behaviour of event
-     * @param runConditions   Run conditions of event
-     * @param queueConditions Queue conditions of event
-     */
     public EventResource(String name, String description, List<PreActiveBehaviour> behaviourList, List<ICondition> runConditions, List<ICondition> queueConditions) {
-        this.name = name;
-        this.description = description;
         this.behaviourList = behaviourList;
         this.runConditions = runConditions;
         this.queueConditions = queueConditions;
+        this.name = name;
+        this.description = description;
     }
+
+    /**
+     * Checks if this event can run.
+     *
+     * @return Is event can run at this moment
+     */
+    public boolean canRun(EventContext context) {
+        if (!context.isForced()) {
+            // Check if conditions to run are met
+            for (ICondition condition : runConditions) {
+                if (!condition.check(context)) {
+                    return false;
+                }
+            }
+        }
+
+        // Check if all behaviours can run
+        for (PreActiveBehaviour preActiveBehaviour : behaviourList) {
+            // todo find a better way to check if behaviour can run
+            if (!preActiveBehaviour.create().canRun(context)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if this event can be queued.
+     * If event can't run, it will usually be queued to wait when it can run.
+     *
+     * @return Is event can be queued at this moment
+     */
+    public boolean canQueue(EventContext context) {
+        // Check if conditions to queue are met
+        for (ICondition condition : queueConditions) {
+            if (!condition.check(context)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     public String getName() {
         return name;
@@ -59,9 +91,6 @@ public class EventResource {
     public List<PreActiveBehaviour> getBehaviourList() {
         return behaviourList;
     }
-    public List<Dynamic<JsonElement>> getBehaviourListAsDynamic() {
-        return behaviourList.stream().map(PreActiveBehaviour::getBehaviourDataAsDynamic).toList();
-    }
 
     public List<ICondition> getRunConditions() {
         return runConditions;
@@ -70,15 +99,4 @@ public class EventResource {
     public List<ICondition> getQueueConditions() {
         return queueConditions;
     }
-
-    public record PreActiveBehaviour(JsonElement behaviourData) {
-        public Dynamic<JsonElement> getBehaviourDataAsDynamic() {
-            return new Dynamic<>(JsonOps.INSTANCE, behaviourData);
-        }
-
-        public IBehaviour create() {
-            return Behaviours.DISPATCH.parse(getBehaviourDataAsDynamic()).result().orElseThrow();
-        }
-    }
-
 }
