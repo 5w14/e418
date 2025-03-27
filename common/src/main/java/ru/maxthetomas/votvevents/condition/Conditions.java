@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.condition.impl.AtHeightCondition;
 import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
-import ru.maxthetomas.votvevents.config.Config;
 
 import java.util.HashMap;
 
@@ -14,7 +13,7 @@ public class Conditions {
 
     public static final Builder ALWAYS = register("always", (json) -> (ctx) -> true);
     public static final Builder NEVER = register("never", (json) -> (ctx) -> false);
-    public static final Builder DEBUG_MODE = register("debug_mode", (json) -> (ctx) -> Config.isDebug());
+    public static final Builder DEBUG_MODE = register("debug_mode", (json) -> (ctx) -> VotvEvents.getConfig().get().isDebug());
     public static final Builder IS_NIGHT = register("is_night", IsNightCondition::new);
     public static final Builder AT_HEIGHT = register("at_height", AtHeightCondition::new);
 

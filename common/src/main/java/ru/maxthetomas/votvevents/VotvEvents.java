@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import org.spongepowered.asm.mixin.Mixins;
+import ru.maxthetomas.votvevents.config.Config;
 import ru.maxthetomas.votvevents.debug.EventCommand;
 import ru.maxthetomas.votvevents.event.EventManager;
 
@@ -17,6 +18,7 @@ public final class VotvEvents {
     private static MinecraftServer ManagedServer = null;
 
     private static EventManager EventManager = new EventManager();
+    private static Config ModConfig = Config.getConfig();
 
     public static void init() {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> ManagedServer = srv);
@@ -39,5 +41,9 @@ public final class VotvEvents {
 
     public static Optional<MinecraftServer> getCurrentServer() {
         return Optional.ofNullable(ManagedServer);
+    }
+
+    public static Optional<Config> getConfig() {
+        return Optional.ofNullable(ModConfig);
     }
 }
