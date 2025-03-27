@@ -12,7 +12,7 @@ public class AtHeightCondition implements ICondition {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "at_height");
     public static MapCodec<AtHeightCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.optionalFieldOf("above", Float.MAX_VALUE).forGetter(AtHeightCondition::getAbove),
-            Codec.FLOAT.optionalFieldOf("below", Float.MIN_VALUE).forGetter(AtHeightCondition::getBelow)
+            Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::getBelow)
     ).apply(instance, AtHeightCondition::new));
 
     private final float above;
@@ -30,7 +30,7 @@ public class AtHeightCondition implements ICondition {
 
         // Check if it's a range
         var has_above = above != Float.MAX_VALUE;
-        var has_below = below != Float.MIN_VALUE;
+        var has_below = below != -Float.MAX_VALUE;
 
         if (has_above && has_below) {
             return positionY > above && positionY < below;
