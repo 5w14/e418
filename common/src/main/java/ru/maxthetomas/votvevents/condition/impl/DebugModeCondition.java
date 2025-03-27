@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.condition.ICondition;
-import ru.maxthetomas.votvevents.config.Config;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 
@@ -14,7 +13,7 @@ public class DebugModeCondition implements ICondition {
 
     @Override
     public boolean check(EventContext context) {
-        return Config.isDebug();
+        return VotvEvents.getConfig().orElseThrow().isDebug();
     }
 
     @Override
