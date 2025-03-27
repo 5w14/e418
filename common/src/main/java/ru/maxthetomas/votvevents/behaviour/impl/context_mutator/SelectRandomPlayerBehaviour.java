@@ -12,15 +12,15 @@ import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.List;
 
-public class RandomPlayerMutateBehaviour extends ContextMutatorBehaviour {
-    public static final MapCodec<RandomPlayerMutateBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+public class SelectRandomPlayerBehaviour extends ContextMutatorBehaviour {
+    public static final MapCodec<SelectRandomPlayerBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(ContextMutatorBehaviour::getBehaviours),
             Conditions.DISPATCH_CODEC.listOf().fieldOf("run_conditions").forGetter(ContextMutatorBehaviour::getRunConditions)
-    ).apply(instance, RandomPlayerMutateBehaviour::new));
+    ).apply(instance, SelectRandomPlayerBehaviour::new));
 
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "context_select_random_player");
 
-    protected RandomPlayerMutateBehaviour(List<PreActiveBehaviour> behaviours, List<ICondition> runConditions) {
+    protected SelectRandomPlayerBehaviour(List<PreActiveBehaviour> behaviours, List<ICondition> runConditions) {
         super(behaviours, runConditions);
     }
 

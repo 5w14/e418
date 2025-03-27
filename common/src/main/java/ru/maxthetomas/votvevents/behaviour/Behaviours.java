@@ -4,7 +4,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.behaviour.impl.*;
-import ru.maxthetomas.votvevents.behaviour.impl.context_mutator.RandomPlayerMutateBehaviour;
+import ru.maxthetomas.votvevents.behaviour.impl.context_mutator.SelectRandomPlayerBehaviour;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class Behaviours {
     public static final MapCodec<? extends IBehaviour> TELEPORT_PLAYER = register(TeleportPlayerBehaviour.ID, TeleportPlayerBehaviour.CODEC);
 
     // Mutators
-    public static final MapCodec<? extends IBehaviour> CONTEXT_MUTATE_SELECT_RANDOM_PLAYER = register(RandomPlayerMutateBehaviour.ID, RandomPlayerMutateBehaviour.CODEC);
+    public static final MapCodec<? extends IBehaviour> CONTEXT_MUTATE_SELECT_RANDOM_PLAYER = register(SelectRandomPlayerBehaviour.ID, SelectRandomPlayerBehaviour.CODEC);
 
     public static DataResult<MapCodec<? extends IBehaviour>> get(ResourceLocation id) {
         if (REGISTRY.containsKey(id)) {
