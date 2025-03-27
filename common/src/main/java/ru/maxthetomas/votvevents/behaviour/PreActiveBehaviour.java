@@ -57,6 +57,9 @@ public class PreActiveBehaviour {
     public PreActiveBehaviour(ResourceLocation type, Dynamic<?> data) {
         this.type = type;
         this.data = data;
+
+        // Ensure that the type is registered
+        Behaviours.get(type).getOrThrow();
     }
 
     public ResourceLocation getType() {

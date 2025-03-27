@@ -3,8 +3,8 @@ package ru.maxthetomas.votvevents.behaviour.impl;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
@@ -26,13 +26,17 @@ public class DebugPrintContextBehaviour implements IBehaviour {
     public void execute(EventContext context) {
         for (Method method : context.getClass().getMethods()) {
             var name = method.getName();
-            if (name.startsWith("get")) {
+            if (name.startsWith("get") && method.getParameterCount() == 0 && !name.equals("getClass")) {
                 try {
                     context.getServer().getPlayerList().broadcastSystemMessage(
-                            ComponentUtils.fromMessage(Component.literal(name + " -> " + method.invoke(context).toString())), false);
+                            Component.literal(name).append(" -> ").append(
+                                            Component.literal(method.invoke(context).toString())
+                                                    .withStyle(ChatFormatting.GRAY))
+                                    .withStyle(ChatFormatting.WHITE)
+                            , false);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     context.getServer().getPlayerList().broadcastSystemMessage(
-                            ComponentUtils.fromMessage(Component.literal(name)), false);
+                            Component.literal(name).withStyle(ChatFormatting.DARK_GRAY), false);
                 }
             }
         }
