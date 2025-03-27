@@ -1,37 +1,75 @@
 package ru.maxthetomas.votvevents.behaviour.impl;
 
-import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.Optional;
 
 public class PlaySoundBehaviour implements IBehaviour {
-    private ResourceLocation soundResourceLocation;
-    private float volume = 1f;
-    private float pitch = 1f;
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "play_sound");
 
-    public PlaySoundBehaviour(JsonElement properties) {
-        var soundResourcePath = properties.getAsJsonObject().get("sound").getAsString();
-        soundResourceLocation = ResourceLocation.parse(soundResourcePath);
+    public static final MapCodec<PlaySoundBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    ResourceLocation.CODEC.fieldOf("sound").forGetter(PlaySoundBehaviour::getSoundEventId),
+                    Codec.FLOAT.optionalFieldOf("volume", 1.0F).forGetter(PlaySoundBehaviour::getVolume),
+                    Codec.FLOAT.optionalFieldOf("range", 16.0F).forGetter(PlaySoundBehaviour::getRange),
+                    Codec.FLOAT.optionalFieldOf("pitch", 1.0F).forGetter(PlaySoundBehaviour::getPitch),
+                    Codec.STRING.xmap((string) -> SoundSource.valueOf(string.toUpperCase()), SoundSource::getName)
+                            .optionalFieldOf("source", SoundSource.AMBIENT).forGetter(PlaySoundBehaviour::getSoundSource)
+            ).apply(instance, PlaySoundBehaviour::new)
+    );
 
-        if (properties.getAsJsonObject().has("volume")) {
-            volume = properties.getAsJsonObject().get("volume").getAsFloat();
-        }
+    private final ResourceLocation soundEventId;
+    private final SoundSource source;
+    private final float volume;
+    private final float range;
+    private final float pitch;
 
-        if (properties.getAsJsonObject().has("pitch")) {
-            pitch = properties.getAsJsonObject().get("pitch").getAsFloat();
-        }
-
-        // TODO: add sound source (category)
-        // TODO: add range
+    public PlaySoundBehaviour(ResourceLocation soundEventId, float volume, float range, float pitch, SoundSource source) {
+        this.soundEventId = soundEventId;
+        this.source = source;
+        this.volume = volume;
+        this.range = range;
+        this.pitch = pitch;
     }
 
     @Override
     public void execute(EventContext context) {
-        context.getPlayer().playNotifySound(new SoundEvent(soundResourceLocation, Optional.empty()), SoundSource.MASTER, volume, pitch);
+        context.getPlayer().playNotifySound(
+                new SoundEvent(getSoundEventId(), Optional.of(getRange())),
+                getSoundSource(), getVolume(), getPitch()
+        );
+    }
+
+    @Override
+    public ResourceLocation getTypeId() {
+        return ID;
+    }
+
+    public ResourceLocation getSoundEventId() {
+        return soundEventId;
+    }
+
+    public SoundSource getSoundSource() {
+        return source;
+    }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public float getRange() {
+        return range;
+    }
+
+    public float getPitch() {
+        return pitch;
     }
 }

@@ -5,12 +5,12 @@
   ],
   "run_conditions": [
     {
-      "id": "votvevents:is_night"
+      "type": "votvevents:is_night"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:is_night"
+      "type": "votvevents:is_night"
     }
   ]
 }

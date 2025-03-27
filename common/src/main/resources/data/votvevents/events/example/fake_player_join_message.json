@@ -3,21 +3,19 @@
   "description": "An example event",
   "behaviours": [
     {
-      "id": "votvevents:broadcast_chat_message",
-      "properties": {
-        "message": {
-          "color": "yellow",
-          "translate": "multiplayer.player.joined",
-          "with": [
-            {
-              "text": "CSQRB",
-              "clickEvent": {
-                "action": "suggest_command",
-                "value": "/tell CSQRB"
-              }
+      "type": "votvevents:broadcast_chat_message",
+      "message": {
+        "color": "yellow",
+        "translate": "multiplayer.player.joined",
+        "with": [
+          {
+            "text": "CSQRB",
+            "clickEvent": {
+              "action": "suggest_command",
+              "value": "/tell CSQRB"
             }
-          ]
-        }
+          }
+        ]
       }
     }
   ],

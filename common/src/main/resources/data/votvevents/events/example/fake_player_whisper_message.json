@@ -3,25 +3,23 @@
   "description": "An example event",
   "behaviours": [
     {
-      "id": "votvevents:broadcast_chat_message",
-      "properties": {
-        "message": {
-          "color": "gray",
-          "italic": true,
-          "translate": "commands.message.display.incoming",
-          "with": [
-            {
-              "text": "CSQRB",
-              "clickEvent": {
-                "action": "suggest_command",
-                "value": "/tell CSQRB"
-              }
-            },
-            {
-              "text": "hello!"
+      "type": "votvevents:broadcast_chat_message",
+      "message": {
+        "color": "gray",
+        "italic": true,
+        "translate": "commands.message.display.incoming",
+        "with": [
+          {
+            "text": "CSQRB",
+            "clickEvent": {
+              "action": "suggest_command",
+              "value": "/tell CSQRB"
             }
-          ]
-        }
+          },
+          {
+            "text": "hello!"
+          }
+        ]
       }
     }
   ],

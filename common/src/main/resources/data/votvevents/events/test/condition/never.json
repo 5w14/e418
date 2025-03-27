@@ -5,12 +5,12 @@
   ],
   "run_conditions": [
     {
-      "id": "votvevents:never"
+      "type": "votvevents:never"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:never"
+      "type": "votvevents:never"
     }
   ]
 }

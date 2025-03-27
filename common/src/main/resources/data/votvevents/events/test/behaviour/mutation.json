@@ -3,29 +3,27 @@
   "description": "Test mutation behaviour",
   "behaviours": [
     {
-      "id": "votvevents:random_player_context_mutator",
-      "properties": {
-        "behaviours": [
-          {
-            "id": "votvevents:debug_print_context"
-          }
-        ],
-        "run_conditions": [
-          {
-            "id": "votvevents:never"
-          }
-        ]
-      }
+      "type": "votvevents:context_select_random_player",
+      "behaviours": [
+        {
+          "type": "votvevents:debug_print_context"
+        }
+      ],
+      "run_conditions": [
+        {
+          "type": "votvevents:never"
+        }
+      ]
     }
   ],
   "run_conditions": [
     {
-      "id": "votvevents:debug_mode"
+      "type": "votvevents:debug_mode"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:never"
+      "type": "votvevents:never"
     }
   ]
 }

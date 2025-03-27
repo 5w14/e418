@@ -1,13 +1,9 @@
 package ru.maxthetomas.votvevents.behaviour.impl.context_mutator;
 
-import com.google.gson.JsonElement;
-import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.behaviour.Behaviours;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
-import ru.maxthetomas.votvevents.condition.Conditions;
+import ru.maxthetomas.votvevents.behaviour.PreActiveBehaviour;
 import ru.maxthetomas.votvevents.condition.ICondition;
 import ru.maxthetomas.votvevents.event.EventContext;
-import ru.maxthetomas.votvevents.event.EventResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +12,15 @@ import java.util.List;
  * Behaviour that mutates context of event for it child behaviours and conditions
  */
 public abstract class ContextMutatorBehaviour implements IBehaviour {
-    List<EventResource.PreActiveBehaviour> behaviours = new ArrayList<>();
-    List<ICondition> runConditions = new ArrayList<>();
     public final List<IBehaviour> activeBehaviours = new ArrayList<>();
+    private final List<PreActiveBehaviour> behaviours;
+    private final List<ICondition> runConditions;
     public EventContext storedMutatedContext;
+
+    protected ContextMutatorBehaviour(List<PreActiveBehaviour> behaviours, List<ICondition> runConditions) {
+        this.behaviours = behaviours;
+        this.runConditions = runConditions;
+    }
 
     /**
      * Mutates context to send it to behaviours and conditions.
@@ -29,31 +30,6 @@ public abstract class ContextMutatorBehaviour implements IBehaviour {
      */
     public EventContext getMutatedContext(EventContext context) {
         return context;
-    }
-
-    public ContextMutatorBehaviour(JsonElement properties) {
-        var jsonObject = properties.getAsJsonObject();
-
-        // This must be present
-        var jsonBehaviours = jsonObject.get("behaviours").getAsJsonArray();
-        for (JsonElement jsonElement : jsonBehaviours) {
-            var jsonBehaviour = jsonElement.getAsJsonObject();
-            var id = jsonBehaviour.get("id").getAsString();
-            var nullableProperties = jsonBehaviour.get("properties");
-            var behaviour = Behaviours.getBehaviourBuilder(ResourceLocation.tryParse(id));
-            behaviours.add(new EventResource.PreActiveBehaviour(behaviour, nullableProperties));
-        }
-
-        // This could be not present
-        if (jsonObject.has("run_conditions")) {
-            for (JsonElement jsonElement : jsonObject.get("run_conditions").getAsJsonArray()) {
-                var jsonBehaviour = jsonElement.getAsJsonObject();
-                var id = jsonBehaviour.get("id").getAsString();
-                var nullableProperties = jsonBehaviour.get("properties");
-                var condition = Conditions.createCondition(ResourceLocation.tryParse(id), nullableProperties);
-                runConditions.add(condition);
-            }
-        }
     }
 
     @Override
@@ -108,5 +84,13 @@ public abstract class ContextMutatorBehaviour implements IBehaviour {
                 return false;
         }
         return true;
+    }
+
+    public List<PreActiveBehaviour> getBehaviours() {
+        return behaviours;
+    }
+
+    public List<ICondition> getRunConditions() {
+        return runConditions;
     }
 }

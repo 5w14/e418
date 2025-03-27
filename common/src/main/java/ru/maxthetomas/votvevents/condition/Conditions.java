@@ -1,41 +1,27 @@
 package ru.maxthetomas.votvevents.condition;
 
-import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.condition.impl.AtHeightCondition;
-import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
+import ru.maxthetomas.votvevents.condition.impl.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Conditions {
-    private static final HashMap<ResourceLocation, Builder> conditions = new HashMap<>();
+    public static Map<ResourceLocation, MapCodec<? extends ICondition>> REGISTRY = new HashMap<>();
 
-    public static final Builder ALWAYS = register("always", (json) -> (ctx) -> true);
-    public static final Builder NEVER = register("never", (json) -> (ctx) -> false);
-    public static final Builder DEBUG_MODE = register("debug_mode", (json) -> (ctx) -> VotvEvents.getConfig().get().isDebug());
-    public static final Builder IS_NIGHT = register("is_night", IsNightCondition::new);
-    public static final Builder AT_HEIGHT = register("at_height", AtHeightCondition::new);
+    public static MapCodec<? extends ICondition> ALWAYS = register(AlwaysCondition.ID, AlwaysCondition.CODEC);
+    public static MapCodec<? extends ICondition> NEVER = register(NeverCondition.ID, NeverCondition.CODEC);
+    public static MapCodec<? extends ICondition> DEBUG_MODE = register(DebugModeCondition.ID, DebugModeCondition.CODEC);
+    public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
+    public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
 
-    public static ICondition createCondition(ResourceLocation name, JsonElement jsonObject) {
-        return getConditionBuilder(name).apply(jsonObject);
-    }
+    public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
+            .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));
 
-    public static Builder getConditionBuilder(ResourceLocation name) {
-        return conditions.get(name);
-    }
-
-    public static Builder registerCondition(ResourceLocation name, Builder builder) {
-        conditions.put(name, builder);
-        return builder;
-    }
-
-    private static Builder register(String name, Builder builder) {
-        return registerCondition(ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, name), builder);
-    }
-
-    @FunctionalInterface
-    public interface Builder {
-        ICondition apply(JsonElement jsonElement);
+    private static MapCodec<? extends ICondition> register(ResourceLocation key, MapCodec<? extends ICondition> reg) {
+        REGISTRY.put(key, reg);
+        return reg;
     }
 }

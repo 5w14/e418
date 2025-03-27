@@ -3,17 +3,15 @@
   "description": "Test broadcast chat behaviour",
   "behaviours": [
     {
-      "id": "votvevents:broadcast_chat_message",
-      "properties": {
-        "message": {
-          "color": "yellow",
-          "text": "null joined the game",
-          "hoverEvent": {
-            "action": "show_text",
-            "value": {
-              "text": "null - это кто?",
-              "color": "yellow"
-            }
+      "type": "votvevents:broadcast_chat_message",
+      "message": {
+        "color": "yellow",
+        "text": "null joined the game",
+        "hoverEvent": {
+          "action": "show_text",
+          "value": {
+            "text": "null - это кто?",
+            "color": "yellow"
           }
         }
       }
@@ -21,12 +19,12 @@
   ],
   "run_conditions": [
     {
-      "id": "votvevents:debug_mode"
+      "type": "votvevents:debug_mode"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:never"
+      "type": "votvevents:never"
     }
   ]
 }

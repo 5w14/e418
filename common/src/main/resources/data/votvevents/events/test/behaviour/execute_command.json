@@ -3,21 +3,19 @@
   "description": "Test that executes a command",
   "behaviours": [
     {
-      "id": "votvevents:execute_command",
-      "properties": {
-        "execute_as_player": true,
-        "command": "/kill"
-      }
+      "type": "votvevents:execute_command",
+      "execute_as_player": true,
+      "command": "/kill"
     }
   ],
   "run_conditions": [
     {
-      "id": "votvevents:debug_mode"
+      "type": "votvevents:debug_mode"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:never"
+      "type": "votvevents:never"
     }
   ]
 }

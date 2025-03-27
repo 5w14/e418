@@ -5,22 +5,18 @@
   ],
   "run_conditions": [
     {
-      "id": "votvevents:at_height",
-      "properties": {
-        "need_both": true,
-        "above": -50,
-        "below": 50
-      }
+      "type": "votvevents:at_height",
+      "need_both": true,
+      "above": -50,
+      "below": 50
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:at_height",
-      "properties": {
-        "need_both": true,
-        "above": -50,
-        "below": 50
-      }
+      "type": "votvevents:at_height",
+      "need_both": true,
+      "above": -50,
+      "below": 50
     }
   ]
 }

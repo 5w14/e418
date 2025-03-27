@@ -6,13 +6,13 @@ import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.condition.ICondition;
 import ru.maxthetomas.votvevents.event.EventContext;
 
-public class IsNightCondition implements ICondition {
-    public static final MapCodec<IsNightCondition> CODEC = MapCodec.unit(IsNightCondition::new);
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "is_night");
+public class NeverCondition implements ICondition {
+    public static final MapCodec<NeverCondition> CODEC = MapCodec.unit(NeverCondition::new);
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "never");
 
     @Override
     public boolean check(EventContext context) {
-        return context.getServer().overworld().isNight();
+        return false;
     }
 
     @Override

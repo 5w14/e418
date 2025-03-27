@@ -3,23 +3,21 @@
   "description": "Player teleportation test",
   "behaviours": [
     {
-      "id": "votvevents:teleport_player",
-      "properties": {
-        "relative": true,
-        "x": 0,
-        "y": -1,
-        "z": 0
-      }
+      "type": "votvevents:teleport_player",
+      "relative": true,
+      "x": 0,
+      "y": -1,
+      "z": 0
     }
   ],
   "run_conditions": [
     {
-      "id": "votvevents:debug_mode"
+      "type": "votvevents:debug_mode"
     }
   ],
   "queue_conditions": [
     {
-      "id": "votvevents:never"
+      "type": "votvevents:never"
     }
   ]
 }
