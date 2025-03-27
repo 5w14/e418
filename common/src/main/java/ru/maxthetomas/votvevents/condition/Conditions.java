@@ -1,42 +1,23 @@
 package ru.maxthetomas.votvevents.condition;
 
-import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.condition.impl.AtHeightCondition;
-import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
-import ru.maxthetomas.votvevents.config.Config;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Conditions {
-    private static final HashMap<ResourceLocation, Builder> conditions = new HashMap<>();
+    private static final Map<ResourceLocation, ICondition> REGISTRY = new HashMap<>();
+    public static Codec<ICondition> CODEC = ResourceLocation.CODEC.dispatch(ICondition::getTypeId,
+            (id) -> get(id).result().orElseThrow().getType());
 
-    public static final Builder ALWAYS = register("always", (json) -> (ctx) -> true);
-    public static final Builder NEVER = register("never", (json) -> (ctx) -> false);
-    public static final Builder DEBUG_MODE = register("debug_mode", (json) -> (ctx) -> Config.isDebug());
-    public static final Builder IS_NIGHT = register("is_night", IsNightCondition::new);
-    public static final Builder AT_HEIGHT = register("at_height", AtHeightCondition::new);
+    public static DataResult<ICondition> get(ResourceLocation id) {
+        if (REGISTRY.containsKey(id)) {
+            return DataResult.success(REGISTRY.get(id));
+        }
 
-    public static ICondition createCondition(ResourceLocation name, JsonElement jsonObject) {
-        return getConditionBuilder(name).apply(jsonObject);
+        return DataResult.error(() -> "Unknown condition: " + id);
     }
 
-    public static Builder getConditionBuilder(ResourceLocation name) {
-        return conditions.get(name);
-    }
-
-    public static Builder registerCondition(ResourceLocation name, Builder builder) {
-        conditions.put(name, builder);
-        return builder;
-    }
-
-    private static Builder register(String name, Builder builder) {
-        return registerCondition(ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, name), builder);
-    }
-
-    @FunctionalInterface
-    public interface Builder {
-        ICondition apply(JsonElement jsonElement);
-    }
 }

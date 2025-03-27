@@ -9,17 +9,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
-import ru.maxthetomas.votvevents.util.ResourceUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-public class EventManager extends SimplePreparableReloadListener<HashMap<ResourceLocation, EventResource>> {
+public class EventManager extends SimplePreparableReloadListener<Map<ResourceLocation, EventResource>> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private HashMap<ResourceLocation, EventResource> registeredEvents;
+    private Map<ResourceLocation, EventResource> registeredEvents;
     private List<ActiveEvent> activeEvents = new ArrayList<>();
 
     // Getters
@@ -92,38 +91,41 @@ public class EventManager extends SimplePreparableReloadListener<HashMap<Resourc
      */
 
     @Override
-    protected @NotNull HashMap<ResourceLocation, EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        var events = new HashMap<ResourceLocation, EventResource>();
+    protected @NotNull Map<ResourceLocation, EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+//        SimpleJsonResourceReloadListener.scanDirectory(resourceManager, "events", (path) -> path.endsWith(".json"));
+//        var events = new HashMap<ResourceLocation, EventResource>();
+//
+//        resourceManager.listResources("events", (path) -> path.getPath().endsWith(".json")).forEach((loc, resource) -> {
+//            var evt = ResourceUtil.getJsonResource(resourceManager, loc);
+//
+//            if (evt == null || !evt.isJsonObject()) {
+//                LOGGER.warn("Failed to parse event resource at location {}", loc);
+//                return;
+//            }
+//
+//            var res = EventResource.buildEventResourceFromJson(evt.getAsJsonObject());
+//
+//            if (res == null) {
+//                LOGGER.warn("Failed to parse event resource at location {}", loc);
+//                return;
+//            }
+//
+//            var ns = loc.getNamespace();
+//            var p = loc.getPath()
+//                    .replaceFirst(".json", "")
+//                    .replaceFirst("events/", "");
+//
+//            events.put(ResourceLocation.fromNamespaceAndPath(ns, p), res);
+//        });
+//
+//        return events;
 
-        resourceManager.listResources("events", (path) -> path.getPath().endsWith(".json")).forEach((loc, resource) -> {
-            var evt = ResourceUtil.getJsonResource(resourceManager, loc);
-
-            if (evt == null || !evt.isJsonObject()) {
-                LOGGER.warn("Failed to parse event resource at location {}", loc);
-                return;
-            }
-
-            var res = EventResource.buildEventResourceFromJson(evt.getAsJsonObject());
-
-            if (res == null) {
-                LOGGER.warn("Failed to parse event resource at location {}", loc);
-                return;
-            }
-
-            var ns = loc.getNamespace();
-            var p = loc.getPath()
-                    .replaceFirst(".json", "")
-                    .replaceFirst("events/", "");
-
-            events.put(ResourceLocation.fromNamespaceAndPath(ns, p), res);
-        });
-
-        return events;
+        return Map.of();
     }
 
     @Override
-    protected void apply(HashMap<ResourceLocation, EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected void apply(Map<ResourceLocation, EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         this.registeredEvents = object;
-        LOGGER.info("Successfully reloaded events!");
+//        LOGGER.info("Successfully reloaded events!");
     }
 }

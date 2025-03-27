@@ -1,13 +1,14 @@
 package ru.maxthetomas.votvevents.behaviour;
 
+import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 /**
  * Event behaviour.
  * These behaviours are generic actions that event could perform.
  */
-@FunctionalInterface
 public interface IBehaviour {
+    public ResourceLocation getTypeId();
 
     /**
      * Can this behaviour run.

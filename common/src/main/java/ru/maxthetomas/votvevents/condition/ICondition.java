@@ -1,5 +1,7 @@
 package ru.maxthetomas.votvevents.condition;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 /**
@@ -15,4 +17,8 @@ public interface ICondition {
      * @return Is condition is met
      */
     boolean check(EventContext context);
+
+    public MapCodec<? extends ICondition> getType();
+
+    public ResourceLocation getTypeId();
 }

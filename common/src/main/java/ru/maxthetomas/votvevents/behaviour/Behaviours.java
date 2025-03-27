@@ -1,45 +1,33 @@
 package ru.maxthetomas.votvevents.behaviour;
 
-import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.impl.*;
-import ru.maxthetomas.votvevents.behaviour.impl.context_mutator.RandomPlayerContextMutatorBehaviour;
+import ru.maxthetomas.votvevents.behaviour.impl.PlaySoundBehaviour;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Behaviours {
-    private static final HashMap<ResourceLocation, Builder> behaviours = new HashMap<>();
+    private static final Map<ResourceLocation, MapCodec<? extends IBehaviour>> REGISTRY = new HashMap<>();
+    public static Codec<? extends IBehaviour> DISPATCH = ResourceLocation.CODEC.dispatchStable(
+            IBehaviour::getTypeId,
+            (id) -> get(id).result().orElseThrow()
+    );
 
-    public static final Builder EMPTY = register("empty", json -> ctx -> {
-    });
-    public static final Builder BROADCAST_CHAT_MESSAGE = register("broadcast_chat_message", BroadcastChatMessageBehaviour::new);
-    public static final Builder PLAY_SOUND = register("play_sound", PlaySoundBehaviour::new);
-    public static final Builder MAKE_CONSUMABLE = register("make_consumable", MakeConsumableBehaviour::new);
-    public static final Builder TELEPORT_PLAYER = register("teleport_player", TeleportPlayerBehaviour::new);
-    public static final Builder RANDOM_PLAYER_CONTEXT_MUTATOR = register("random_player_context_mutator", RandomPlayerContextMutatorBehaviour::new);
-    public static final Builder DEBUG_PRINT_CONTEXT = register("debug_print_context", DebugPrintContextBehaviour::new);
-    public static final Builder EXECUTE_COMMAND = register("execute_command", ExecuteCommandBehaviour::new);
+    public static final MapCodec<? extends IBehaviour> PLAY_SOUND_BEHAVIOUR = register(PlaySoundBehaviour.ID, PlaySoundBehaviour.CODEC);
 
-    public static IBehaviour createBehaviour(ResourceLocation name, JsonElement jsonObject) {
-        return getBehaviourBuilder(name).apply(jsonObject);
+    public static DataResult<MapCodec<? extends IBehaviour>> get(ResourceLocation id) {
+        if (REGISTRY.containsKey(id)) {
+            return DataResult.success(REGISTRY.get(id));
+        }
+
+        return DataResult.error(() -> "Unknown behaviour: " + id);
     }
 
-    public static Builder getBehaviourBuilder(ResourceLocation name) {
-        return behaviours.get(name);
-    }
-
-    public static Builder registerBehaviour(ResourceLocation name, Builder builder) {
-        behaviours.put(name, builder);
-        return builder;
-    }
-
-    private static Builder register(String name, Builder builder) {
-        return registerBehaviour(ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, name), builder);
-    }
-
-    @FunctionalInterface
-    public interface Builder {
-        IBehaviour apply(JsonElement jsonElement);
+    public static MapCodec<? extends IBehaviour> register(ResourceLocation id, MapCodec<? extends IBehaviour> codec) {
+        REGISTRY.put(id, codec);
+        return codec;
     }
 }
