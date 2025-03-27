@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixins;
 import ru.maxthetomas.votvevents.config.Config;
 import ru.maxthetomas.votvevents.debug.EventCommand;
 import ru.maxthetomas.votvevents.event.EventManager;
+import ru.maxthetomas.votvevents.event.RandomEventManager;
 
 import java.util.Optional;
 
@@ -28,6 +29,8 @@ public final class VotvEvents {
             }
         });
 
+        RandomEventManager.init();
+        
         CommandRegistrationEvent.EVENT.register(EventCommand::register);
 
         Mixins.addConfiguration(MOD_ID + ".mixins.json");

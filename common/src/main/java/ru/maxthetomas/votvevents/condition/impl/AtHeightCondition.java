@@ -21,11 +21,13 @@ public class AtHeightCondition implements ICondition {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "at_height");
     public static MapCodec<AtHeightCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.optionalFieldOf("above", Float.MAX_VALUE).forGetter(AtHeightCondition::getAbove),
-            Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::getBelow)
+            Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::getBelow),
+            Codec.BOOL.optionalFieldOf("need_both", true).forGetter(AtHeightCondition::needBoth)
     ).apply(instance, AtHeightCondition::new));
 
     private final float above;
     private final float below;
+    private final boolean needBoth;
 
     /**
      * Creates a new instance of AtHeightCondition.
@@ -33,9 +35,10 @@ public class AtHeightCondition implements ICondition {
      * @param above Check that the player is above this height. Use <code>Float.MAX_VALUE</code> to disable.
      * @param below Check that the player is below this height. Use <code>-Float.MAX_VALUE</code> to disable.
      */
-    public AtHeightCondition(float above, float below) {
+    public AtHeightCondition(float above, float below, boolean needBoth) {
         this.above = above;
         this.below = below;
+        this.needBoth = needBoth;
     }
 
 
@@ -43,11 +46,7 @@ public class AtHeightCondition implements ICondition {
     public boolean check(EventContext context) {
         var positionY = context.getPlayer().position().y;
 
-        // Check if it's a range
-        var has_above = above != Float.MAX_VALUE;
-        var has_below = below != -Float.MAX_VALUE;
-
-        if (has_above && has_below) {
+        if (needBoth) {
             return positionY > above && positionY < below;
         } else {
             return positionY > above || positionY < below;
@@ -65,5 +64,9 @@ public class AtHeightCondition implements ICondition {
 
     public float getBelow() {
         return below;
+    }
+
+    public boolean needBoth() {
+        return needBoth;
     }
 }

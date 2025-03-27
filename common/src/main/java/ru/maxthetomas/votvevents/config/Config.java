@@ -3,9 +3,9 @@ package ru.maxthetomas.votvevents.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.mojang.logging.LogUtils;
 import dev.architectury.platform.Platform;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -14,16 +14,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Config {
-    private boolean isDebug = false;
-    private String testVar = "AAA NULL";
-
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH = Platform.getConfigFolder().resolve("votvevents.json");
-    private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    public boolean isDebug() {
-        return Platform.isDevelopmentEnvironment() || isDebug;
-    }
+    private boolean isDebug = false;
+    private int minTimeBetweenEvents = 20;
+    private int maxTimeBetweenEvents = 200;
+    private boolean isRandomEventsEnabled = false;
 
     /**
      * Reads config file and returns filled config
@@ -61,4 +59,21 @@ public class Config {
             LOGGER.error("Failed to save configuration", exception);
         }
     }
+
+    public boolean isDebug() {
+        return Platform.isDevelopmentEnvironment() || isDebug;
+    }
+
+    public int getMinTimeBetweenEvents() {
+        return minTimeBetweenEvents;
+    }
+
+    public int getMaxTimeBetweenEvents() {
+        return maxTimeBetweenEvents;
+    }
+
+    public boolean isRandomEventsEnabled() {
+        return isRandomEventsEnabled;
+    }
+
 }

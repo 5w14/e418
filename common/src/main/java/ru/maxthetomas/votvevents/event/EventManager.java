@@ -34,6 +34,18 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
         return this.registeredEvents.getOrDefault(location, null);
     }
 
+    /**
+     * TODO: Make it only get non-debug events
+     *
+     * @return random registered event
+     */
+    public EventResource getRandomEvent() {
+        Random random = new Random();
+        var resourceArray = this.registeredEvents.keySet().toArray();
+
+        return this.registeredEvents.get((ResourceLocation) resourceArray[random.nextInt(resourceArray.length)]);
+    }
+
     public Set<ResourceLocation> getRegisteredEvents() {
         return registeredEvents.keySet();
     }
