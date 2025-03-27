@@ -3,7 +3,7 @@
   "description": "Test mutation behaviour",
   "behaviours": [
     {
-      "type": "votvevents:random_player_context_mutator",
+      "type": "votvevents:context_select_random_player",
       "behaviours": [
         {
           "type": "votvevents:debug_print_context"
