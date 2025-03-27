@@ -8,7 +8,7 @@ import ru.maxthetomas.votvevents.event.EventContext;
 
 public class AlwaysCondition implements ICondition {
     public static final MapCodec<AlwaysCondition> CODEC = MapCodec.unit(AlwaysCondition::new);
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "never");
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "always");
 
     @Override
     public boolean check(EventContext context) {
