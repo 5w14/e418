@@ -3,9 +3,13 @@
   "description": "Test making current item in hand consumable",
   "behaviours": [
     {
-      "type": "votvevents:make_consumable",
-      "consume_seconds": 2,
-      "has_consume_particles": true
+      "type": "votvevents:modify_held_item_components",
+      "components": {
+        "minecraft:consumable": {
+          "consume_seconds": 2,
+          "has_consume_particles": true
+        }
+      }
     }
   ],
   "run_conditions": [
