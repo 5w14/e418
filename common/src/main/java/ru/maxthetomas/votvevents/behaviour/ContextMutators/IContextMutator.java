@@ -1,4 +1,4 @@
-package ru.maxthetomas.votvevents.behaviour.impl.context_mutators;
+package ru.maxthetomas.votvevents.behaviour.ContextMutators;
 
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.behaviour.impl.MutateContextBehaviour;

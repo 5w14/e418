@@ -1,10 +1,10 @@
-package ru.maxthetomas.votvevents.behaviour.impl.context_mutators;
+package ru.maxthetomas.votvevents.behaviour.ContextMutators;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.behaviour.impl.context_mutators.impl.SelectRandomPlayerContextMutator;
+import ru.maxthetomas.votvevents.behaviour.ContextMutators.impl.SelectRandomPlayerContextMutator;
 
 import java.util.HashMap;
 import java.util.Map;
