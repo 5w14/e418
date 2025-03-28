@@ -64,6 +64,6 @@ public class ExecuteCommandBehaviour implements IBehaviour {
 
     @Override
     public boolean canRun(EventContext context) {
-        return asPlayer && context.getPlayer() == null;
+        return !asPlayer || context.getPlayer() != null;
     }
 }
