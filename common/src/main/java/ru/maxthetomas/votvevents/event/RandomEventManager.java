@@ -34,7 +34,7 @@ public class RandomEventManager {
             var eventContext = new EventContext(minecraftServer)
                     .withPlayer(minecraftServer.overworld().getRandomPlayer());
 
-            LOGGER.info("Starting random event: {}", eventResource.getName());
+            LOGGER.info("Starting random event: {}", eventResource.name());
             VotvEvents.getEventManager().runEvent(eventResource, eventContext);
 
             currentTick = 0;
