@@ -1,4 +1,4 @@
-package ru.maxthetomas.votvevents.behaviour.ContextMutators.impl;
+package ru.maxthetomas.votvevents.behaviour.contextmutators.impl;
 
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.ContextMutators.IContextMutator;
+import ru.maxthetomas.votvevents.behaviour.contextmutators.IContextMutator;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 /**
