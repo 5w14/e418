@@ -4,7 +4,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.behaviour.impl.*;
-import ru.maxthetomas.votvevents.behaviour.impl.context_mutator.SelectRandomPlayerBehaviour;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +21,7 @@ public class Behaviours {
     public static final MapCodec<? extends IBehaviour> MODIFY_HELD_ITEM_COMPONENTS = register(ModifyHeldItemComponents.ID, ModifyHeldItemComponents.CODEC);
     public static final MapCodec<? extends IBehaviour> PLAY_SOUND = register(PlaySoundBehaviour.ID, PlaySoundBehaviour.CODEC);
     public static final MapCodec<? extends IBehaviour> TELEPORT_PLAYER = register(TeleportPlayerBehaviour.ID, TeleportPlayerBehaviour.CODEC);
-
-    // Mutators
-    public static final MapCodec<? extends IBehaviour> CONTEXT_MUTATE_SELECT_RANDOM_PLAYER = register(SelectRandomPlayerBehaviour.ID, SelectRandomPlayerBehaviour.CODEC);
+    public static final MapCodec<? extends IBehaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);
 
     /**
      * Gets a codec to create a {@linkplain IBehaviour} from the registry.

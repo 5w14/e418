@@ -10,9 +10,10 @@ import ru.maxthetomas.votvevents.event.EventContext;
 public interface ICondition {
 
     /**
-     * Check if condition is met
+     * Check if condition is met.
      *
-     * @return Is condition is met
+     * @param context Context of event.
+     * @return Is condition is met.
      */
     boolean check(EventContext context);
 
