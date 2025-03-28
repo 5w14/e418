@@ -1,0 +1,13 @@
+{
+  "name": "Weather Condition Test (No queue)",
+  "description": "Test that checks if it is thundering",
+  "behaviours": [
+  ],
+  "run_conditions": [
+    {
+      "type": "votvevents:weather",
+      "weather": "thunder"
+    }
+  ],
+  "queue_conditions": []
+}

@@ -3,5 +3,9 @@
   "votvevents.commands.event.start.success": "Started %s",
   "votvevents.commands.event.start.success.force": "Forcefully started %s",
   "votvevents.commands.event.start.fail": "Unable to start %s",
-  "votvevents.commands.event.print": "Currently registered events: \n%s"
+  "votvevents.commands.event.print": "Currently registered events: \n%s",
+  "votvevents.commands.event.queue.success": "Queued %s",
+  "votvevents.commands.event.queue.success.force": "Forcefully queued %s",
+  "votvevents.commands.event.queue.fail": "Unable to queue %s",
+  "votvevents.commands.event.print_queued": "Currently queued events: \n%s"
 }
