@@ -3,6 +3,7 @@ package ru.maxthetomas.votvevents.behaviour.impl;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.behaviour.PreActiveBehaviour;
@@ -42,6 +43,7 @@ public class MutateContextBehaviour implements IBehaviour {
      * @param context Context to mutate
      * @return New mutated context or null if mutation was failed.
      */
+    @Nullable
     public EventContext getMutatedContext(EventContext context) {
         var mutatedContext = context.clone();
 
@@ -75,6 +77,9 @@ public class MutateContextBehaviour implements IBehaviour {
     public void execute(EventContext context) {
         storedMutatedContext = getMutatedContext(context);
 
+        if (storedMutatedContext == null)
+            return;
+
         for (var preActiveBehaviour : behaviours) {
             var behaviour = preActiveBehaviour.create();
             behaviour.execute(storedMutatedContext);
@@ -95,6 +100,33 @@ public class MutateContextBehaviour implements IBehaviour {
             if (!behaviour.isDone())
                 return false;
         }
+        return true;
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        var mutatedContext = getMutatedContext(context);
+
+        if (mutatedContext == null)
+            return false;
+
+        if (!mutatedContext.isForced()) {
+            // Check if conditions to run are met
+            for (ICondition condition : runConditions) {
+                if (!condition.check(mutatedContext)) {
+                    return false;
+                }
+            }
+        }
+
+        // Check if all behaviours can run
+        for (var preActiveBehaviour : behaviours) {
+            // todo find a better way to check if behaviour can run
+            if (!preActiveBehaviour.create().canRun(mutatedContext)) {
+                return false;
+            }
+        }
+
         return true;
     }
 }

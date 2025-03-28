@@ -42,6 +42,9 @@ public class ExecuteCommandBehaviour implements IBehaviour {
     public void execute(EventContext context) {
         CommandSourceStack stack;
 
+        if (asPlayer && context.getPlayer() == null)
+            return;
+
         if (asPlayer) {
             stack = ((ServerPlayer) context.getPlayer()).createCommandSourceStack();
         } else {
@@ -57,5 +60,10 @@ public class ExecuteCommandBehaviour implements IBehaviour {
         }
 
         context.getServer().getCommands().performPrefixedCommand(stack, this.command);
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return asPlayer && context.getPlayer() == null;
     }
 }
