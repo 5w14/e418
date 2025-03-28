@@ -13,7 +13,7 @@ public interface IContextMutator {
      * Mutates given context.
      *
      * @param context Context to mutate
-     * @return If mutation was failed
+     * @return Whether the mutation succeeded.
      */
     public boolean mutate(EventContext context);
 
