@@ -6,7 +6,8 @@
       "type": "votvevents:mutate_context",
       "mutators": [
         {
-          "type": "votvevents:select_random_player"
+          "type": "votvevents:select_random_player",
+          "prevent_override": true
         }
       ],
       "behaviours": [
