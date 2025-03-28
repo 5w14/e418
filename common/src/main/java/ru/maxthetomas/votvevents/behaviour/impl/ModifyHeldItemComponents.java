@@ -25,6 +25,10 @@ public class ModifyHeldItemComponents implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        if (context.getPlayer() != null) {
+            return;
+        }
+
         var item = context.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
         item.applyComponents(components);
     }
@@ -32,6 +36,11 @@ public class ModifyHeldItemComponents implements IBehaviour {
     @Override
     public ResourceLocation getTypeId() {
         return ID;
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return context.getPlayer() != null;
     }
 
     public DataComponentPatch getComponents() {
