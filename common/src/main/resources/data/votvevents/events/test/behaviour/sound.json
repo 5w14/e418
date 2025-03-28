@@ -3,10 +3,20 @@
   "description": "Test sound behaviour",
   "behaviours": [
     {
-      "type": "votvevents:play_sound",
-      "sound": "minecraft:ambient.cave",
-      "volume": 1.0,
-      "pitch": 1.0
+      "type": "votvevents:mutate_context",
+      "mutators": [
+        {
+          "type": "votvevents:select_random_player"
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "votvevents:play_sound",
+          "sound": "minecraft:ambient.cave",
+          "volume": 1.0,
+          "pitch": 1.0
+        }
+      ]
     }
   ],
   "run_conditions": [

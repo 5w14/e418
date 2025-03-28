@@ -3,9 +3,19 @@
   "description": "Test that executes a command",
   "behaviours": [
     {
-      "type": "votvevents:execute_command",
-      "as_player": true,
-      "command": "/kill"
+      "type": "votvevents:mutate_context",
+      "mutators": [
+        {
+          "type": "votvevents:select_random_player"
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "votvevents:execute_command",
+          "as_player": true,
+          "command": "/kill"
+        }
+      ]
     }
   ],
   "run_conditions": [

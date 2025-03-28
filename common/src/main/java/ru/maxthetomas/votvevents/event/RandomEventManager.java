@@ -31,11 +31,15 @@ public class RandomEventManager {
         if (currentTick >= timeToEvent) {
             var eventResource = VotvEvents.getEventManager().getRandomEvent();
 
-            var eventContext = new EventContext(minecraftServer)
-                    .withPlayer(minecraftServer.overworld().getRandomPlayer());
+            var eventContext = new EventContext(minecraftServer);
 
-            LOGGER.info("Starting random event: {}", eventResource.name());
-            VotvEvents.getEventManager().runEvent(eventResource, eventContext);
+            var activeEvent = VotvEvents.getEventManager().runEvent(eventResource, eventContext);
+
+            if (activeEvent == null) {
+                LOGGER.info("Failed to start random event: {}", eventResource.name());
+            } else {
+                LOGGER.info("Starting random event: {}", eventResource.name());
+            }
 
             currentTick = 0;
             timeToEvent = RANDOM.nextInt(
