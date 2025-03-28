@@ -4,7 +4,7 @@
   "behaviours": [
     {
       "type": "votvevents:mutate_context",
-      "context_mutators": [
+      "mutators": [
         {
           "type": "votvevents:select_random_player"
         }

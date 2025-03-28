@@ -3,6 +3,7 @@ package ru.maxthetomas.votvevents.behaviour.impl;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.votvevents.VotvEvents;
@@ -39,15 +40,22 @@ public class ExecuteCommandBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        CommandSourceStack stack;
+
         if (asPlayer) {
-            context.getServer().getCommands().performPrefixedCommand(
-                    ((ServerPlayer) context.getPlayer()).createCommandSourceStack(),
-                    command);
+            stack = ((ServerPlayer) context.getPlayer()).createCommandSourceStack();
         } else {
-            context.getServer().getCommands().performPrefixedCommand(
-                    context.getServer().createCommandSourceStack(),
-                    command);
+            stack = context.getServer().createCommandSourceStack();
         }
 
+        stack = stack.withPermission(2);
+
+        if (context.getLocation() != null) {
+            stack = stack
+                    .withLevel(context.getLocation().getLevel())
+                    .withPosition(context.getLocation().getPosition());
+        }
+
+        context.getServer().getCommands().performPrefixedCommand(stack, this.command);
     }
 }

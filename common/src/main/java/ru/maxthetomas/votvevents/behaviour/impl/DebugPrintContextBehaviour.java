@@ -5,6 +5,8 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
@@ -12,6 +14,7 @@ import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.stream.Stream;
 
 public class DebugPrintContextBehaviour implements IBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "debug_print_context");
@@ -26,17 +29,26 @@ public class DebugPrintContextBehaviour implements IBehaviour {
     public void execute(EventContext context) {
         for (Method method : context.getClass().getMethods()) {
             var name = method.getName();
-            if (name.startsWith("get") && method.getParameterCount() == 0 && !name.equals("getClass")) {
+            if (Stream.of("get", "is").anyMatch(name::startsWith)
+                    && method.getParameterCount() == 0 && !name.equals("getClass")) {
                 try {
+                    var result = method.invoke(context);
+                    if (result == null)
+                        throw new NullPointerException();
+
                     context.getServer().getPlayerList().broadcastSystemMessage(
                             Component.literal(name).append(" -> ").append(
-                                            Component.literal(method.invoke(context).toString())
+                                            Component.literal(result.toString())
                                                     .withStyle(ChatFormatting.GRAY))
                                     .withStyle(ChatFormatting.WHITE)
                             , false);
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException | NullPointerException e) {
                     context.getServer().getPlayerList().broadcastSystemMessage(
-                            Component.literal(name).withStyle(ChatFormatting.DARK_GRAY), false);
+                            Component.literal(name + " -> ")
+                                    .append(Component.literal("null").withStyle(Style.EMPTY
+                                            .applyFormat(ChatFormatting.DARK_GRAY)
+                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal(e.toString()))))),
+                            false);
                 }
             }
         }

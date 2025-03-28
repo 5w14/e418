@@ -18,9 +18,9 @@ import java.util.List;
 public class MutateContextBehaviour implements IBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ContextMutators.DISPATCH_CODEC.listOf().fieldOf("context_mutators").forGetter(MutateContextBehaviour::getContextMutators),
+            ContextMutators.DISPATCH_CODEC.listOf().fieldOf("mutators").forGetter(MutateContextBehaviour::getContextMutators),
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(MutateContextBehaviour::getBehaviours),
-            Conditions.DISPATCH_CODEC.listOf().fieldOf("run_conditions").forGetter(MutateContextBehaviour::getRunConditions)
+            Conditions.DISPATCH_CODEC.listOf().optionalFieldOf("run_conditions", List.of()).forGetter(MutateContextBehaviour::getRunConditions)
     ).apply(instance, MutateContextBehaviour::new));
 
     public final List<IContextMutator> contextMutators;
