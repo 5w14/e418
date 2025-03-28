@@ -42,10 +42,19 @@ public class PlaySoundBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        if (context.getPlayer() == null) {
+            return;
+        }
+
         context.getPlayer().playNotifySound(
                 new SoundEvent(getSoundEventId(), Optional.of(getRange())),
                 getSoundSource(), getVolume(), getPitch()
         );
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return context.getPlayer() != null;
     }
 
     @Override

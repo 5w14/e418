@@ -54,10 +54,19 @@ public class TeleportPlayerBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        if (context.getPlayer() == null) {
+            return;
+        }
+
         if (relative) {
             context.getPlayer().teleportRelative(x, y, z);
         } else {
             context.getPlayer().teleportTo(x, y, z);
         }
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return context.getPlayer() != null;
     }
 }

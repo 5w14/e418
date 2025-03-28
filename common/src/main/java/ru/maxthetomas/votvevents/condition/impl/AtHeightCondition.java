@@ -44,6 +44,10 @@ public class AtHeightCondition implements ICondition {
 
     @Override
     public boolean check(EventContext context) {
+        if (context.getPlayer() == null) {
+            return false;
+        }
+
         var positionY = context.getPlayer().position().y;
 
         if (needBoth) {
