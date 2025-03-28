@@ -20,6 +20,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
     public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
+    public static MapCodec<? extends ICondition> WEATHER = register(WeatherCondition.ID, WeatherCondition.CODEC);
 
     public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));
