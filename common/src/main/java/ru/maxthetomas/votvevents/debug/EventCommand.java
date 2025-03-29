@@ -32,7 +32,6 @@ public class EventCommand {
                 .then(startEvent())
                 .then(queueEvent())
                 .then(printEvents())
-                .then(printQueuedEvents())
         );
     }
 
@@ -79,19 +78,17 @@ public class EventCommand {
     }
 
     /**
-     * Prints out all loaded events
+     * Prints out selected data
      */
     private static LiteralArgumentBuilder<CommandSourceStack> printEvents() {
         return LiteralArgumentBuilder.<CommandSourceStack>literal("print")
-                .executes(EventCommand::executePrintEvents);
-    }
-
-    /**
-     * Prints out all queued events
-     */
-    private static LiteralArgumentBuilder<CommandSourceStack> printQueuedEvents() {
-        return LiteralArgumentBuilder.<CommandSourceStack>literal("print_queued")
-                .executes(EventCommand::executePrintQueuedEvents);
+                .then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("registered")
+                                .executes(EventCommand::executePrintEvents)
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("queued")
+                                .executes(EventCommand::executePrintQueuedEvents)
+                );
     }
 
     /**
