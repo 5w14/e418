@@ -4,10 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.condition.impl.AtHeightCondition;
-import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
-import ru.maxthetomas.votvevents.condition.impl.RandomCondition;
-import ru.maxthetomas.votvevents.condition.impl.WeatherCondition;
+import ru.maxthetomas.votvevents.condition.impl.*;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.HashMap;
@@ -20,13 +17,18 @@ import java.util.function.Function;
 public class Conditions {
     public static Map<ResourceLocation, MapCodec<? extends ICondition>> REGISTRY = new HashMap<>();
 
-    public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
-    public static MapCodec<? extends ICondition> NEVER = registerSimple("never", (ctx) -> false);
-    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> VotvEvents.getConfig().get().isDebug());
     public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
     public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
-    public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
     public static MapCodec<? extends ICondition> WEATHER = register(WeatherCondition.ID, WeatherCondition.CODEC);
+
+    // Utility conditions
+    public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
+    public static MapCodec<? extends ICondition> NEVER = registerSimple("never", (ctx) -> false);
+    public static MapCodec<? extends ICondition> OR = register(OrCondition.ID, OrCondition.CODEC);
+    public static MapCodec<? extends ICondition> AND = register(AndCondition.ID, AndCondition.CODEC);
+    public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
+    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> VotvEvents.getConfig().get().isDebug());
+
 
     public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));
