@@ -6,7 +6,6 @@
   "run_conditions": [
     {
       "type": "votvevents:at_height",
-      "need_both": true,
       "above": -50,
       "below": 50
     }
@@ -14,7 +13,6 @@
   "queue_conditions": [
     {
       "type": "votvevents:at_height",
-      "need_both": true,
       "above": -50,
       "below": 50
     }
