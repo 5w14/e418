@@ -84,10 +84,13 @@ public class EventCommand {
         return LiteralArgumentBuilder.<CommandSourceStack>literal("print")
                 .then(
                         LiteralArgumentBuilder.<CommandSourceStack>literal("registered")
-                                .executes(EventCommand::executePrintEvents)
+                                .executes(EventCommand::executePrintRegisteredEvents)
                 ).then(
                         LiteralArgumentBuilder.<CommandSourceStack>literal("queued")
                                 .executes(EventCommand::executePrintQueuedEvents)
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("active")
+                                .executes(EventCommand::executePrintActiveEvents)
                 );
     }
 
@@ -218,9 +221,9 @@ public class EventCommand {
     }
 
     /**
-     * Executes the print command
+     * Prints registered events
      */
-    private static int executePrintEvents(CommandContext<CommandSourceStack> context) {
+    private static int executePrintRegisteredEvents(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(
                 () -> Component.translatable("votvevents.commands.event.print",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getRegisteredEvents(),
@@ -232,13 +235,28 @@ public class EventCommand {
     }
 
     /**
-     * Executes the print queued events command
+     * Prints queued events
      */
     private static int executePrintQueuedEvents(CommandContext<CommandSourceStack> context) {
         // TODO: make it also show timeout
         context.getSource().sendSuccess(
                 () -> Component.translatable("votvevents.commands.event.print_queued",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getQueuedEvents(),
+                                Component.literal("\n"),
+                                (e) -> Component.literal(" - " + e.resource.name()))
+                ), false);
+
+        return 1;
+    }
+
+    /**
+     * Prints active events
+     */
+    private static int executePrintActiveEvents(CommandContext<CommandSourceStack> context) {
+        // TODO: make it also show timeout
+        context.getSource().sendSuccess(
+                () -> Component.translatable("votvevents.commands.event.print_active",
+                        ComponentUtils.formatList(VotvEvents.getEventManager().getActiveEvents(),
                                 Component.literal("\n"),
                                 (e) -> Component.literal(" - " + e.resource.name()))
                 ), false);
