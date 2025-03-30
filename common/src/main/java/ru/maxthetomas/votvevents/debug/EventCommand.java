@@ -251,7 +251,7 @@ public class EventCommand {
                 () -> Component.translatable("votvevents.commands.event.print_queued",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getQueuedEvents(),
                                 Component.literal("\n"),
-                                (e) -> Component.literal(" - " + e.resource.name()))
+                                (e) -> Component.literal(" - ").append(formatEvent(e.resource)))
                 ), false);
 
         return 1;
@@ -266,7 +266,7 @@ public class EventCommand {
                 () -> Component.translatable("votvevents.commands.event.print_active",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getActiveEvents(),
                                 Component.literal("\n"),
-                                (e) -> Component.literal(" - " + e.resource.name()))
+                                (e) -> Component.literal(" - ").append(formatEvent(e.resource)))
                 ), false);
 
         return 1;
@@ -291,7 +291,7 @@ public class EventCommand {
                         Component.literal(registryKey.toString()),
                         ComponentUtils.formatList(registry.get().getEvents(),
                                 Component.literal("\n"),
-                                (e) -> formatEvent(e.resource()))
+                                (e) -> Component.literal(" - ").append(formatEvent(e.resource())))
                 ), false);
 
         return 1;
