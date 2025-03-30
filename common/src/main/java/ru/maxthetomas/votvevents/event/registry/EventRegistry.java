@@ -45,6 +45,10 @@ public class EventRegistry {
      * @return Randomly picked event.
      */
     public EventResource getRandomEvent(Random random) {
+        if (events.isEmpty()) {
+            return null;
+        }
+        
         int totalWeight = 0;
         for (WeightedEvent event : events) {
             totalWeight += event.weight();
