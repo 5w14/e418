@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.config.Config;
+import ru.maxthetomas.votvevents.event.registry.EventRegistries;
 
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class RandomEventManager {
         currentTick++;
 
         if (currentTick >= timeToEvent) {
-            var eventResource = VotvEvents.getEventManager().getRandomEvent();
+            var eventResource = EventRegistries.RANDOM.getRandomEvent();
 
             var eventContext = new EventContext(minecraftServer);
 

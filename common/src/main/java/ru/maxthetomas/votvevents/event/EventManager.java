@@ -1,12 +1,14 @@
 package ru.maxthetomas.votvevents.event;
 
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -16,27 +18,16 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.event.registry.EventRegistries;
+import ru.maxthetomas.votvevents.event.registry.EventRegistry;
 
 import java.util.*;
 
-public class EventManager extends SimplePreparableReloadListener<Map<ResourceLocation, EventResource>> {
+public class EventManager extends SimplePreparableReloadListener<EventManager.EventManagerData> {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final List<ActiveEvent> activeEvents = new ArrayList<>();
     private final List<QueuedEvent> queuedEvents = new ArrayList<>();
     private Map<ResourceLocation, EventResource> registeredEvents;
-
-    // Getters
-    public List<ActiveEvent> getActiveEvents() {
-        return activeEvents;
-    }
-
-    public List<QueuedEvent> getQueuedEvents() {
-        return queuedEvents;
-    }
-
-    public @Nullable EventResource getEvent(ResourceLocation location) {
-        return this.registeredEvents.getOrDefault(location, null);
-    }
 
     public EventManager() {
         TickEvent.SERVER_POST.register(EventManager::tick);
@@ -58,6 +49,19 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
             }
             return false;
         });
+    }
+
+    // Getters
+    public List<ActiveEvent> getActiveEvents() {
+        return activeEvents;
+    }
+
+    public List<QueuedEvent> getQueuedEvents() {
+        return queuedEvents;
+    }
+
+    public @Nullable EventResource getEvent(ResourceLocation location) {
+        return this.registeredEvents.getOrDefault(location, null);
     }
 
     /**
@@ -185,16 +189,81 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
      */
 
     @Override
-    protected @NotNull Map<ResourceLocation, EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+    protected @NotNull EventManagerData prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         HashMap<ResourceLocation, EventResource> eventMap = new HashMap<>();
         SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("events"),
                 JsonOps.INSTANCE, EventResource.CODEC.codec(), eventMap);
-        return eventMap;
+
+        HashMap<ResourceLocation, AddToRegistryData> addToRegistry = new HashMap<>();
+        SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("event_registries"),
+                JsonOps.INSTANCE, AddToRegistryData.CODEC.codec(), addToRegistry);
+
+        return new EventManagerData(eventMap, addToRegistry);
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, EventResource> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        this.registeredEvents = object;
+    protected void apply(EventManagerData object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        this.registeredEvents = object.events();
+
+        // Following code adds events to event registry by the resource path.
+
+        EventRegistries.clearAll();
+
+        // Due to limitations of file names on Windows, a file
+        // cannot be named votvevents:random.json, so to avoid that we use folder structure:
+        // event_registries/votvevents/random.json links to votvevents:random registry.
+        object.registryUpdate().forEach((key, value) -> {
+            var path = key.getPath().split("/");
+
+            if (path.length <= 1) {
+                return;
+            }
+
+            var location = ResourceLocation.fromNamespaceAndPath(path[0], path[1]);
+            var registry = EventRegistries.get(location);
+
+            if (registry.isEmpty()) {
+                LOGGER.warn("Could not add events from {}, no such registry exists: {}", key, location);
+                return;
+            }
+
+            var reg = registry.get();
+            value.storedWeightedEvents().forEach(stored -> {
+                reg.addEvent(stored.toWeightedEvent());
+            });
+        });
+
         LOGGER.info("Successfully reloaded events!");
+    }
+
+    public record EventManagerData(Map<ResourceLocation, EventResource> events,
+                                   Map<ResourceLocation, AddToRegistryData> registryUpdate) {
+    }
+
+    public record AddToRegistryData(List<StoredWeightedEvent> storedWeightedEvents) {
+        public static final MapCodec<AddToRegistryData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                StoredWeightedEvent.CODEC.listOf().fieldOf("events").forGetter(AddToRegistryData::storedWeightedEvents)
+        ).apply(instance, AddToRegistryData::new));
+    }
+
+    public record StoredWeightedEvent(ResourceLocation id, int weight) {
+        public static final MapCodec<StoredWeightedEvent> FULL_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ResourceLocation.CODEC.fieldOf("id").forGetter(StoredWeightedEvent::id),
+                Codec.INT.optionalFieldOf("weight", 1).forGetter(StoredWeightedEvent::weight)
+        ).apply(instance, StoredWeightedEvent::new));
+
+        public static final Codec<StoredWeightedEvent> CODEC = Codec.withAlternative(
+                FULL_CODEC.codec(),
+                ResourceLocation.CODEC.xmap(id -> new StoredWeightedEvent(id, 1), StoredWeightedEvent::id)
+        );
+
+        public EventRegistry.WeightedEvent toWeightedEvent() {
+            var event = VotvEvents.getEventManager().getEvent(id);
+            if (event == null) {
+                LOGGER.warn("Cannot find event {}!", id);
+                return null;
+            }
+            return new EventRegistry.WeightedEvent(event, weight);
+        }
     }
 }

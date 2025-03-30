@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.event.EventContext;
 import ru.maxthetomas.votvevents.event.EventResource;
+import ru.maxthetomas.votvevents.event.registry.EventRegistries;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -91,6 +92,14 @@ public class EventCommand {
                 ).then(
                         LiteralArgumentBuilder.<CommandSourceStack>literal("active")
                                 .executes(EventCommand::executePrintActiveEvents)
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("event_registry")
+                                .executes(EventCommand::executePrintEventRegistriesSummary)
+                                .then(
+                                        RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("registry", ResourceLocationArgument.id())
+                                                .suggests(EventCommand::getEventRegistriesSuggestions)
+                                                .executes(EventCommand::executePrintEventRegistryEvents)
+                                )
                 );
     }
 
@@ -243,7 +252,7 @@ public class EventCommand {
                 () -> Component.translatable("votvevents.commands.event.print_queued",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getQueuedEvents(),
                                 Component.literal("\n"),
-                                (e) -> Component.literal(" - " + e.resource.name()))
+                                (e) -> Component.literal(" - ").append(formatEvent(e.resource)))
                 ), false);
 
         return 1;
@@ -258,11 +267,52 @@ public class EventCommand {
                 () -> Component.translatable("votvevents.commands.event.print_active",
                         ComponentUtils.formatList(VotvEvents.getEventManager().getActiveEvents(),
                                 Component.literal("\n"),
-                                (e) -> Component.literal(" - " + e.resource.name()))
+                                (e) -> Component.literal(" - ").append(formatEvent(e.resource)))
                 ), false);
 
         return 1;
     }
+
+    /**
+     * Prints events from an event registry
+     */
+    private static int executePrintEventRegistriesSummary(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(
+                () -> Component.translatable("votvevents.commands.event.print_event_registries_summary",
+                        ComponentUtils.formatList(EventRegistries.getRegistries(),
+                                Component.literal("\n"),
+                                (e) -> Component.translatable("votvevents.commands.event.print_event_registries_summary.line",
+                                        e.toString(), EventRegistries.get(e).get().getEvents().size()
+                                ))
+                ), false);
+
+        return 1;
+    }
+
+    /**
+     * Prints events from an event registry
+     */
+    private static int executePrintEventRegistryEvents(CommandContext<CommandSourceStack> context) {
+        var registryKey = ResourceLocationArgument.getId(context, "registry");
+        var registry = EventRegistries.get(registryKey);
+
+        if (registry.isEmpty()) {
+            context.getSource().sendFailure(Component.translatable("votv.commands.event.invalid_registry", registryKey.toString())
+                    .withStyle(ChatFormatting.RED));
+            return 0;
+        }
+
+        context.getSource().sendSuccess(
+                () -> Component.translatable("votvevents.commands.event.print_event_registry",
+                        Component.literal(registryKey.toString()),
+                        ComponentUtils.formatList(registry.get().getEvents(),
+                                Component.literal("\n"),
+                                (e) -> Component.literal(" - ").append(formatEvent(e.resource())))
+                ), false);
+
+        return 1;
+    }
+
 
     /**
      * Suggests event names for every event that starts with the input
@@ -279,6 +329,20 @@ public class EventCommand {
         return builder.buildFuture();
     }
 
+    /**
+     * Suggests event registry names for every events that starts with the input
+     */
+    private static CompletableFuture<Suggestions> getEventRegistriesSuggestions(CommandContext<CommandSourceStack> ctx,
+                                                                                SuggestionsBuilder builder) {
+        var input = builder.getRemaining();
+
+        EventRegistries.getRegistries()
+                .stream()
+                .filter(e -> e.toString().startsWith(input))
+                .forEach((e) -> builder.suggest(e.toString()));
+
+        return builder.buildFuture();
+    }
 
     // Util functions
     private static Component formatEvent(EventResource event) {
