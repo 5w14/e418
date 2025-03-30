@@ -1,7 +1,5 @@
 package ru.maxthetomas.votvevents.event;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import dev.architectury.event.events.common.TickEvent;
@@ -10,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +17,6 @@ import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.*;
 
 public class EventManager extends SimplePreparableReloadListener<Map<ResourceLocation, EventResource>> {
@@ -191,28 +187,8 @@ public class EventManager extends SimplePreparableReloadListener<Map<ResourceLoc
     @Override
     protected @NotNull Map<ResourceLocation, EventResource> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         HashMap<ResourceLocation, EventResource> eventMap = new HashMap<>();
-
-        var fileToId = FileToIdConverter.json("events");
-        for (Map.Entry<ResourceLocation, Resource> entry : fileToId.listMatchingResources(resourceManager).entrySet()) {
-            ResourceLocation resourceLocation = entry.getKey();
-            ResourceLocation resourceLocation2 = fileToId.fileToId(resourceLocation);
-            try {
-                BufferedReader reader = entry.getValue().openAsReader();
-                try {
-                    EventResource.CODEC.decoder().decode(JsonOps.INSTANCE,
-                            JsonParser.parseReader(reader)).ifSuccess(event -> {
-                        if (eventMap.putIfAbsent(resourceLocation2, event.getFirst()) != null) {
-                            throw new IllegalStateException("Duplicate data file ignored with ID " + String.valueOf(resourceLocation2));
-                        }
-                    }).ifError(error -> LOGGER.error("Couldn't parse data file '{}' from '{}': {}", resourceLocation2, resourceLocation, error));
-                } finally {
-                    ((Reader) reader).close();
-                }
-            } catch (JsonParseException | IOException | IllegalArgumentException exception) {
-                LOGGER.error("Couldn't parse data file '{}' from '{}'", resourceLocation2, resourceLocation, exception);
-            }
-        }
-
+        SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("events"),
+                JsonOps.INSTANCE, EventResource.CODEC.codec(), eventMap);
         return eventMap;
     }
 
