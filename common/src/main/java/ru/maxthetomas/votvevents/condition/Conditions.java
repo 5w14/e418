@@ -8,7 +8,6 @@ import ru.maxthetomas.votvevents.condition.impl.AtHeightCondition;
 import ru.maxthetomas.votvevents.condition.impl.IsNightCondition;
 import ru.maxthetomas.votvevents.condition.impl.RandomCondition;
 import ru.maxthetomas.votvevents.condition.impl.WeatherCondition;
-import ru.maxthetomas.votvevents.config.Config;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class Conditions {
 
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
     public static MapCodec<? extends ICondition> NEVER = registerSimple("never", (ctx) -> false);
-    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> Config.getConfig().isDebug());
+    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> VotvEvents.getConfig().get().isDebug());
     public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
     public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);

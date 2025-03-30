@@ -28,7 +28,7 @@ public class Config {
      *
      * @return filled config
      */
-    public static Config getConfig() {
+    public static Config loadConfig() {
         try {
             if (Files.exists(CONFIG_PATH)) {
                 try (Reader reader = Files.newBufferedReader(CONFIG_PATH)) {

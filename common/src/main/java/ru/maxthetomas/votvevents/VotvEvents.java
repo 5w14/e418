@@ -18,7 +18,7 @@ public final class VotvEvents {
     private static MinecraftServer ManagedServer = null;
 
     private static EventManager EventManager = new EventManager();
-    private static Config ModConfig = Config.getConfig();
+    private static Config ModConfig = Config.loadConfig();
 
     public static void init() {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> ManagedServer = srv);
