@@ -36,15 +36,15 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     private static void tick(MinecraftServer server) {
         VotvEvents.getEventManager().queuedEvents.removeIf((QueuedEvent queuedEvent) -> {
             // Check timeout time
-            if (queuedEvent.timeoutTick != null && queuedEvent.timeoutTick < server.overworld().getGameTime()) {
-                LOGGER.info("Dequeued event {} (timed out).", queuedEvent.resource.name());
+            if (queuedEvent.timeoutTick() != null && queuedEvent.timeoutTick() < server.overworld().getGameTime()) {
+                LOGGER.info("Dequeued event {} (timed out).", queuedEvent.resource().name());
                 return true;
             }
 
             // Run event if it can
-            if (queuedEvent.resource.canRun(queuedEvent.context)) {
-                LOGGER.info("Running event {} from queue.", queuedEvent.resource.name());
-                VotvEvents.getEventManager().runEvent(queuedEvent.resource, queuedEvent.context);
+            if (queuedEvent.resource().canRun(queuedEvent.context())) {
+                LOGGER.info("Running event {} from queue.", queuedEvent.resource().name());
+                VotvEvents.getEventManager().runEvent(queuedEvent.resource(), queuedEvent.context());
                 return true;
             }
             return false;
@@ -158,7 +158,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     }
 
     public void dequeueEvent(QueuedEvent queuedEvent) {
-        LOGGER.info("Dequeued event {}", queuedEvent.resource.name());
+        LOGGER.info("Dequeued event {}", queuedEvent.resource().name());
 
         queuedEvents.remove(queuedEvent);
     }
