@@ -8,5 +8,7 @@
   "votvevents.commands.event.queue.success.force": "Forcefully queued %s",
   "votvevents.commands.event.queue.fail": "Unable to queue %s",
   "votvevents.commands.event.print_queued": "Currently queued events: \n%s",
-  "votvevents.commands.event.print_active": "Currently active events: \n%s"
+  "votvevents.commands.event.print_active": "Currently active events: \n%s",
+  "votvevents.commands.event.print_event_registry": "Events registered in %s: \n%s",
+  "votvevents.commands.event.invalid_registry": "Invalid event registry %s"
 }

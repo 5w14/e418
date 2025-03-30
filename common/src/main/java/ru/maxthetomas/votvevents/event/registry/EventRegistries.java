@@ -6,14 +6,20 @@ import ru.maxthetomas.votvevents.VotvEvents;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class EventRegistries {
-    public static final EventRegistry RANDOM = create("random");
-
     private static final Map<ResourceLocation, EventRegistry> REGISTRY = new HashMap<>();
+
+    // Register registries
+    public static final EventRegistry RANDOM = create("random");
 
     public static Optional<EventRegistry> get(ResourceLocation id) {
         return Optional.ofNullable(REGISTRY.getOrDefault(id, null));
+    }
+
+    public static Set<ResourceLocation> getRegistries() {
+        return REGISTRY.keySet();
     }
 
     public static void clearAll() {
@@ -21,7 +27,9 @@ public class EventRegistries {
     }
 
     public static EventRegistry create(ResourceLocation id) {
-        return new EventRegistry(id);
+        var registry = new EventRegistry(id);
+        REGISTRY.put(id, registry);
+        return registry;
     }
 
     private static EventRegistry create(String id) {

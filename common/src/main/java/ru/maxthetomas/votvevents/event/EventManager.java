@@ -223,7 +223,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             var registry = EventRegistries.get(location);
 
             if (registry.isEmpty()) {
-                LOGGER.warn("Could not add events from {}, no such registry exists: {}", path, location);
+                LOGGER.warn("Could not add events from {}, no such registry exists: {}", key, location);
                 return;
             }
 
@@ -242,15 +242,20 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     public record AddToRegistryData(List<StoredWeightedEvent> storedWeightedEvents) {
         public static final MapCodec<AddToRegistryData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                StoredWeightedEvent.CODEC.codec().listOf().fieldOf("events").forGetter(AddToRegistryData::storedWeightedEvents)
+                StoredWeightedEvent.CODEC.listOf().fieldOf("events").forGetter(AddToRegistryData::storedWeightedEvents)
         ).apply(instance, AddToRegistryData::new));
     }
 
     public record StoredWeightedEvent(ResourceLocation id, int weight) {
-        public static final MapCodec<StoredWeightedEvent> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ResourceLocation.CODEC.fieldOf("type").forGetter(StoredWeightedEvent::id),
+        public static final MapCodec<StoredWeightedEvent> FULL_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ResourceLocation.CODEC.fieldOf("id").forGetter(StoredWeightedEvent::id),
                 Codec.INT.optionalFieldOf("weight", 1).forGetter(StoredWeightedEvent::weight)
         ).apply(instance, StoredWeightedEvent::new));
+
+        public static final Codec<StoredWeightedEvent> CODEC = Codec.withAlternative(
+                FULL_CODEC.codec(),
+                ResourceLocation.CODEC.xmap(id -> new StoredWeightedEvent(id, 1), StoredWeightedEvent::id)
+        );
 
         public EventRegistry.WeightedEvent toWeightedEvent() {
             var event = VotvEvents.getEventManager().getEvent(id);
