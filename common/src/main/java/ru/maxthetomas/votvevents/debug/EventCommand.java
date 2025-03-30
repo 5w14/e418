@@ -94,10 +94,11 @@ public class EventCommand {
                                 .executes(EventCommand::executePrintActiveEvents)
                 ).then(
                         LiteralArgumentBuilder.<CommandSourceStack>literal("event_registry")
+                                .executes(EventCommand::executePrintEventRegistriesSummary)
                                 .then(
                                         RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("registry", ResourceLocationArgument.id())
                                                 .suggests(EventCommand::getEventRegistriesSuggestions)
-                                                .executes(EventCommand::executePrintEventRegistry)
+                                                .executes(EventCommand::executePrintEventRegistryEvents)
                                 )
                 );
     }
@@ -272,11 +273,26 @@ public class EventCommand {
         return 1;
     }
 
+    /**
+     * Prints events from an event registry
+     */
+    private static int executePrintEventRegistriesSummary(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(
+                () -> Component.translatable("votvevents.commands.event.print_event_registries_summary",
+                        ComponentUtils.formatList(EventRegistries.getRegistries(),
+                                Component.literal("\n"),
+                                (e) -> Component.translatable("votvevents.commands.event.print_event_registries_summary.line",
+                                        e.toString(), EventRegistries.get(e).get().getEvents().size()
+                                ))
+                ), false);
+
+        return 1;
+    }
 
     /**
      * Prints events from an event registry
      */
-    private static int executePrintEventRegistry(CommandContext<CommandSourceStack> context) {
+    private static int executePrintEventRegistryEvents(CommandContext<CommandSourceStack> context) {
         var registryKey = ResourceLocationArgument.getId(context, "registry");
         var registry = EventRegistries.get(registryKey);
 
