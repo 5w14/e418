@@ -22,6 +22,7 @@ public class Behaviours {
     public static final MapCodec<? extends IBehaviour> PLAY_SOUND = register(PlaySoundBehaviour.ID, PlaySoundBehaviour.CODEC);
     public static final MapCodec<? extends IBehaviour> TELEPORT_PLAYER = register(TeleportPlayerBehaviour.ID, TeleportPlayerBehaviour.CODEC);
     public static final MapCodec<? extends IBehaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);
+    public static final MapCodec<? extends IBehaviour> WHILE = register(WhileBehaviour.ID, WhileBehaviour.CODEC);
 
     /**
      * Gets a codec to create a {@linkplain IBehaviour} from the registry.
