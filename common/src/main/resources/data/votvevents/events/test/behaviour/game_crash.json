@@ -1,0 +1,19 @@
+{
+  "name": "Game crash test",
+  "description": "Bye bye!",
+  "behaviours": [
+    {
+      "type": "votvevents:game_crash"
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "votvevents:never"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "votvevents:never"
+    }
+  ]
+}
