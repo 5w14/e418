@@ -26,7 +26,7 @@ public class IntegerPointerException extends RuntimeException {
             "Cannot print: Printer is on fire!",
             "Cannot print: No cyan paint!",
             "No message provided.",
-            "The "
+            "C:\\startup.lua not found!"
     );
 
     public IntegerPointerException(String message) {
