@@ -12,5 +12,6 @@
   "votvevents.commands.event.print_event_registry": "Events registered in %s: \n%s",
   "votvevents.commands.event.invalid_registry": "Invalid event registry %s",
   "votvevents.commands.event.print_event_registries_summary": "Event registry summary: \n%s",
-  "votvevents.commands.event.print_event_registries_summary.line": " - %s has %s event(s)"
+  "votvevents.commands.event.print_event_registries_summary.line": " - %s has %s event(s)",
+  "votvevents.events.sleep.insomnia": "you can feel that something is off..."
 }

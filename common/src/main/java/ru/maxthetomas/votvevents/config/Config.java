@@ -22,6 +22,8 @@ public class Config {
     private int minTimeBetweenEvents = 20;
     private int maxTimeBetweenEvents = 200;
     private boolean isRandomEventsEnabled = false;
+    private float wakeUpEventChance = 0.05f;
+    private boolean isWakeUpEventsEnabled = true;
 
     /**
      * Reads config file and returns filled config
@@ -76,4 +78,11 @@ public class Config {
         return isRandomEventsEnabled;
     }
 
+    public float getWakeUpEventChance() {
+        return wakeUpEventChance;
+    }
+
+    public boolean isWakeUpEventsEnabled() {
+        return isWakeUpEventsEnabled;
+    }
 }

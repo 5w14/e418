@@ -13,6 +13,7 @@ public class EventRegistries {
 
     // Register registries
     public static final EventRegistry RANDOM = create("random");
+    public static final EventRegistry WAKE_UP = create("wake_up");
 
     public static Optional<EventRegistry> get(ResourceLocation id) {
         return Optional.ofNullable(REGISTRY.getOrDefault(id, null));
