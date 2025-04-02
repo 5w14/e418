@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.condition.ICondition;
 import ru.maxthetomas.votvevents.event.EventContext;
@@ -11,7 +13,7 @@ import ru.maxthetomas.votvevents.event.EventContext;
 public class WeatherCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "weather");
     public static final MapCodec<WeatherCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("weather").xmap(a -> Weather.valueOf(a.toUpperCase()), Enum::toString).forGetter(WeatherCondition::getWeather)
+            Weather.CODEC.fieldOf("weather").forGetter(WeatherCondition::getWeather)
     ).apply(instance, WeatherCondition::new));
 
     private final Weather weather;
@@ -22,6 +24,7 @@ public class WeatherCondition implements ICondition {
 
     @Override
     public boolean check(EventContext context) {
+        // todo: if current player/location is defined, check the weather in their dimension
         return switch (weather) {
             case RAIN -> context.getServer().overworld().isRaining();
             case THUNDER -> context.getServer().overworld().isThundering();
@@ -38,9 +41,22 @@ public class WeatherCondition implements ICondition {
         return weather;
     }
 
-    public enum Weather {
-        CLEAR,
-        RAIN,
-        THUNDER
+    public enum Weather implements StringRepresentable {
+        CLEAR("clear"),
+        RAIN("rain"),
+        THUNDER("thunder");
+
+        public static Codec<Weather> CODEC = StringRepresentable.fromEnum(Weather::values);
+
+        final String name;
+
+        Weather(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public @NotNull String getSerializedName() {
+            return this.name;
+        }
     }
 }
