@@ -14,8 +14,9 @@
         {
           "type": "votvevents:teleport_player",
           "relative": true,
+          "level": "votvevents:lines",
           "x": 0,
-          "y": -1,
+          "y": 0,
           "z": 0
         }
       ]
