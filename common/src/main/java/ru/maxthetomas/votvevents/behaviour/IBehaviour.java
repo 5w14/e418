@@ -24,6 +24,13 @@ public interface IBehaviour {
     }
 
     /**
+     * Stops behaviour. This doesn't actually dispose behaviour, so it could smoothly end it's activity.
+     */
+    default void stop() {
+        dispose();
+    }
+
+    /**
      * Can this behaviour run.
      * Behaviours are generic. This should return false only if behaviour really can't run.
      * If you want your event don't run in specific conditions (i.e. only at night), use {@link ru.maxthetomas.votvevents.condition.ICondition}

@@ -95,6 +95,13 @@ public class MutateContextBehaviour implements IBehaviour {
     }
 
     @Override
+    public void stop() {
+        for (IBehaviour behaviour : activeBehaviours) {
+            behaviour.stop();
+        }
+    }
+
+    @Override
     public boolean isDone() {
         for (IBehaviour behaviour : this.activeBehaviours) {
             if (!behaviour.isDone())

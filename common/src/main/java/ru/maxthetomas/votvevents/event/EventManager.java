@@ -168,8 +168,21 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
      *
      * @param event Event to stop.
      */
-    public void endEvent(ActiveEvent event) {
-        LOGGER.info("Ended event {}", event.resource.name());
+    public void stopEvent(ActiveEvent event) {
+        LOGGER.info("Stopping event {}", event.resource.name());
+
+        for (IBehaviour behaviour : event.activeBehaviours) {
+            behaviour.stop();
+        }
+    }
+
+    /**
+     * Disposes the event.
+     *
+     * @param event Event to dispose.
+     */
+    public void disposeEvent(ActiveEvent event) {
+        LOGGER.info("Disposed event {}", event.resource.name());
 
         for (IBehaviour behaviour : event.activeBehaviours) {
             behaviour.dispose();
@@ -181,8 +194,6 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     public boolean isNotDisposed(ActiveEvent event) {
         return activeEvents.contains(event);
     }
-
-
     /*
      * Following methods are used to reload events from
      * resources, using Minecraft's reload system.

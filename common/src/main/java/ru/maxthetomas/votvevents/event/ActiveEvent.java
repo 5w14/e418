@@ -26,7 +26,7 @@ public class ActiveEvent {
             if (!behaviour.isDone())
                 return;
         }
-        VotvEvents.getEventManager().endEvent(this);
+        VotvEvents.getEventManager().stopEvent(this);
     }
 
     @Override
