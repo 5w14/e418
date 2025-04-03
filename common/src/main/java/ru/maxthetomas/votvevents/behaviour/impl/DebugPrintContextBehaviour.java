@@ -9,14 +9,14 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-public class DebugPrintContextBehaviour implements IBehaviour {
+public class DebugPrintContextBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "debug_print_context");
     public static final MapCodec<DebugPrintContextBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(DebugPrintContextBehaviour::new));
 
@@ -27,6 +27,9 @@ public class DebugPrintContextBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        super.execute(context);
+        setDone(true);
+
         for (Method method : context.getClass().getMethods()) {
             var name = method.getName();
             if (Stream.of("get", "is").anyMatch(name::startsWith)

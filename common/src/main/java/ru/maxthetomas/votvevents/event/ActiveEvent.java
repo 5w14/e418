@@ -1,7 +1,7 @@
 package ru.maxthetomas.votvevents.event;
 
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.Behaviour;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,8 @@ public class ActiveEvent {
     public final EventResource resource;
     public final EventContext context;
     public final long startTime;
-    public final List<IBehaviour> activeBehaviours = new ArrayList<>();
+    public final List<Behaviour> activeBehaviours = new ArrayList<>();
+    private boolean dirty = false;
 
     public ActiveEvent(EventResource resource, EventContext context, long startTime) {
         this.resource = resource;
@@ -22,15 +23,44 @@ public class ActiveEvent {
     }
 
     public void updateState() {
-        for (IBehaviour behaviour : this.activeBehaviours) {
-            if (!behaviour.isDone())
-                return;
+        if (isDone())
+            VotvEvents.getEventManager().disposeEvent(this);
+    }
+
+    public void disposeBehaviours() {
+        for (Behaviour activeBehaviour : activeBehaviours) {
+            activeBehaviour.tryDispose();
         }
-        VotvEvents.getEventManager().stopEvent(this);
+    }
+
+    public void stopBehaviours() {
+        for (Behaviour activeBehaviour : activeBehaviours) {
+            activeBehaviour.tryStop();
+        }
     }
 
     @Override
     public String toString() {
         return String.format("ActiveEvent[%s] (started at: %s, active behaviours: %s)", resource.name(), startTime, activeBehaviours.size());
+    }
+
+    public boolean isDone() {
+        for (Behaviour behaviour : this.activeBehaviours) {
+            if (!behaviour.isDone())
+                return false;
+        }
+        return true;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void dirty() {
+        this.dirty = true;
+    }
+
+    public void undirty() {
+        this.dirty = false;
     }
 }

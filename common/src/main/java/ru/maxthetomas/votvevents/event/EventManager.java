@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
 import ru.maxthetomas.votvevents.event.registry.EventRegistries;
 import ru.maxthetomas.votvevents.event.registry.EventRegistry;
 
@@ -30,11 +29,12 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     private Map<ResourceLocation, EventResource> registeredEvents;
 
     public EventManager() {
-        TickEvent.SERVER_POST.register(EventManager::tick);
+        TickEvent.SERVER_POST.register(this::tick);
     }
 
-    private static void tick(MinecraftServer server) {
-        VotvEvents.getEventManager().queuedEvents.removeIf((QueuedEvent queuedEvent) -> {
+    private void tick(MinecraftServer server) {
+        // Queued events
+        queuedEvents.removeIf((QueuedEvent queuedEvent) -> {
             // Check timeout time
             if (queuedEvent.timeoutTick() != null && queuedEvent.timeoutTick() < server.overworld().getGameTime()) {
                 LOGGER.info("Dequeued event {} (timed out).", queuedEvent.resource().name());
@@ -47,6 +47,18 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
                 VotvEvents.getEventManager().runEvent(queuedEvent.resource(), queuedEvent.context());
                 return true;
             }
+            return false;
+        });
+
+        // Active events
+        activeEvents.removeIf((ActiveEvent event) -> {
+            // Check if dirty event is done
+            if (event.isDirty() && event.isDone()) {
+                event.disposeBehaviours();
+                LOGGER.info("Disposed event {} (Event is done)", event.resource.name());
+                return true;
+            }
+            event.undirty();
             return false;
         });
     }
@@ -101,7 +113,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
         for (var preActiveBehaviour : activeEvent.resource.behaviourList()) {
             var behaviour = preActiveBehaviour.create();
-            behaviour.execute(context);
+            behaviour.tryExecute(context);
             activeEvent.activeBehaviours.add(behaviour);
         }
 
@@ -171,9 +183,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     public void stopEvent(ActiveEvent event) {
         LOGGER.info("Stopping event {}", event.resource.name());
 
-        for (IBehaviour behaviour : event.activeBehaviours) {
-            behaviour.stop();
-        }
+        event.stopBehaviours();
     }
 
     /**
@@ -184,16 +194,15 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     public void disposeEvent(ActiveEvent event) {
         LOGGER.info("Disposed event {}", event.resource.name());
 
-        for (IBehaviour behaviour : event.activeBehaviours) {
-            behaviour.dispose();
-        }
+        event.disposeBehaviours();
 
         activeEvents.remove(event);
     }
 
-    public boolean isNotDisposed(ActiveEvent event) {
-        return activeEvents.contains(event);
+    public boolean isDisposed(ActiveEvent event) {
+        return !activeEvents.contains(event);
     }
+
     /*
      * Following methods are used to reload events from
      * resources, using Minecraft's reload system.

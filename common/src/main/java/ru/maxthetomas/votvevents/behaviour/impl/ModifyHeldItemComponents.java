@@ -6,10 +6,10 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
 
-public class ModifyHeldItemComponents implements IBehaviour {
+public class ModifyHeldItemComponents extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "modify_held_item_components");
 
     public static final MapCodec<ModifyHeldItemComponents> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -25,6 +25,9 @@ public class ModifyHeldItemComponents implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        super.execute(context);
+        setDone(true);
+
         if (context.getPlayer() != null) {
             return;
         }

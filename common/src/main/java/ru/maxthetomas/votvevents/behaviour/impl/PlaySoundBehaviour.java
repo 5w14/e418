@@ -7,12 +7,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
 
 import java.util.Optional;
 
-public class PlaySoundBehaviour implements IBehaviour {
+public class PlaySoundBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "play_sound");
 
     public static final MapCodec<PlaySoundBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -42,6 +42,9 @@ public class PlaySoundBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        super.execute(context);
+        setDone(true);
+
         if (context.getPlayer() == null) {
             return;
         }

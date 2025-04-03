@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.behaviour.PreActiveBehaviour;
 import ru.maxthetomas.votvevents.behaviour.contextmutators.ContextMutators;
 import ru.maxthetomas.votvevents.behaviour.contextmutators.IContextMutator;
@@ -16,7 +16,7 @@ import ru.maxthetomas.votvevents.event.EventContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MutateContextBehaviour implements IBehaviour {
+public class MutateContextBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ContextMutators.DISPATCH_CODEC.listOf().fieldOf("mutators").forGetter(MutateContextBehaviour::getContextMutators),
@@ -28,7 +28,7 @@ public class MutateContextBehaviour implements IBehaviour {
     public final List<PreActiveBehaviour> behaviours;
     public final List<ICondition> runConditions;
 
-    public final List<IBehaviour> activeBehaviours = new ArrayList<>();
+    public final List<Behaviour> activeBehaviours = new ArrayList<>();
     public EventContext storedMutatedContext;
 
     public MutateContextBehaviour(List<IContextMutator> contextMutators, List<PreActiveBehaviour> behaviours, List<ICondition> runConditions) {
@@ -75,6 +75,7 @@ public class MutateContextBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        super.execute(context);
         storedMutatedContext = getMutatedContext(context);
 
         if (storedMutatedContext == null)
@@ -89,21 +90,23 @@ public class MutateContextBehaviour implements IBehaviour {
 
     @Override
     public void dispose() {
-        for (IBehaviour behaviour : activeBehaviours) {
+        super.dispose();
+        for (Behaviour behaviour : activeBehaviours) {
             behaviour.dispose();
         }
     }
 
     @Override
     public void stop() {
-        for (IBehaviour behaviour : activeBehaviours) {
+        super.stop();
+        for (Behaviour behaviour : activeBehaviours) {
             behaviour.stop();
         }
     }
 
     @Override
     public boolean isDone() {
-        for (IBehaviour behaviour : this.activeBehaviours) {
+        for (Behaviour behaviour : this.activeBehaviours) {
             if (!behaviour.isDone())
                 return false;
         }

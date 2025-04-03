@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * This class represents behaviours before they are activated. Use {@code create()} to convert into an active behaviour.
  *
- * @see IBehaviour
+ * @see Behaviour
  */
 public class PreActiveBehaviour {
     public static Codec<PreActiveBehaviour> CODEC = new Codec<PreActiveBehaviour>() {
@@ -76,9 +76,9 @@ public class PreActiveBehaviour {
     }
 
     /**
-     * Creates a new instance of {@link IBehaviour}, after parsing the stored data.
+     * Creates a new instance of {@link Behaviour}, after parsing the stored data.
      */
-    public IBehaviour create() {
+    public Behaviour create() {
         return Behaviours.get(type).getOrThrow().decoder()
                 .decode(data).result().orElseThrow().getFirst();
     }

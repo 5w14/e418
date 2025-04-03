@@ -5,10 +5,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.behaviour.IBehaviour;
+import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
 
-public class TeleportPlayerBehaviour implements IBehaviour {
+public class TeleportPlayerBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "teleport_player");
 
     public static final MapCodec<TeleportPlayerBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -54,6 +54,9 @@ public class TeleportPlayerBehaviour implements IBehaviour {
 
     @Override
     public void execute(EventContext context) {
+        super.execute(context);
+        setDone(true);
+
         if (context.getPlayer() == null) {
             return;
         }
