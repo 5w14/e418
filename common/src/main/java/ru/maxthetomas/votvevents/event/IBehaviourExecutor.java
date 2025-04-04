@@ -4,6 +4,10 @@ import ru.maxthetomas.votvevents.behaviour.Behaviour;
 
 import java.util.List;
 
+/**
+ * Interface for objects that can execute behaviours.
+ * Used to correctly react on events that are done.
+ */
 public interface IBehaviourExecutor {
 
     /**
