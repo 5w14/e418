@@ -44,7 +44,9 @@ public class PlayerMixin {
         Config config = VotvEvents.getConfig().orElseThrow();
         Random random = new Random();
 
-        if (random.nextFloat() >= config.getWakeUpEventChance() || !config.isWakeUpEventsEnabled()) {
+        if (random.nextFloat() >= config.getWakeUpEventChance() ||
+                !config.isWakeUpEventsEnabled() ||
+                !player.isSleepingLongEnough()) {
             return;
         }
 
