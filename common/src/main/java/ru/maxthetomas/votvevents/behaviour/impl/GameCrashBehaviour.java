@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
 import ru.maxthetomas.votvevents.util.exceptions.IntegerPointerException;
 
 public class GameCrashBehaviour extends Behaviour {
@@ -17,8 +18,8 @@ public class GameCrashBehaviour extends Behaviour {
     }
 
     @Override
-    public void execute(EventContext context) {
-        super.execute(context);
+    public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
         setDone(true);
 
         IntegerPointerException.youJustLostTheGame();

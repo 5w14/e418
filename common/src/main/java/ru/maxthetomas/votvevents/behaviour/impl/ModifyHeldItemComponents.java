@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
 
 public class ModifyHeldItemComponents extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "modify_held_item_components");
@@ -24,8 +25,8 @@ public class ModifyHeldItemComponents extends Behaviour {
     }
 
     @Override
-    public void execute(EventContext context) {
-        super.execute(context);
+    public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
         setDone(true);
 
         if (context.getPlayer() != null) {

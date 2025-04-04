@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,8 +27,8 @@ public class DebugPrintContextBehaviour extends Behaviour {
     }
 
     @Override
-    public void execute(EventContext context) {
-        super.execute(context);
+    public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
         setDone(true);
 
         for (Method method : context.getClass().getMethods()) {

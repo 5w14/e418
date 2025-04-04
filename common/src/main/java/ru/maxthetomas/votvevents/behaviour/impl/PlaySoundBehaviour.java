@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
 
 import java.util.Optional;
 
@@ -41,8 +42,8 @@ public class PlaySoundBehaviour extends Behaviour {
     }
 
     @Override
-    public void execute(EventContext context) {
-        super.execute(context);
+    public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
         setDone(true);
 
         if (context.getPlayer() == null) {

@@ -113,7 +113,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
         for (var preActiveBehaviour : activeEvent.resource.behaviourList()) {
             var behaviour = preActiveBehaviour.create();
-            behaviour.tryExecute(context);
+            behaviour.tryExecute(context, activeEvent);
             activeEvent.activeBehaviours.add(behaviour);
         }
 

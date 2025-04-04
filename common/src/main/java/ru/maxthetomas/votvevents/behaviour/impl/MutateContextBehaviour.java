@@ -12,15 +12,16 @@ import ru.maxthetomas.votvevents.behaviour.contextmutators.IContextMutator;
 import ru.maxthetomas.votvevents.condition.Conditions;
 import ru.maxthetomas.votvevents.condition.ICondition;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MutateContextBehaviour extends Behaviour {
+public class MutateContextBehaviour extends Behaviour implements IBehaviourExecutor {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ContextMutators.DISPATCH_CODEC.listOf().fieldOf("mutators").forGetter(MutateContextBehaviour::getContextMutators),
-            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(MutateContextBehaviour::getBehaviours),
+            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(MutateContextBehaviour::getPreActiveBehaviours),
             Conditions.DISPATCH_CODEC.listOf().optionalFieldOf("run_conditions", List.of()).forGetter(MutateContextBehaviour::getRunConditions)
     ).apply(instance, MutateContextBehaviour::new));
 
@@ -60,7 +61,7 @@ public class MutateContextBehaviour extends Behaviour {
         return runConditions;
     }
 
-    public List<PreActiveBehaviour> getBehaviours() {
+    public List<PreActiveBehaviour> getPreActiveBehaviours() {
         return behaviours;
     }
 
@@ -74,8 +75,8 @@ public class MutateContextBehaviour extends Behaviour {
     }
 
     @Override
-    public void execute(EventContext context) {
-        super.execute(context);
+    public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
         storedMutatedContext = getMutatedContext(context);
 
         if (storedMutatedContext == null)
@@ -83,7 +84,7 @@ public class MutateContextBehaviour extends Behaviour {
 
         for (var preActiveBehaviour : behaviours) {
             var behaviour = preActiveBehaviour.create();
-            behaviour.execute(storedMutatedContext);
+            behaviour.tryExecute(storedMutatedContext, this);
             activeBehaviours.add(behaviour);
         }
     }
@@ -105,12 +106,17 @@ public class MutateContextBehaviour extends Behaviour {
     }
 
     @Override
-    public boolean isDone() {
+    public List<Behaviour> getBehaviours() {
+        return activeBehaviours;
+    }
+
+    @Override
+    public void dirty() {
         for (Behaviour behaviour : this.activeBehaviours) {
             if (!behaviour.isDone())
-                return false;
+                setDone(false);
         }
-        return true;
+        setDone(true);
     }
 
     @Override

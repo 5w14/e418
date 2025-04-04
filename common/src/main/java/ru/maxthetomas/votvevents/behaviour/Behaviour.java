@@ -1,9 +1,8 @@
 package ru.maxthetomas.votvevents.behaviour;
 
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.votvevents.VotvEvents;
-import ru.maxthetomas.votvevents.event.ActiveEvent;
 import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
 
 /**
  * Event behaviour.
@@ -17,13 +16,16 @@ public abstract class Behaviour {
     private boolean isExecuted = false;
     private boolean isDone = false;
 
+    private IBehaviourExecutor executor;
+
     /**
      * Executes behaviour in event. Used if event with this behaviour starts.
      *
      * @param context Context of event.
      */
-    public void execute(EventContext context) {
+    public void execute(EventContext context, IBehaviourExecutor executor) {
         isExecuted = true;
+        this.executor = executor;
     }
 
     /**
@@ -45,10 +47,10 @@ public abstract class Behaviour {
      * Tries to execute behaviour.
      * This will execute behaviour only if it wasn't executed before.
      */
-    public final void tryExecute(EventContext context) {
+    public final void tryExecute(EventContext context, IBehaviourExecutor executor) {
         if (isExecuted)
             return;
-        execute(context);
+        execute(context, executor);
         isExecuted = true;
     }
 
@@ -92,12 +94,7 @@ public abstract class Behaviour {
      */
     public final void setDone(boolean value) {
         isDone = value;
-        // TODO: we need to somehow update behaviours that execute other behaviours too, not just event it was casted from.
-        // temporary solution until above is resolved
-        for (ActiveEvent activeEvent : VotvEvents.getEventManager().getActiveEvents()) {
-            activeEvent.dirty();
-        }
-
+        executor.dirty();
     }
 
     /**
@@ -107,7 +104,7 @@ public abstract class Behaviour {
      *
      * @return Is behaviour done.
      */
-    public boolean isDone() {
+    public final boolean isDone() {
         return isDone;
     }
 

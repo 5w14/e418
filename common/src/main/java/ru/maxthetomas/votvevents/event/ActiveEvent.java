@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Event that is currently active.
  */
-public class ActiveEvent {
+public class ActiveEvent implements IBehaviourExecutor {
     public final EventResource resource;
     public final EventContext context;
     public final long startTime;
@@ -52,15 +52,23 @@ public class ActiveEvent {
         return true;
     }
 
+    @Override
     public boolean isDirty() {
         return dirty;
     }
 
+    @Override
     public void dirty() {
         this.dirty = true;
     }
 
+    @Override
     public void undirty() {
         this.dirty = false;
+    }
+
+    @Override
+    public List<Behaviour> getBehaviours() {
+        return activeBehaviours;
     }
 }
