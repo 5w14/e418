@@ -19,6 +19,7 @@ public class Config {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private boolean isDebug = false;
+    private boolean shouldSkipBackupScreen;
     private int minTimeBetweenEvents = 20;
     private int maxTimeBetweenEvents = 200;
     private boolean isRandomEventsEnabled = false;
@@ -84,5 +85,9 @@ public class Config {
 
     public boolean isWakeUpEventsEnabled() {
         return isWakeUpEventsEnabled;
+    }
+
+    public boolean shouldSkipBackupScreen() {
+        return shouldSkipBackupScreen;
     }
 }
