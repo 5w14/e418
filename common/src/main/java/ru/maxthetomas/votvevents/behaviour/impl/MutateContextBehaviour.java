@@ -106,7 +106,7 @@ public class MutateContextBehaviour extends Behaviour implements IBehaviourExecu
     }
 
     @Override
-    public List<Behaviour> getBehaviours() {
+    public List<Behaviour> getExecutedBehaviours() {
         return activeBehaviours;
     }
 

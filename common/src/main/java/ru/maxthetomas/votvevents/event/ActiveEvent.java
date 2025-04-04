@@ -68,7 +68,7 @@ public class ActiveEvent implements IBehaviourExecutor {
     }
 
     @Override
-    public List<Behaviour> getBehaviours() {
+    public List<Behaviour> getExecutedBehaviours() {
         return activeBehaviours;
     }
 }
