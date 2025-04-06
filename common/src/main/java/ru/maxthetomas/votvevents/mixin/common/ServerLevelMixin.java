@@ -1,0 +1,72 @@
+package ru.maxthetomas.votvevents.mixin.common;
+
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.SleepStatus;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.storage.ServerLevelData;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
+import java.util.function.BooleanSupplier;
+
+@Mixin(ServerLevel.class)
+public abstract class ServerLevelMixin {
+    @Shadow
+    @Final
+    private SleepStatus sleepStatus;
+    @Shadow
+    @Final
+    private ServerLevelData serverLevelData;
+
+    @Shadow
+    public abstract GameRules getGameRules();
+
+    @Shadow
+    public abstract List<ServerPlayer> players();
+
+    @Shadow
+    public abstract void setDayTime(long l);
+
+    @Shadow
+    protected abstract void wakeUpAllPlayers();
+
+    @Shadow
+    public abstract void resetWeatherCycle();
+
+    @ModifyVariable(at = @At("STORE"), method = "tick", ordinal = 0)
+    public int modifySleepingPercentage(int input) {
+        return 101; // Disable sleep through night logic.
+    }
+
+    @Inject(
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/players/SleepStatus;areEnoughSleeping(I)Z"
+            ),
+            method = "tick"
+    )
+    public void customSleepLogic(BooleanSupplier booleanSupplier, CallbackInfo ci) {
+        // Code from vanilla - do not remove!
+        var sleepingPercentage = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+        if (this.sleepStatus.areEnoughSleeping(sleepingPercentage)
+                && this.sleepStatus.areEnoughDeepSleeping(sleepingPercentage, this.players())) {
+            if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                var l = this.serverLevelData.getDayTime() + 24000L;
+                this.setDayTime(l - l % 24000L);
+            }
+
+            this.wakeUpAllPlayers();
+
+            if (this.getGameRules().getBoolean(GameRules.RULE_WEATHER_CYCLE) && this.serverLevelData.isRaining()) {
+                this.resetWeatherCycle();
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@
     "client.SkipBackupScreenMixin"
   ],
   "mixins": [
-    "ServerLevelMixin"
+    "common.ServerLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

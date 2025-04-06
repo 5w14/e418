@@ -15,9 +15,10 @@ import java.util.Map;
 public class Behaviours {
     private static final Map<ResourceLocation, MapCodec<? extends Behaviour>> REGISTRY = new HashMap<>();
 
-    public static final MapCodec<? extends Behaviour> BROADCAST_CHAT_MESSAGE = register(BroadcastChatMessageBehaviour.ID, BroadcastChatMessageBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> BROADCAST_CHAT_MESSAGE = register(BroadcastMessageBehaviour.ID, BroadcastMessageBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> DEBUG_PRINT_CONTEXT = register(DebugPrintContextBehaviour.ID, DebugPrintContextBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> EXECUTE_COMMAND = register(ExecuteCommandBehaviour.ID, ExecuteCommandBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> EXECUTE_EVENT = register(ExecuteEventBehaviour.ID, ExecuteEventBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> MODIFY_HELD_ITEM_COMPONENTS = register(ModifyHeldItemComponents.ID, ModifyHeldItemComponents.CODEC);
     public static final MapCodec<? extends Behaviour> PLAY_SOUND = register(PlaySoundBehaviour.ID, PlaySoundBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> TELEPORT_PLAYER = register(TeleportPlayerBehaviour.ID, TeleportPlayerBehaviour.CODEC);

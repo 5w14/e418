@@ -3,7 +3,7 @@
   "description": "Test broadcast chat behaviour",
   "behaviours": [
     {
-      "type": "votvevents:broadcast_chat_message",
+      "type": "votvevents:broadcast_message",
       "message": {
         "color": "yellow",
         "text": "null joined the game",

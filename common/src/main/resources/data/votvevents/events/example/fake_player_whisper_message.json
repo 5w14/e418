@@ -3,7 +3,7 @@
   "description": "An example event",
   "behaviours": [
     {
-      "type": "votvevents:broadcast_chat_message",
+      "type": "votvevents:broadcast_message",
       "message": {
         "color": "gray",
         "italic": true,
