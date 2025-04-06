@@ -1,0 +1,18 @@
+{
+  "name": "No Players Nearby",
+  "description": "Debug event that works only when thereš no players nearby",
+  "behaviours": [
+  ],
+  "run_conditions": [
+    {
+      "type": "votvevents:no_players_nearby",
+      "radius": 10
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "votvevents:no_players_nearby",
+      "radius": 10
+    }
+  ]
+}

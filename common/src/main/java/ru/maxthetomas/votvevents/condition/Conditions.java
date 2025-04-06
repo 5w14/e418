@@ -20,6 +20,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
     public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
     public static MapCodec<? extends ICondition> WEATHER = register(WeatherCondition.ID, WeatherCondition.CODEC);
+    public static MapCodec<? extends ICondition> NO_PLAYERS_NEARBY = register(NoPlayersNearbyCondition.ID, NoPlayersNearbyCondition.CODEC);
 
     // Utility conditions
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
