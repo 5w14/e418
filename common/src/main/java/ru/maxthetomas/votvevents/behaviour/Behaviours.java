@@ -22,6 +22,7 @@ public class Behaviours {
     public static final MapCodec<? extends Behaviour> MODIFY_HELD_ITEM_COMPONENTS = register(ModifyHeldItemComponents.ID, ModifyHeldItemComponents.CODEC);
     public static final MapCodec<? extends Behaviour> PLAY_SOUND = register(PlaySoundBehaviour.ID, PlaySoundBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> TELEPORT_PLAYER = register(TeleportPlayerBehaviour.ID, TeleportPlayerBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> SHOW_TOAST = register(ShowToastBehaviour.ID, ShowToastBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> GAME_CRASH = register(GameCrashBehaviour.ID, GameCrashBehaviour.CODEC);
 
     // Utilities

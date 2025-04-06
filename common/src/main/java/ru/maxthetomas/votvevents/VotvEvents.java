@@ -3,6 +3,7 @@ package ru.maxthetomas.votvevents;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.ReloadListenerRegistry;
+import dev.architectury.utils.GameInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
@@ -10,6 +11,7 @@ import ru.maxthetomas.votvevents.config.Config;
 import ru.maxthetomas.votvevents.debug.EventCommand;
 import ru.maxthetomas.votvevents.event.EventManager;
 import ru.maxthetomas.votvevents.event.RandomEventManager;
+import ru.maxthetomas.votvevents.networking.VotvEventsNetworking;
 
 import java.util.Optional;
 
@@ -33,6 +35,8 @@ public final class VotvEvents {
         CommandRegistrationEvent.EVENT.register(EventCommand::register);
 
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
+
+        VotvEventsNetworking.init();
     }
 
     public static EventManager getEventManager() {
@@ -40,7 +44,7 @@ public final class VotvEvents {
     }
 
     public static Optional<MinecraftServer> getCurrentServer() {
-        return Optional.ofNullable(ManagedServer);
+        return Optional.ofNullable(GameInstance.getServer());
     }
 
     public static Optional<Config> getConfig() {
