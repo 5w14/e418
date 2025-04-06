@@ -26,6 +26,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
     public static MapCodec<? extends ICondition> NEVER = registerSimple("never", (ctx) -> false);
     public static MapCodec<? extends ICondition> OR = register(OrCondition.ID, OrCondition.CODEC);
+    public static MapCodec<? extends ICondition> NOT = register(NotCondition.ID, NotCondition.CODEC);
     public static MapCodec<? extends ICondition> AND = register(AndCondition.ID, AndCondition.CODEC);
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
     public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> VotvEvents.getConfig().get().isDebug());
