@@ -6,5 +6,7 @@ public class VotvEventsNetworking {
     public static void init() {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CShowToast.TYPE,
                 S2CShowToast.STREAM_CODEC, S2CShowToast::receive);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetShader.TYPE,
+                S2CSetShader.STREAM_CODEC, S2CSetShader::receive);
     }
 }

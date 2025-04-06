@@ -1,0 +1,16 @@
+{
+  "name": "Test show toast behaviour",
+  "description": "Taking inventory achievement",
+  "behaviours": [
+    {
+      "type": "votvevents:show_toast",
+      "title": "Taking Inventory",
+      "stack": {
+        "id": "minecraft:book",
+        "count": 1
+      }
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

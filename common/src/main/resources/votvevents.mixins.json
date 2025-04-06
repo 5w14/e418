@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "accessors.GameRendererAccessor",
     "client.CreateWorldScreenMixin",
     "client.DebugScreenOverlayMixin",
     "client.LevelRendererMixin",
