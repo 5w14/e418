@@ -1,10 +1,12 @@
 package ru.maxthetomas.votvevents.mixin.common;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.storage.ServerLevelData;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,8 +14,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import ru.maxthetomas.votvevents.VotvEvents;
+import ru.maxthetomas.votvevents.event.EventContext;
+import ru.maxthetomas.votvevents.event.registry.EventRegistries;
 
 import java.util.List;
+import java.util.Random;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
@@ -40,6 +46,9 @@ public abstract class ServerLevelMixin {
     @Shadow
     public abstract void resetWeatherCycle();
 
+    @Shadow
+    public abstract @NotNull MinecraftServer getServer();
+
     @ModifyVariable(at = @At("STORE"), method = "tick", ordinal = 0)
     public int modifySleepingPercentage(int input) {
         return 101; // Disable sleep through night logic.
@@ -57,6 +66,20 @@ public abstract class ServerLevelMixin {
         var sleepingPercentage = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
         if (this.sleepStatus.areEnoughSleeping(sleepingPercentage)
                 && this.sleepStatus.areEnoughDeepSleeping(sleepingPercentage, this.players())) {
+
+
+            // todo: Probably should separate this into a different class
+            var server = getServer();
+            var config = VotvEvents.getConfig().orElseThrow();
+            var random = new Random(); // todo: make this use world random
+            if (config.isWakeUpEventsEnabled() &&
+                    random.nextFloat() >= config.getWakeUpEventChance()) {
+                var resource = EventRegistries.WAKE_UP.getRandomEvent();
+                var context = new EventContext(server);
+                VotvEvents.getEventManager().runEvent(resource, context);
+                return;
+            }
+
             if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 var l = this.serverLevelData.getDayTime() + 24000L;
                 this.setDayTime(l - l % 24000L);
