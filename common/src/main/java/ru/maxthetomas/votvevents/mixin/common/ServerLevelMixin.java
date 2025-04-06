@@ -73,11 +73,11 @@ public abstract class ServerLevelMixin {
             var config = VotvEvents.getConfig().orElseThrow();
             var random = new Random(); // todo: make this use world random
             if (config.isWakeUpEventsEnabled() &&
-                    random.nextFloat() >= config.getWakeUpEventChance()) {
+                    random.nextFloat() <= config.getWakeUpEventChance()) {
                 var resource = EventRegistries.WAKE_UP.getRandomEvent();
                 var context = new EventContext(server);
                 VotvEvents.getEventManager().runEvent(resource, context);
-                return;
+                // return;
             }
 
             if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
