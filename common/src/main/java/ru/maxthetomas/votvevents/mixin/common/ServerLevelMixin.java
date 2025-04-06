@@ -4,6 +4,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.storage.ServerLevelData;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.event.EventContext;
 import ru.maxthetomas.votvevents.event.registry.EventRegistries;
@@ -92,4 +95,14 @@ public abstract class ServerLevelMixin {
             }
         }
     }
+
+    @Inject(at = @At("HEAD"), method = "addEntity", cancellable = true)
+    public void spawnEntity(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+        if (!(entity instanceof LivingEntity)) return;
+
+        var dim = ((ServerLevel) (Object) this).dimension();
+        if (dim.location().equals(VotvEvents.NO_ENTITY_AND_STRUCTURE_DIMENSION_ID))
+            cir.cancel();
+    }
+
 }

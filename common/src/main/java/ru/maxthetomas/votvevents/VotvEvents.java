@@ -17,8 +17,9 @@ import java.util.Optional;
 
 public final class VotvEvents {
     public static final String MOD_ID = "votvevents";
+    public static ResourceLocation NO_ENTITY_AND_STRUCTURE_DIMENSION_ID =
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "featureless_overworld");
     private static MinecraftServer ManagedServer = null;
-
     private static EventManager EventManager = new EventManager();
     private static Config ModConfig = Config.loadConfig();
 

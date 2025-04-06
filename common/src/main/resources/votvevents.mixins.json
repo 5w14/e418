@@ -10,7 +10,9 @@
     "client.WorldOpenFlowsMixin"
   ],
   "mixins": [
-    "common.ServerLevelMixin"
+    "common.EntityMixin",
+    "common.ServerLevelMixin",
+    "common.StructureManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
