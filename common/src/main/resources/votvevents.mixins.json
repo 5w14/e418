@@ -4,9 +4,10 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "client.CreateWorldScreenMixin",
     "client.DebugScreenOverlayMixin",
     "client.LevelRendererMixin",
-    "client.SkipBackupScreenMixin"
+    "client.WorldOpenFlowsMixin"
   ],
   "mixins": [
     "common.ServerLevelMixin"

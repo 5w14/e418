@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ru.maxthetomas.votvevents.VotvEvents;
 
 @Mixin(WorldOpenFlows.class)
-public abstract class SkipBackupScreenMixin {
+public abstract class WorldOpenFlowsMixin {
     @Shadow
     protected abstract void openWorldLoadBundledResourcePack(LevelStorageSource.LevelStorageAccess levelStorageAccess, WorldStem worldStem, PackRepository packRepository, Runnable runnable);
 
