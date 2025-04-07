@@ -1,0 +1,69 @@
+package ru.maxthetomas.votvevents.condition.impl;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import ru.maxthetomas.votvevents.VotvEvents;
+import ru.maxthetomas.votvevents.condition.ICondition;
+import ru.maxthetomas.votvevents.event.EventContext;
+
+/**
+ * A condition that succeeds only if it is the nighttime in the overworld.
+ */
+public class PlayersNearbyCondition implements ICondition {
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(VotvEvents.MOD_ID, "players_nearby");
+    public static MapCodec<PlayersNearbyCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.DOUBLE.optionalFieldOf("radius", 1d).forGetter(PlayersNearbyCondition::getRadius),
+            Codec.INT.optionalFieldOf("min_players_nearby", 0).forGetter(PlayersNearbyCondition::getMinPlayerNearby),
+            Codec.INT.optionalFieldOf("max_players_nearby", 0).forGetter(PlayersNearbyCondition::getMaxPlayerNearby)
+    ).apply(instance, PlayersNearbyCondition::new));
+
+    private final double radius;
+    private final int minPlayersNearby;
+    private final int maxPlayersNearby;
+
+    public PlayersNearbyCondition(double radius, int minPlayersNearby, int maxPlayersNearby) {
+        this.radius = radius;
+        this.minPlayersNearby = minPlayersNearby;
+        this.maxPlayersNearby = maxPlayersNearby;
+    }
+
+    @Override
+    public boolean check(EventContext context) {
+        var playersNearby = 0;
+        var player = context.getPlayer();
+
+        for (Player otherPlayer : player.level().players()) {
+            if (otherPlayer == player) {
+                continue;
+            }
+
+            if (otherPlayer.distanceTo(player) <= radius &&
+                    !otherPlayer.isSpectator() &&
+                    otherPlayer.isAlive()) {
+                playersNearby++;
+            }
+        }
+
+        return playersNearby >= minPlayersNearby && playersNearby <= maxPlayersNearby;
+    }
+
+    @Override
+    public ResourceLocation getType() {
+        return ID;
+    }
+
+    public Double getRadius() {
+        return radius;
+    }
+
+    public int getMinPlayerNearby() {
+        return minPlayersNearby;
+    }
+
+    public int getMaxPlayerNearby() {
+        return minPlayersNearby;
+    }
+}
