@@ -113,8 +113,10 @@ public class MutateContextBehaviour extends Behaviour implements IBehaviourExecu
     @Override
     public void dirty() {
         for (Behaviour behaviour : this.activeBehaviours) {
-            if (!behaviour.isDone())
+            if (!behaviour.isDone()) {
                 setDone(false);
+                return;
+            }
         }
         setDone(true);
     }

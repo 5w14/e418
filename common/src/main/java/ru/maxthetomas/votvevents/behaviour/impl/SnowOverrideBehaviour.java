@@ -33,10 +33,14 @@ public class SnowOverrideBehaviour extends Behaviour {
     public void stop() {
         super.stop();
         setSnow(false);
+        setDone(true);
     }
 
     private void setSnow(boolean value) {
         VotvEventsVariables.ShouldSnow = value;
+
+        // Todo: if player rejoins server - this won't work.
+        // needs a better sync solution.
         NetworkManager.sendToPlayers(VotvEvents.getCurrentServer().get().getPlayerList().getPlayers(),
                 new S2CSetSnowRender(value));
     }

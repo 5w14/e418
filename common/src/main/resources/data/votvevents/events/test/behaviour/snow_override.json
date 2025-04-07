@@ -7,11 +7,26 @@
     },
     {
       "type": "votvevents:execute_command",
-      "command": "/weather rain 55s"
+      "command": "/weather rain 15s"
     },
     {
-      "type": "votvevents:timeout",
-      "ticks": 1200
+      "type": "votvevents:wait_for_conditions",
+      "conditions": [
+        {
+          "type": "votvevents:not",
+          "conditions": [
+            {
+              "type": "votvevents:weather",
+              "weather": "any_non_clear"
+            }
+          ]
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "votvevents:stop_event"
+        }
+      ]
     }
   ],
   "run_conditions": [],

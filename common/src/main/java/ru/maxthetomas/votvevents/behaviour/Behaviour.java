@@ -9,14 +9,13 @@ import ru.maxthetomas.votvevents.event.IBehaviourExecutor;
  * These behaviours are generic actions that event could perform.
  */
 public abstract class Behaviour {
-    public abstract ResourceLocation getTypeId();
-
+    protected IBehaviourExecutor executor;
     private boolean isDisposed = false;
     private boolean isStopped = false;
     private boolean isExecuted = false;
     private boolean isDone = false;
 
-    private IBehaviourExecutor executor;
+    public abstract ResourceLocation getTypeId();
 
     /**
      * Executes behaviour in event. Used if event with this behaviour starts.
@@ -88,16 +87,6 @@ public abstract class Behaviour {
     }
 
     /**
-     * Changes done state.
-     *
-     * @param value Done state
-     */
-    public final void setDone(boolean value) {
-        isDone = value;
-        executor.dirty();
-    }
-
-    /**
      * Is this behaviour done its activity.
      * Done behaviour means that it's safe to dispose it.
      * If all behaviours on event returns true, the event will be automatically disposed
@@ -106,6 +95,16 @@ public abstract class Behaviour {
      */
     public final boolean isDone() {
         return isDone;
+    }
+
+    /**
+     * Changes done state.
+     *
+     * @param value Done state
+     */
+    public final void setDone(boolean value) {
+        isDone = value;
+        executor.dirty();
     }
 
     /**

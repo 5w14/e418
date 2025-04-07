@@ -40,7 +40,7 @@ public class TimeoutBehaviour extends Behaviour {
         super.execute(context, executor);
         this.endTick = (int) (context.getSourceEvent().startTime + ticks);
         this.event = context.getSourceEvent();
-        TickEvent.SERVER_POST.register(this::processTick);
+        TickEvent.SERVER_PRE.register(this::processTick);
     }
 
     private void processTick(MinecraftServer server) {
@@ -49,8 +49,13 @@ public class TimeoutBehaviour extends Behaviour {
     }
 
     private void end(ActiveEvent event) {
-        setDone(true);
-        TickEvent.SERVER_POST.unregister(this::processTick);
         VotvEvents.getEventManager().stopEvent(event);
+        setDone(true);
+    }
+
+    @Override
+    public void dispose() {
+        TickEvent.SERVER_PRE.unregister(this::processTick);
+        super.dispose();
     }
 }

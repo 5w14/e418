@@ -30,6 +30,8 @@ public class Behaviours {
     // Utilities
     public static final MapCodec<? extends Behaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> TIMEOUT = register(TimeoutBehaviour.ID, TimeoutBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> WAIT_FOR_CONDITIONS = register(WaitForConditionBehaviour.ID, WaitForConditionBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> STOP_EVENT = register(StopEventBehaviour.ID, StopEventBehaviour.CODEC);
 
     /**
      * Gets a codec to create a {@linkplain Behaviour} from the registry.

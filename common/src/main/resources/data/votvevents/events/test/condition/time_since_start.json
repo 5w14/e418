@@ -1,0 +1,23 @@
+{
+  "name": "Test time since start condition",
+  "description": "10 seconds since start",
+  "behaviours": [
+    {
+      "type": "votvevents:wait_for_conditions",
+      "conditions": [
+        {
+          "type": "votvevents:time_since_start",
+          "ticks": 200
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "votvevents:broadcast_message",
+          "message": "Time since start done"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

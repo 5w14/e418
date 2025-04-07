@@ -62,4 +62,9 @@ public class ShowToastBehaviour extends Behaviour {
                 title, description, stack
         ));
     }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return context.getPlayer() != null;
+    }
 }

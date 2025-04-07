@@ -28,6 +28,7 @@ public class WeatherCondition implements ICondition {
         return switch (weather) {
             case RAIN -> context.getServer().overworld().isRaining();
             case THUNDER -> context.getServer().overworld().isThundering();
+            case ANY_NON_CLEAR -> context.getServer().overworld().getRainLevel(1F) > 0;
             default -> true;
         };
     }
@@ -44,6 +45,7 @@ public class WeatherCondition implements ICondition {
     public enum Weather implements StringRepresentable {
         CLEAR("clear"),
         RAIN("rain"),
+        ANY_NON_CLEAR("any_non_clear"),
         THUNDER("thunder");
 
         public static Codec<Weather> CODEC = StringRepresentable.fromEnum(Weather::values);
