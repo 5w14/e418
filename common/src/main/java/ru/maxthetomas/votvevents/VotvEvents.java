@@ -1,5 +1,6 @@
 package ru.maxthetomas.votvevents;
 
+import dev.architectury.event.events.client.ClientPlayerEvent;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.ReloadListenerRegistry;
@@ -12,23 +13,35 @@ import ru.maxthetomas.votvevents.debug.EventCommand;
 import ru.maxthetomas.votvevents.event.EventManager;
 import ru.maxthetomas.votvevents.event.RandomEventManager;
 import ru.maxthetomas.votvevents.networking.VotvEventsNetworking;
+import ru.maxthetomas.votvevents.util.VotvEventsClientVariables;
+import ru.maxthetomas.votvevents.util.VotvEventsVariables;
 
 import java.util.Optional;
 
 public final class VotvEvents {
     public static final String MOD_ID = "votvevents";
-    public static ResourceLocation NO_ENTITY_AND_STRUCTURE_DIMENSION_ID =
+    public static final ResourceLocation NO_ENTITY_AND_STRUCTURE_DIMENSION_ID =
             ResourceLocation.fromNamespaceAndPath(MOD_ID, "featureless_overworld");
+    private static final Config ModConfig = Config.loadConfig();
+    private static final EventManager EventManager = new EventManager();
+
     private static MinecraftServer ManagedServer = null;
-    private static EventManager EventManager = new EventManager();
-    private static Config ModConfig = Config.loadConfig();
 
     public static void init() {
-        LifecycleEvent.SERVER_BEFORE_START.register(srv -> ManagedServer = srv);
+        LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
+            ManagedServer = srv;
+            VotvEventsVariables.init();
+        });
+
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
             if (srv == ManagedServer) {
                 ManagedServer = null;
             }
+            VotvEventsVariables.init();
+        });
+
+        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> {
+            VotvEventsClientVariables.init();
         });
 
         RandomEventManager.init();

@@ -25,6 +25,7 @@ public class Behaviours {
     public static final MapCodec<? extends Behaviour> SHOW_TOAST = register(ShowToastBehaviour.ID, ShowToastBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> SET_SHADER = register(SetShaderBehaviour.ID, SetShaderBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> GAME_CRASH = register(GameCrashBehaviour.ID, GameCrashBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> SNOW_OVERRIDE = register(SnowOverrideBehaviour.ID, SnowOverrideBehaviour.CODEC);
 
     // Utilities
     public static final MapCodec<? extends Behaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);

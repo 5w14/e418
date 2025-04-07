@@ -9,11 +9,14 @@
     "client.DebugScreenOverlayMixin",
     "client.GameRendererMixin",
     "client.LevelRendererMixin",
+    "client.WeatherEffectRendererMixin",
     "client.WorldOpenFlowsMixin"
   ],
   "mixins": [
+    "common.BiomeMixin",
     "common.EntityMixin",
     "common.ServerLevelMixin",
+    "common.SnowAndFreezeFeatureMixin",
     "common.StructureManagerMixin"
   ],
   "injectors": {

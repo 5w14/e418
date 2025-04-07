@@ -1,0 +1,19 @@
+{
+  "name": "Test snow override",
+  "description": "Snow override test with 1 minute timeout",
+  "behaviours": [
+    {
+      "type": "votvevents:snow_override"
+    },
+    {
+      "type": "votvevents:execute_command",
+      "command": "/weather rain 55s"
+    },
+    {
+      "type": "votvevents:timeout",
+      "ticks": 1200
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
