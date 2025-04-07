@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.TickTask;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.behaviour.PreActiveBehaviour;
@@ -40,7 +41,7 @@ public class WaitForConditionBehaviour extends Behaviour implements IBehaviourEx
 
         this.context = context;
 
-        TickEvent.SERVER_PRE.register(this::tick);
+        TickEvent.SERVER_POST.register(this::tick);
     }
 
     private void tick(MinecraftServer server) {
@@ -104,7 +105,12 @@ public class WaitForConditionBehaviour extends Behaviour implements IBehaviourEx
     @Override
     public void dispose() {
         super.dispose();
-        TickEvent.SERVER_PRE.unregister(this::tick);
+
+        // TODO fix this mess bruh
+        E418.getCurrentServer().get().schedule(new TickTask(0, () -> {
+            TickEvent.SERVER_POST.unregister(this::tick);
+        }));
+
         for (Behaviour behaviour : executedBehaviours) {
             behaviour.dispose();
         }
