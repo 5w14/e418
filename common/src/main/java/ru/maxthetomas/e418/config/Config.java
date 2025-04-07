@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 public class Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_PATH = Platform.getConfigFolder().resolve("votvevents.json");
+    private static final Path CONFIG_PATH = Platform.getConfigFolder().resolve("e418.json");
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private boolean isDebug = false;

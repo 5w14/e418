@@ -12,7 +12,7 @@ import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.debug.EventCommand;
 import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.RandomEventManager;
-import ru.maxthetomas.e418.networking.VotvEventsNetworking;
+import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Variables;
 
@@ -50,7 +50,7 @@ public final class E418 {
 
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
 
-        VotvEventsNetworking.init();
+        E418Networking.init();
     }
 
     public static EventManager getEventManager() {

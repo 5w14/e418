@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'votvevents'
+rootProject.name = 'e418'
 
 include 'common'
 include 'fabric'
