@@ -18,11 +18,11 @@ public record S2CSetShader(ResourceLocation shader) implements CustomPacketPaylo
             S2CSetShader::new
     );
 
-    private final static ResourceLocation EMPTY_ID = ResourceLocation.withDefaultNamespace("empty");
+    public final static ResourceLocation EMPTY_SHADER = ResourceLocation.withDefaultNamespace("empty");
 
     public static void receive(S2CSetShader packet, NetworkManager.PacketContext context) {
         var renderer = Minecraft.getInstance().gameRenderer;
-        if (packet.shader.equals(EMPTY_ID)) {
+        if (packet.shader.equals(EMPTY_SHADER)) {
             renderer.clearPostEffect();
         } else {
             ((GameRendererAccessor) renderer).callSetPostEffect(packet.shader);

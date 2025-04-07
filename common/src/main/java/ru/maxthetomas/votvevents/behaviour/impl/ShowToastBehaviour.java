@@ -6,7 +6,6 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import ru.maxthetomas.votvevents.VotvEvents;
@@ -53,13 +52,14 @@ public class ShowToastBehaviour extends Behaviour {
 
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
+        setDone(true);
+
         var player = context.getPlayer();
         if (player == null) return;
 
-        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CShowToast(
+        NetworkManager.sendToPlayer(player, new S2CShowToast(
                 title, description, stack
         ));
-
-        super.execute(context, executor);
     }
 }

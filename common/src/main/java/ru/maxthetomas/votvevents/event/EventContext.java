@@ -1,7 +1,7 @@
 package ru.maxthetomas.votvevents.event;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.votvevents.util.Location;
@@ -13,7 +13,7 @@ public class EventContext {
     @Nullable
     private Location location;
     @Nullable
-    private Player player;
+    private ServerPlayer player;
 
     // TODO add more fields here
 
@@ -35,7 +35,7 @@ public class EventContext {
     }
 
     @Nullable
-    public Player getPlayer() {
+    public ServerPlayer getPlayer() {
         return player;
     }
 
@@ -48,7 +48,7 @@ public class EventContext {
         return this;
     }
 
-    public EventContext withPlayer(Player player) {
+    public EventContext withPlayer(ServerPlayer player) {
         this.player = player;
         return this;
     }

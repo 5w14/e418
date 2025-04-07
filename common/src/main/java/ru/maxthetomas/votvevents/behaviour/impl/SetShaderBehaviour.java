@@ -19,6 +19,7 @@ public class SetShaderBehaviour extends Behaviour {
     ).apply(instance, SetShaderBehaviour::new));
 
     private final ResourceLocation shaderId;
+    private ServerPlayer player = null;
 
     public SetShaderBehaviour(ResourceLocation shaderId) {
         this.shaderId = shaderId;
@@ -35,9 +36,17 @@ public class SetShaderBehaviour extends Behaviour {
 
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
+        super.execute(context, executor);
+
         var player = context.getPlayer();
         if (player == null) return;
-        NetworkManager.sendToPlayer((ServerPlayer) player, new S2CSetShader(shaderId));
-        super.execute(context, executor);
+        NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
+        this.player = player;
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        NetworkManager.sendToPlayer(player, new S2CSetShader(S2CSetShader.EMPTY_SHADER));
     }
 }

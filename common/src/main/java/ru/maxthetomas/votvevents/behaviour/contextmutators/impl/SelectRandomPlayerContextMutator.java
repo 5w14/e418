@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.contextmutators.IContextMutator;
 import ru.maxthetomas.votvevents.event.EventContext;
@@ -46,8 +46,7 @@ public class SelectRandomPlayerContextMutator implements IContextMutator {
 
         var random = context.getServer().overworld().getRandom();
 
-        Player target = playerList.get(random.nextIntBetweenInclusive(0, playerList.size() - 1));
-
+        ServerPlayer target = playerList.get(random.nextIntBetweenInclusive(0, playerList.size() - 1));
         context.withPlayer(target);
 
         return true;

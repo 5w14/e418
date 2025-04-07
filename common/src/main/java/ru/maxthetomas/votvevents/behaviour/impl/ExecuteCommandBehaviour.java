@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.behaviour.Behaviour;
 import ru.maxthetomas.votvevents.event.EventContext;
@@ -50,7 +49,7 @@ public class ExecuteCommandBehaviour extends Behaviour {
             return;
 
         if (asPlayer) {
-            stack = ((ServerPlayer) context.getPlayer()).createCommandSourceStack();
+            stack = context.getPlayer().createCommandSourceStack();
         } else {
             stack = context.getServer().createCommandSourceStack();
         }
