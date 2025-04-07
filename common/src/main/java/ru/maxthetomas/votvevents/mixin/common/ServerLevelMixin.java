@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.maxthetomas.votvevents.VotvEvents;
 import ru.maxthetomas.votvevents.event.EventContext;
 import ru.maxthetomas.votvevents.event.registry.EventRegistries;
+import ru.maxthetomas.votvevents.util.VotvEventsVariables;
 
 import java.util.List;
 import java.util.Random;
@@ -70,6 +71,8 @@ public abstract class ServerLevelMixin {
         if (this.sleepStatus.areEnoughSleeping(sleepingPercentage)
                 && this.sleepStatus.areEnoughDeepSleeping(sleepingPercentage, this.players())) {
 
+            if (VotvEventsVariables.DisableNightSkip)
+                return;
 
             // todo: Probably should separate this into a different class
             var server = getServer();
@@ -80,7 +83,6 @@ public abstract class ServerLevelMixin {
                 var resource = EventRegistries.WAKE_UP.getRandomEvent();
                 var context = new EventContext(server);
                 VotvEvents.getEventManager().runEvent(resource, context);
-                // return;
             }
 
             if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
