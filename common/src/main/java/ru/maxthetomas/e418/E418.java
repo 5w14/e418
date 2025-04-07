@@ -33,6 +33,12 @@ public final class E418 {
             E418Variables.init();
         });
 
+        LifecycleEvent.SERVER_STOPPING.register(srv -> {
+            if (srv == ManagedServer) {
+                EventManager.getActiveEvents().forEach(EventManager::disposeEvent);
+            }
+        });
+
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
             if (srv == ManagedServer) {
                 ManagedServer = null;

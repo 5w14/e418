@@ -24,6 +24,7 @@ public class ExecuteEventBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
+        setDone(true);
 
         var manager = E418.getEventManager();
         var evt = manager.getEvent(getEventId());
@@ -33,7 +34,7 @@ public class ExecuteEventBehaviour extends Behaviour {
             return;
         }
 
-        manager.runEvent(evt, context);
+        manager.runEvent(evt, context.clone());
     }
 
     public ResourceLocation getEventId() {

@@ -41,7 +41,9 @@ public class WaitForConditionBehaviour extends Behaviour implements IBehaviourEx
 
         this.context = context;
 
-        TickEvent.SERVER_POST.register(this::tick);
+        E418.getCurrentServer().get().schedule(new TickTask(0, () -> {
+            TickEvent.SERVER_POST.register(this::tick);
+        }));
     }
 
     private void tick(MinecraftServer server) {
