@@ -1,0 +1,16 @@
+{
+  "name": "Test timeout",
+  "description": "Test timeout behaviour with set_shader.",
+  "behaviours": [
+    {
+      "type": "e418:set_shader",
+      "shader": "e418:colors"
+    },
+    {
+      "type": "e418:timeout",
+      "ticks": 100
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

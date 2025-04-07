@@ -1,28 +1,32 @@
 {
   "schemaVersion": 1,
-  "id": "votvevents",
+  "id": "e418",
   "version": "${version}",
-  "name": "votvevents",
-  "description": "",
+  "name": "Myths of Entity 418",
+  "description": "A less intrusive horror mod inspired by Voices of the Void.",
   "authors": [
-    ""
+    "maxthetomas",
+    "CSQRB",
+    "iller_saver"
   ],
   "contact": {
-    "homepage": ""
+    "homepage": "https://github.com/maxthetomas/myths-of-entity-418",
+    "issues": "https://github.com/maxthetomas/myths-of-entity-418/issues",
+    "sources": "https://github.com/maxthetomas/myths-of-entity-418"
   },
   "license": "MIT",
-  "icon": "assets/votvevents/icon.png",
+  "icon": "assets/e418/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ru.maxthetomas.votvevents.fabric.VotvEventsFabric"
+      "ru.maxthetomas.e418.fabric.E418Fabric"
     ],
     "client": [
-      "ru.maxthetomas.votvevents.fabric.client.VotvEventsFabricClient"
+      "ru.maxthetomas.e418.fabric.client.E418FabricClient"
     ]
   },
   "mixins": [
-    "votvevents.mixins.json"
+    "e418.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.10",
@@ -32,6 +36,5 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "another-mod": "*"
   }
 }

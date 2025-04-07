@@ -1,0 +1,16 @@
+{
+  "name": "Is Night",
+  "description": "Debug event that works only at night",
+  "behaviours": [
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:is_night"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:is_night"
+    }
+  ]
+}

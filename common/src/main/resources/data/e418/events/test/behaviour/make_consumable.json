@@ -1,0 +1,36 @@
+{
+  "name": "Make Consumable Test",
+  "description": "Test making current item in hand consumable",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player",
+          "prevent_override": true
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:modify_held_item_components",
+          "components": {
+            "minecraft:consumable": {
+              "consume_seconds": 2,
+              "has_consume_particles": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:never"
+    }
+  ]
+}

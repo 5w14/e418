@@ -1,0 +1,30 @@
+{
+  "name": "Test Broadcast Chat Behaviour",
+  "description": "Test broadcast chat behaviour",
+  "behaviours": [
+    {
+      "type": "e418:broadcast_message",
+      "message": {
+        "color": "yellow",
+        "text": "null joined the game",
+        "hoverEvent": {
+          "action": "show_text",
+          "value": {
+            "text": "null - это кто?",
+            "color": "yellow"
+          }
+        }
+      }
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:never"
+    }
+  ]
+}

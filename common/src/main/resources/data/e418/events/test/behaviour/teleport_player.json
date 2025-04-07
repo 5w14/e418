@@ -1,0 +1,35 @@
+{
+  "name": "Teleport Player Test",
+  "description": "Player teleportation test",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player",
+          "prevent_override": true
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:teleport_player",
+          "relative": true,
+          "level": "e418:lines",
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:never"
+    }
+  ]
+}

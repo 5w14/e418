@@ -1,0 +1,17 @@
+{
+  "e418.commands.event.start.not_found": "Event not found",
+  "e418.commands.event.start.success": "Started %s",
+  "e418.commands.event.start.success.force": "Forcefully started %s",
+  "e418.commands.event.start.fail": "Unable to start %s",
+  "e418.commands.event.print": "Currently registered events: \n%s",
+  "e418.commands.event.queue.success": "Queued %s",
+  "e418.commands.event.queue.success.force": "Forcefully queued %s",
+  "e418.commands.event.queue.fail": "Unable to queue %s",
+  "e418.commands.event.print_queued": "Currently queued events: \n%s",
+  "e418.commands.event.print_active": "Currently active events: \n%s",
+  "e418.commands.event.print_event_registry": "Events registered in %s: \n%s",
+  "e418.commands.event.invalid_registry": "Invalid event registry %s",
+  "e418.commands.event.print_event_registries_summary": "Event registry summary: \n%s",
+  "e418.commands.event.print_event_registries_summary.line": " - %s has %s event(s)",
+  "e418.events.sleep.insomnia": "you can feel that something is off..."
+}

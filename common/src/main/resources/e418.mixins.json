@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "package": "ru.maxthetomas.e418.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "accessors.GameRendererAccessor",
+    "client.CreateWorldScreenMixin",
+    "client.DebugScreenOverlayMixin",
+    "client.GameRendererMixin",
+    "client.LevelRendererMixin",
+    "client.WeatherEffectRendererMixin",
+    "client.WorldOpenFlowsMixin"
+  ],
+  "mixins": [
+    "common.BiomeMixin",
+    "common.EntityMixin",
+    "common.ServerLevelMixin",
+    "common.SnowAndFreezeFeatureMixin",
+    "common.StructureManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

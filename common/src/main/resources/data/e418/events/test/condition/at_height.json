@@ -1,0 +1,20 @@
+{
+  "name": "At Height",
+  "description": "Debug event that works only in defined range of height",
+  "behaviours": [
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:at_height",
+      "above": -50,
+      "below": 50
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:at_height",
+      "above": -50,
+      "below": 50
+    }
+  ]
+}

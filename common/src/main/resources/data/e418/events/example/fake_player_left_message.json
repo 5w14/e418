@@ -1,0 +1,24 @@
+{
+  "name": "Example fake player left message event",
+  "description": "An example event",
+  "behaviours": [
+    {
+      "type": "e418:broadcast_message",
+      "message": {
+        "color": "yellow",
+        "translate": "multiplayer.player.left",
+        "with": [
+          {
+            "text": "CSQRB",
+            "clickEvent": {
+              "action": "suggest_command",
+              "value": "/tell CSQRB"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

@@ -1,0 +1,8 @@
+{
+  "events": [
+    {
+      "id": "e418:test/behaviour/broadcast",
+      "weight": 1
+    }
+  ]
+}

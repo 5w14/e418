@@ -1,0 +1,34 @@
+{
+  "name": "Test snow override",
+  "description": "Snow override test with 1 minute timeout",
+  "behaviours": [
+    {
+      "type": "e418:snow_override"
+    },
+    {
+      "type": "e418:execute_command",
+      "command": "/weather rain 15s"
+    },
+    {
+      "type": "e418:wait_for_conditions",
+      "conditions": [
+        {
+          "type": "e418:not",
+          "conditions": [
+            {
+              "type": "e418:weather",
+              "weather": "any_non_clear"
+            }
+          ]
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:stop_event"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

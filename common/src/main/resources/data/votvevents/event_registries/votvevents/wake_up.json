@@ -1,8 +1,0 @@
-{
-  "events": [
-    {
-      "id": "votvevents:test/behaviour/broadcast",
-      "weight": 1
-    }
-  ]
-}

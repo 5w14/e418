@@ -4,30 +4,30 @@ loaderVersion = "[2,)"
 license = "MIT"
 
 [[mods]]
-modId = "votvevents"
+modId = "e418"
 version = "${version}"
-displayName = "votvevents"
-authors = ""
+displayName = "Myths of Entity 418"
+authors = "maxthetomas, CSQRB, iller_saver"
 description = '''
-
+A less intrusive horror mod inspired by Voices of the Void.
 '''
 #logoFile = ""
 
-[[dependencies.votvevents]]
+[[dependencies.e418]]
 modId = "neoforge"
 type = "required"
 versionRange = "[21,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.votvevents]]
+[[dependencies.e418]]
 modId = "minecraft"
 type = "required"
 versionRange = "[1.21.4,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.votvevents]]
+[[dependencies.e418]]
 modId = "architectury"
 type = "required"
 versionRange = "[15.0.3,)"
@@ -35,4 +35,4 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[mixins]]
-config = "votvevents.mixins.json"
+config = "e418.mixins.json"

@@ -1,0 +1,9 @@
+{
+  "events": [
+    {
+      "id": "e418:test/behaviour/broadcast",
+      "weight": 1
+    },
+    "e418:test/behaviour/teleport_player"
+  ]
+}

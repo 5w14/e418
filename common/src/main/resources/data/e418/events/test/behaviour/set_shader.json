@@ -1,0 +1,12 @@
+{
+  "name": "Test set shader behaviour",
+  "description": "Sets `colors` post program",
+  "behaviours": [
+    {
+      "type": "e418:set_shader",
+      "shader": "e418:colors"
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

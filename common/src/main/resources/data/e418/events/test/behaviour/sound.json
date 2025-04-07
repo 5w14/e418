@@ -1,0 +1,33 @@
+{
+  "name": "Sound Behaviour Test",
+  "description": "Test sound behaviour",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player",
+          "prevent_override": true
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:play_sound",
+          "sound": "minecraft:ambient.cave",
+          "volume": 1.0,
+          "pitch": 1.0
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:never"
+    }
+  ]
+}

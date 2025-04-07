@@ -1,0 +1,34 @@
+{
+  "name": "Test Mutation Behaviour",
+  "description": "Test mutation behaviour",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player"
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:debug_print_context"
+        }
+      ],
+      "run_conditions": [
+        {
+          "type": "e418:never"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:never"
+    }
+  ]
+}

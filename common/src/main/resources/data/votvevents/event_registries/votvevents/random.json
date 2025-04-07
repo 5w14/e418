@@ -1,9 +1,0 @@
-{
-  "events": [
-    {
-      "id": "votvevents:test/behaviour/broadcast",
-      "weight": 1
-    },
-    "votvevents:test/behaviour/teleport_player"
-  ]
-}
