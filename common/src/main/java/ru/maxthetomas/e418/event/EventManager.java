@@ -61,6 +61,8 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             event.undirty();
             return false;
         });
+
+        activeEvents.forEach(ActiveEvent::tick);
     }
 
     // Getters

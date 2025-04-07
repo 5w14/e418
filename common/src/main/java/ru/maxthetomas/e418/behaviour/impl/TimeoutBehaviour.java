@@ -3,9 +3,7 @@ package ru.maxthetomas.e418.behaviour.impl;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.ActiveEvent;
@@ -19,8 +17,8 @@ public class TimeoutBehaviour extends Behaviour {
     ).apply(instance, TimeoutBehaviour::new));
 
     private final int ticks;
-    private int endTick;
-    private ActiveEvent event;
+    private EventContext context;
+    private long endTick;
 
     public TimeoutBehaviour(int ticks) {
         this.ticks = ticks;
@@ -39,13 +37,15 @@ public class TimeoutBehaviour extends Behaviour {
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
         this.endTick = (int) (context.getSourceEvent().startTime + ticks);
-        this.event = context.getSourceEvent();
-        TickEvent.SERVER_PRE.register(this::processTick);
+        this.context = context;
     }
 
-    private void processTick(MinecraftServer server) {
-        if (server.overworld().getGameTime() >= endTick && !isDone())
-            end(event);
+    @Override
+    public void tick() {
+        super.tick();
+        if (isDone()) return;
+        if (context.getServer().overworld().getGameTime() > this.endTick)
+            end(context.getSourceEvent());
     }
 
     private void end(ActiveEvent event) {
@@ -55,7 +55,6 @@ public class TimeoutBehaviour extends Behaviour {
 
     @Override
     public void dispose() {
-        TickEvent.SERVER_PRE.unregister(this::processTick);
         super.dispose();
     }
 }

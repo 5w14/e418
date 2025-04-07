@@ -39,6 +39,12 @@ public class ActiveEvent implements IBehaviourExecutor {
         }
     }
 
+    public void tick() {
+        for (Behaviour activeBehaviour : activeBehaviours) {
+            activeBehaviour.tick();
+        }
+    }
+
     @Override
     public String toString() {
         return String.format("ActiveEvent[%s] (started at: %s, active behaviours: %s)", resource.name(), startTime, activeBehaviours.size());

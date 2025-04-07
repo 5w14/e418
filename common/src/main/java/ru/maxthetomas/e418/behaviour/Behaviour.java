@@ -76,6 +76,10 @@ public abstract class Behaviour {
         isDisposed = true;
     }
 
+    public void tick() {
+
+    }
+
     /**
      * Can this behaviour run.
      * Behaviours are generic. This should return false only if behaviour really can't run.

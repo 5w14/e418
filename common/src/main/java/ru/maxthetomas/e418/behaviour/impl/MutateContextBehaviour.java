@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.behaviour.Behaviour;
+import ru.maxthetomas.e418.behaviour.ExecutorBehaviour;
 import ru.maxthetomas.e418.behaviour.PreActiveBehaviour;
 import ru.maxthetomas.e418.behaviour.contextmutators.ContextMutators;
 import ru.maxthetomas.e418.behaviour.contextmutators.IContextMutator;
@@ -14,10 +14,9 @@ import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MutateContextBehaviour extends Behaviour implements IBehaviourExecutor {
+public class MutateContextBehaviour extends ExecutorBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ContextMutators.DISPATCH_CODEC.listOf().fieldOf("mutators").forGetter(MutateContextBehaviour::getContextMutators),
@@ -26,15 +25,13 @@ public class MutateContextBehaviour extends Behaviour implements IBehaviourExecu
     ).apply(instance, MutateContextBehaviour::new));
 
     public final List<IContextMutator> contextMutators;
-    public final List<PreActiveBehaviour> behaviours;
     public final List<ICondition> runConditions;
 
-    public final List<Behaviour> activeBehaviours = new ArrayList<>();
     public EventContext storedMutatedContext;
 
     public MutateContextBehaviour(List<IContextMutator> contextMutators, List<PreActiveBehaviour> behaviours, List<ICondition> runConditions) {
+        super(behaviours);
         this.contextMutators = contextMutators;
-        this.behaviours = behaviours;
         this.runConditions = runConditions;
     }
 
@@ -61,10 +58,6 @@ public class MutateContextBehaviour extends Behaviour implements IBehaviourExecu
         return runConditions;
     }
 
-    public List<PreActiveBehaviour> getPreActiveBehaviours() {
-        return behaviours;
-    }
-
     public List<IContextMutator> getContextMutators() {
         return contextMutators;
     }
@@ -82,43 +75,9 @@ public class MutateContextBehaviour extends Behaviour implements IBehaviourExecu
         if (storedMutatedContext == null)
             return;
 
-        for (var preActiveBehaviour : behaviours) {
-            var behaviour = preActiveBehaviour.create();
-            behaviour.tryExecute(storedMutatedContext, this);
-            activeBehaviours.add(behaviour);
-        }
-    }
+        this.context = storedMutatedContext;
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        for (Behaviour behaviour : activeBehaviours) {
-            behaviour.dispose();
-        }
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        for (Behaviour behaviour : activeBehaviours) {
-            behaviour.stop();
-        }
-    }
-
-    @Override
-    public List<Behaviour> getExecutedBehaviours() {
-        return activeBehaviours;
-    }
-
-    @Override
-    public void dirty() {
-        for (Behaviour behaviour : this.activeBehaviours) {
-            if (!behaviour.isDone()) {
-                setDone(false);
-                return;
-            }
-        }
-        setDone(true);
+        tryStartBehaviours();
     }
 
     @Override
