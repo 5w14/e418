@@ -54,7 +54,12 @@ public class ExecuteCommandBehaviour extends Behaviour {
             stack = context.getServer().createCommandSourceStack();
         }
 
+        // Datapack-level permissions.
         stack = stack.withPermission(2);
+
+        // Remove command output for operators, to not spoil ongoing events.
+        if (!VotvEvents.getConfig().get().isDebug())
+            stack = stack.withSuppressedOutput();
 
         if (context.getLocation() != null) {
             stack = stack
