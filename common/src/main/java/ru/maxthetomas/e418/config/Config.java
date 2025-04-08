@@ -57,8 +57,7 @@ public class Config {
                 var config = CODEC.decode(JsonOps.INSTANCE, JsonOps.INSTANCE.getMap(json).getOrThrow());
                 return config.getOrThrow();
             } else {
-                var config = new Config(false, true,
-                        new Dynamic<>(JsonOps.INSTANCE).emptyMap());
+                var config = empty();
                 saveToFile(config);
                 return config;
             }
@@ -66,7 +65,7 @@ public class Config {
             LOGGER.error("Cannot load config!", exc);
         }
 
-        return null;
+        return empty();
     }
 
     /**
@@ -83,6 +82,11 @@ public class Config {
         } catch (IOException exception) {
             LOGGER.error("Failed to save configuration", exception);
         }
+    }
+
+    private static Config empty() {
+        return new Config(false, true,
+                new Dynamic<>(JsonOps.INSTANCE).emptyMap());
     }
 
     private void updateSources() {
