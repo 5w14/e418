@@ -20,7 +20,6 @@ public class Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH = Platform.getConfigFolder().resolve("e418.json");
     private static final Logger LOGGER = LogUtils.getLogger();
-
     private static final MapCodec<Config> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
@@ -38,7 +37,7 @@ public class Config {
         var map = sources.getMapValues().getOrThrow();
         var keys = map.keySet().stream().map(Dynamic::asString).map(DataResult::getOrThrow);
         keys.map(ResourceLocation::tryParse).filter(Objects::nonNull).forEach(v ->
-                SourceConfigs.setValues(v, map.get(v.toString())));
+                SourceConfigs.setValues(v, map.getOrDefault(v.toString(), null)));
 
         updateSources();
     }
@@ -102,4 +101,6 @@ public class Config {
     public boolean shouldSkipBackupScreen() {
         return shouldSkipBackupScreen;
     }
+
+
 }

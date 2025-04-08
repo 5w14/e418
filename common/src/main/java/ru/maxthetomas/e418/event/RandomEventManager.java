@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Config CONFIG = E418.getConfig().orElseThrow();
+    private static final Config CONFIG = E418.getConfig();
     private static final Random RANDOM = new Random();
 
     private static int currentTick = 0;

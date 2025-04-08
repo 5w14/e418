@@ -58,7 +58,7 @@ public class ExecuteCommandBehaviour extends Behaviour {
         stack = stack.withPermission(2);
 
         // Remove command output for operators, to not spoil ongoing events.
-        if (!E418.getConfig().get().isDebug())
+        if (!E418.getConfig().isDebug())
             stack = stack.withSuppressedOutput();
 
         if (context.getLocation() != null) {

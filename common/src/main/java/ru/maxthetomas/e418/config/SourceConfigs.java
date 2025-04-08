@@ -13,7 +13,8 @@ import java.util.Map;
 public class SourceConfigs {
     private static final HashMap<ResourceLocation, SourceConfig> REGISTRY = new HashMap<>();
 
-    public static RandomSourceConfig RANDOM_EVENT = create(new RandomSourceConfig());
+    public static RandomSourceConfig RANDOM_EVENT = create(new RandomSourceConfig(true,
+            20 * 60 * 30, 20 * 60 * 90)); // 30 to 90 minutes
     public static SourceConfig WAKE_UP = create("wake_up", 0.05f);
 
     public static <T extends SourceConfig> T create(T instance) {
@@ -38,6 +39,9 @@ public class SourceConfigs {
 
     public static void setValues(ResourceLocation id, Dynamic<?> values) {
         if (!REGISTRY.containsKey(id))
+            return;
+
+        if (values == null)
             return;
 
         REGISTRY.get(id).setValues(values);

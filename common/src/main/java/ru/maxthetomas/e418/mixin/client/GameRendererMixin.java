@@ -15,7 +15,7 @@ public class GameRendererMixin {
 
     @Inject(method = "togglePostEffect", at = @At("HEAD"), cancellable = true)
     public void togglePostEffectOverride(CallbackInfo ci) {
-        if (!E418.getConfig().get().isDebug()) {
+        if (!E418.getConfig().isDebug()) {
             this.effectActive = true;
             ci.cancel();
         }

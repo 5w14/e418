@@ -14,7 +14,7 @@ public class CreateWorldScreenMixin {
                     target = "Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;confirmWorldCreation(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/gui/screens/worldselection/CreateWorldScreen;Lcom/mojang/serialization/Lifecycle;Ljava/lang/Runnable;Z)V")
     )
     public boolean modifySkip(boolean bool) {
-        if (E418.getConfig().get().shouldSkipBackupScreen()) {
+        if (E418.getConfig().shouldSkipBackupScreen()) {
             return true;
         }
 

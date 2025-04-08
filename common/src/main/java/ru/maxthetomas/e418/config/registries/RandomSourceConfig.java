@@ -9,15 +9,9 @@ public class RandomSourceConfig extends SourceConfig {
     private int maxTime;
 
     public RandomSourceConfig(boolean enabled, int minTime, int maxTime) {
-        super(enabled, 0.9F);
+        super(enabled, 1F);
         this.minTime = minTime;
         this.maxTime = maxTime;
-    }
-
-    public RandomSourceConfig() {
-        super(true, 0.9F);
-        this.minTime = 20 * 60 * 30; // 30 minutes
-        this.maxTime = 20 * 60 * 90; // 1.5 hours
     }
 
     public int getMinTime() {

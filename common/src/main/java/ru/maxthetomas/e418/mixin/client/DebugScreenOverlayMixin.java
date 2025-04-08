@@ -19,7 +19,7 @@ public class DebugScreenOverlayMixin {
             ordinal = 0
     )
     public BlockState modifyHitBlockState(BlockState value) {
-        if (E418.getConfig().get().isDebug())
+        if (E418.getConfig().isDebug())
             return value;
 
         var regName = value.getBlock().arch$registryName();
