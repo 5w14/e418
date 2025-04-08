@@ -41,8 +41,6 @@ public class Config {
                 SourceConfigs.setValues(v, map.get(v.toString())));
 
         updateSources();
-
-        isDebug();
     }
 
     /**
