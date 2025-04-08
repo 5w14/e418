@@ -1,9 +1,7 @@
 {
   "events": [
-    {
-      "id": "e418:test/behaviour/broadcast",
-      "weight": 1
-    },
-    "e418:test/behaviour/teleport_player"
+    "e418:content/random/snow_override",
+    "e418:content/random/teleport_into_ground",
+    "e418:content/random/cave_sound"
   ]
 }

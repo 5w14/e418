@@ -1,8 +1,5 @@
 {
   "events": [
-    {
-      "id": "e418:test/behaviour/cancel_time_skip",
-      "weight": 1
-    }
+    "e418:content/wake_up/cancel_time_skip"
   ]
 }

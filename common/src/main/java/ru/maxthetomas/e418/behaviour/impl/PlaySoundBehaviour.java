@@ -46,19 +46,29 @@ public class PlaySoundBehaviour extends Behaviour {
         super.execute(context, executor);
         setDone(true);
 
+        var soundEvent =
+                new SoundEvent(getSoundEventId(), Optional.of(getRange()));
+
         if (context.getPlayer() == null) {
+            if (context.getLocation() != null) {
+                context.getLocation().getLevel().playLocalSound(
+                        context.getLocation().getBlockPosition(),
+                        soundEvent, getSoundSource(), getVolume(), getPitch(), false
+                );
+            }
+
             return;
         }
 
         context.getPlayer().playNotifySound(
-                new SoundEvent(getSoundEventId(), Optional.of(getRange())),
+                soundEvent,
                 getSoundSource(), getVolume(), getPitch()
         );
     }
 
     @Override
     public boolean canRun(EventContext context) {
-        return context.getPlayer() != null;
+        return context.getPlayer() != null || context.getLocation() != null;
     }
 
     @Override

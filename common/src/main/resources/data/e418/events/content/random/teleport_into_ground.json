@@ -1,0 +1,28 @@
+{
+  "name": "Whoosh...",
+  "description": "...and you're in the ground!",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player",
+          "prevent_override": true
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:teleport_player",
+          "relative": true,
+          "x": 0,
+          "y": -1,
+          "z": 0
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+  ],
+  "queue_conditions": [
+  ]
+}
