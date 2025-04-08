@@ -19,7 +19,7 @@ public abstract class WorldOpenFlowsMixin {
 
     @Inject(at = @At("HEAD"), method = "openWorldCheckWorldStemCompatibility", cancellable = true)
     public void modifyAllowsForBackupSkin(LevelStorageSource.LevelStorageAccess levelStorageAccess, WorldStem worldStem, PackRepository packRepository, Runnable runnable, CallbackInfo ci) {
-        if (E418.getConfig().get().shouldSkipBackupScreen()) {
+        if (E418.getConfig().shouldSkipBackupScreen()) {
             // This skips the method execution and mimics
             // it's function without backup checks.
 

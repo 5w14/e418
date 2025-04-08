@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.SourceConfigs;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.util.E418Variables;
@@ -76,10 +77,9 @@ public abstract class ServerLevelMixin {
 
             // todo: Probably should separate this into a different class
             var server = getServer();
-            var config = E418.getConfig().orElseThrow();
             var random = new Random(); // todo: make this use world random
-            if (config.isWakeUpEventsEnabled() &&
-                    random.nextFloat() <= config.getWakeUpEventChance()) {
+            if (SourceConfigs.WAKE_UP.isEnabled() &&
+                    random.nextFloat() <= SourceConfigs.WAKE_UP.getChance()) {
                 var resource = EventRegistries.WAKE_UP.getRandomEvent();
                 var context = new EventContext(server);
                 E418.getEventManager().runEvent(resource, context);

@@ -57,6 +57,8 @@ public final class E418 {
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
 
         E418Networking.init();
+
+        Config.saveToFile(ModConfig);
     }
 
     public static EventManager getEventManager() {
@@ -67,7 +69,7 @@ public final class E418 {
         return Optional.ofNullable(GameInstance.getServer());
     }
 
-    public static Optional<Config> getConfig() {
-        return Optional.ofNullable(ModConfig);
+    public static Config getConfig() {
+        return ModConfig;
     }
 }

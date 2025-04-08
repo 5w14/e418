@@ -30,7 +30,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> NOT = register(NotCondition.ID, NotCondition.CODEC);
     public static MapCodec<? extends ICondition> AND = register(AndCondition.ID, AndCondition.CODEC);
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
-    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> E418.getConfig().get().isDebug());
+    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> E418.getConfig().isDebug());
 
 
     public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
