@@ -1,6 +1,7 @@
 package ru.maxthetomas.e418.behaviour;
 
 import net.minecraft.resources.ResourceLocation;
+import ru.maxthetomas.e418.codecs.NumberRequester;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
@@ -9,7 +10,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  * Event behaviour.
  * These behaviours are generic actions that event could perform.
  */
-public abstract class Behaviour {
+public abstract class Behaviour implements NumberRequester {
     protected IBehaviourExecutor executor;
     private boolean isDisposed = false;
     private boolean isStopped = false;

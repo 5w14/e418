@@ -79,7 +79,6 @@ public class PreActiveBehaviour {
      * Creates a new instance of {@link Behaviour}, after parsing the stored data.
      */
     public Behaviour create() {
-        return Behaviours.get(type).getOrThrow().decoder()
-                .decode(data).result().orElseThrow().getFirst();
+        return Behaviours.get(type).getOrThrow().decoder().decode(data).result().orElseThrow().getFirst();
     }
 }

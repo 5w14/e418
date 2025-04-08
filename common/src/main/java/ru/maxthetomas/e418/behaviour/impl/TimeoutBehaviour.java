@@ -1,11 +1,12 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
+import ru.maxthetomas.e418.codecs.NumberProvider;
+import ru.maxthetomas.e418.codecs.NumberProviders;
 import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
@@ -13,18 +14,18 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 public class TimeoutBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "timeout");
     public static final MapCodec<TimeoutBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.INT.fieldOf("ticks").forGetter(TimeoutBehaviour::getTicks)
+            NumberProviders.CODEC.fieldOf("ticks").forGetter(TimeoutBehaviour::getTicks)
     ).apply(instance, TimeoutBehaviour::new));
 
-    private final int ticks;
+    private final NumberProvider ticks;
     private EventContext context;
     private long endTick;
 
-    public TimeoutBehaviour(int ticks) {
+    public TimeoutBehaviour(NumberProvider ticks) {
         this.ticks = ticks;
     }
 
-    public int getTicks() {
+    public NumberProvider getTicks() {
         return ticks;
     }
 
@@ -36,7 +37,7 @@ public class TimeoutBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-        this.endTick = (int) (context.getSourceEvent().startTime + ticks);
+        this.endTick = (int) (context.getSourceEvent().startTime + ticks.get(context, this).longValue());
         this.context = context;
     }
 
