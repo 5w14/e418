@@ -7,7 +7,9 @@ import net.minecraft.server.players.SleepStatus;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.ticks.LevelTicks;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.config.SourceConfigs;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.util.E418Variables;
 
@@ -54,6 +57,10 @@ public abstract class ServerLevelMixin {
     @Shadow
     public abstract @NotNull MinecraftServer getServer();
 
+    @Shadow
+    @Final
+    private LevelTicks<Fluid> fluidTicks;
+
     @ModifyVariable(at = @At("STORE"), method = "tick", ordinal = 0)
     public int modifySleepingPercentage(int input) {
         return 101; // Disable sleep through night logic.
@@ -78,14 +85,20 @@ public abstract class ServerLevelMixin {
             // todo: Probably should separate this into a different class
             var server = getServer();
             var random = new Random(); // todo: make this use world random
+
+            var cancelTimeSkip = false;
+
             if (SourceConfigs.WAKE_UP.isEnabled() &&
                     random.nextFloat() <= SourceConfigs.WAKE_UP.getChance()) {
                 var resource = EventRegistries.WAKE_UP.getRandomEvent();
-                var context = new EventContext(server);
+                var cause = new WakeUpEventCause();
+                var context = new EventContext(server)
+                        .withCause(cause);
                 E418.getEventManager().runEvent(resource, context);
+                cancelTimeSkip = cause.isTimeSkipCancelled();
             }
 
-            if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+            if (!cancelTimeSkip && this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 var l = this.serverLevelData.getDayTime() + 24000L;
                 this.setDayTime(l - l % 24000L);
             }

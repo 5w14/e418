@@ -1,7 +1,7 @@
 {
   "events": [
     {
-      "id": "e418:test/behaviour/broadcast",
+      "id": "e418:test/behaviour/cancel_time_skip",
       "weight": 1
     }
   ]

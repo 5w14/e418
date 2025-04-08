@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
+import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 
 import java.util.concurrent.CompletableFuture;
@@ -123,6 +124,7 @@ public class EventCommand {
 
         var eventContext = new EventContext(context.getSource().getServer())
                 .withPlayer(context.getSource().getPlayer())
+                .withCause(new ConsoleCommandEventCause(context))
                 .withForced(isForced);
 
         var activeEvent = E418.getEventManager().runEvent(event, eventContext);
@@ -165,6 +167,7 @@ public class EventCommand {
 
         var eventContext = new EventContext(context.getSource().getServer())
                 .withPlayer(context.getSource().getPlayer())
+                .withCause(new ConsoleCommandEventCause(context))
                 .withForced(isForced);
 
 
@@ -207,6 +210,7 @@ public class EventCommand {
 
         var eventContext = new EventContext(context.getSource().getServer())
                 .withPlayer(context.getSource().getPlayer())
+                .withCause(new ConsoleCommandEventCause(context))
                 .withForced(isForced);
 
 

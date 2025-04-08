@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.config.SourceConfigs;
+import ru.maxthetomas.e418.event.cause.impl.RandomEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 
 import java.util.Random;
@@ -33,6 +34,7 @@ public class RandomEventManager {
             var eventResource = EventRegistries.RANDOM.getRandomEvent();
 
             var eventContext = new EventContext(minecraftServer);
+            eventContext.withCause(new RandomEventCause());
 
             var activeEvent = E418.getEventManager().runEvent(eventResource, eventContext);
 

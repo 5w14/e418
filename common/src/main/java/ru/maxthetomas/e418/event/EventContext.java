@@ -4,6 +4,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import ru.maxthetomas.e418.event.cause.IEventCause;
 import ru.maxthetomas.e418.util.Location;
 
 public class EventContext {
@@ -14,6 +15,7 @@ public class EventContext {
     private Location location;
     @Nullable
     private ServerPlayer player;
+    private IEventCause cause;
 
     // TODO add more fields here
 
@@ -43,6 +45,10 @@ public class EventContext {
         return forced;
     }
 
+    public IEventCause getCause() {
+        return cause;
+    }
+
     public EventContext withSourceEvent(ActiveEvent sourceEvent) {
         this.sourceEvent = sourceEvent;
         return this;
@@ -63,6 +69,11 @@ public class EventContext {
         return this;
     }
 
+    public EventContext withCause(IEventCause cause) {
+        this.cause = cause;
+        return this;
+    }
+
     @Override
     public EventContext clone() {
         var newContext = new EventContext(server);
@@ -70,6 +81,7 @@ public class EventContext {
         newContext.player = player;
         newContext.sourceEvent = sourceEvent;
         newContext.forced = forced;
+        newContext.cause = cause;
         if (location != null) {
             newContext.location = new Location(location.getLevel(),
                     new Vec3(location.getPosition().x, location.getPosition().y, location.getPosition().z));
