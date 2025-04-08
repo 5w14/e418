@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.config.Config;
+import ru.maxthetomas.e418.config.SourceConfigs;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 
 import java.util.Random;
@@ -16,12 +17,11 @@ public class RandomEventManager {
     private static final Random RANDOM = new Random();
 
     private static int currentTick = 0;
-    private static int timeToEvent = RANDOM.nextInt(
-            CONFIG.getMinTimeBetweenEvents(),
-            CONFIG.getMaxTimeBetweenEvents());
+    private static int timeToEvent = RANDOM.nextInt(SourceConfigs.RANDOM_EVENT.getMinTime(),
+            SourceConfigs.RANDOM_EVENT.getMaxTime());
 
     public static void init() {
-        if (CONFIG.isRandomEventsEnabled()) {
+        if (SourceConfigs.RANDOM_EVENT.isEnabled()) {
             TickEvent.SERVER_POST.register(RandomEventManager::tick);
         }
     }
@@ -44,8 +44,8 @@ public class RandomEventManager {
 
             currentTick = 0;
             timeToEvent = RANDOM.nextInt(
-                    CONFIG.getMinTimeBetweenEvents(),
-                    CONFIG.getMaxTimeBetweenEvents());
+                    SourceConfigs.RANDOM_EVENT.getMinTime(),
+                    SourceConfigs.RANDOM_EVENT.getMaxTime());
         }
     }
 }
