@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.*;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +17,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -35,9 +37,10 @@ public class Config {
         this.sources = sources;
 
         var map = sources.getMapValues().getOrThrow();
-        var keys = map.keySet().stream().map(Dynamic::asString).map(DataResult::getOrThrow);
-        keys.map(ResourceLocation::tryParse).filter(Objects::nonNull).forEach(v ->
-                SourceConfigs.setValues(v, map.getOrDefault(v.toString(), null)));
+        map.forEach((key, value) -> {
+            var resouceLocationKey = ResourceLocation.tryParse(key.asString().getOrThrow());
+            SourceConfigs.setValues(resouceLocationKey, value);
+        });
 
         updateSources();
     }
@@ -76,8 +79,7 @@ public class Config {
         try {
             var record = CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.mapBuilder());
             var json = record.build(JsonOps.INSTANCE.empty()).getOrThrow();
-            var jsonString = json.toString();
-            Files.writeString(CONFIG_PATH, jsonString, StandardCharsets.UTF_8);
+            Files.writeString(CONFIG_PATH, GSON.toJson(json), StandardCharsets.UTF_8);
         } catch (IOException exception) {
             LOGGER.error("Failed to save configuration", exception);
         }
