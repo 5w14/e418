@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.mixin.accessors.GameRendererAccessor;
+import ru.maxthetomas.e418.util.E418ClientVariables;
 
 public record S2CSetShader(ResourceLocation shader) implements CustomPacketPayload {
     public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_shader");
@@ -23,8 +24,10 @@ public record S2CSetShader(ResourceLocation shader) implements CustomPacketPaylo
     public static void receive(S2CSetShader packet, NetworkManager.PacketContext context) {
         var renderer = Minecraft.getInstance().gameRenderer;
         if (packet.shader.equals(EMPTY_SHADER)) {
+            E418ClientVariables.ShouldRenderPostEffect = false;
             renderer.clearPostEffect();
         } else {
+            E418ClientVariables.ShouldRenderPostEffect = true;
             ((GameRendererAccessor) renderer).callSetPostEffect(packet.shader);
         }
     }
