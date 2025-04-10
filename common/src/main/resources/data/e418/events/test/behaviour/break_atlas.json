@@ -1,0 +1,37 @@
+{
+  "name": "Test break atlas",
+  "description": "Test that breaks the atlas",
+  "behaviours": [
+    {
+      "type": "e418:break_atlas"
+    },
+    {
+      "type": "e418:wait_for_conditions",
+      "behaviours": [
+        {
+          "type": "e418:stop_event"
+        }
+      ],
+      "conditions": [
+        {
+          "type": "e418:time_since_start",
+          "ticks": {
+            "type": "e418:random",
+            "min": 20,
+            "max": 70
+          }
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:debug_mode"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:never"
+    }
+  ]
+}

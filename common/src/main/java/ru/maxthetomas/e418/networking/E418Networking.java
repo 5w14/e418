@@ -8,5 +8,6 @@ public class E418Networking {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetShader.TYPE, S2CSetShader.STREAM_CODEC, S2CSetShader::receive);
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetSnowRender.TYPE, S2CSetSnowRender.STREAM_CODEC, S2CSetSnowRender::receive);
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CCrashGame.TYPE, S2CCrashGame.STREAM_CODEC, S2CCrashGame::receive);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetBreakAtlas.TYPE, S2CSetBreakAtlas.STREAM_CODEC, S2CSetBreakAtlas::receive);
     }
 }

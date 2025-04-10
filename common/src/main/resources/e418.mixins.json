@@ -9,10 +9,12 @@
     "client.DebugScreenOverlayMixin",
     "client.GameRendererMixin",
     "client.LevelRendererMixin",
+    "client.TextureAtlasSpriteMixin",
     "client.WeatherEffectRendererMixin",
     "client.WorldOpenFlowsMixin"
   ],
   "mixins": [
+    "client.TextureManagerMixin",
     "common.BiomeMixin",
     "common.EntityMixin",
     "common.ServerLevelMixin",

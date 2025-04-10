@@ -28,6 +28,7 @@ public class Behaviours {
     public static final MapCodec<? extends Behaviour> SNOW_OVERRIDE = register(SnowOverrideBehaviour.ID, SnowOverrideBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> DISABLE_NIGHT_SKIP = register(DisableNightSkipBehaviour.ID, DisableNightSkipBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> CANCEL_TIME_SKIP = register(CancelTimeSkipBehaviour.ID, CancelTimeSkipBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> BREAK_ATLAS = register(BreakAtlasBehaviour.ID, BreakAtlasBehaviour.CODEC);
 
     // Utilities
     public static final MapCodec<? extends Behaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);
