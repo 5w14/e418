@@ -28,6 +28,15 @@ public final class E418 {
     private static MinecraftServer ManagedServer = null;
 
     public static void init() {
+        E418Networking.init();
+        RandomEventManager.init();
+        CommandRegistrationEvent.EVENT.register(EventCommand::register);
+        ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
+        registerListeners();
+        Config.saveToFile(ModConfig);
+    }
+
+    private static void registerListeners() {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
             ManagedServer = srv;
             E418Variables.init();
@@ -49,16 +58,6 @@ public final class E418 {
         ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> {
             E418ClientVariables.init();
         });
-
-        RandomEventManager.init();
-
-        CommandRegistrationEvent.EVENT.register(EventCommand::register);
-
-        ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
-
-        E418Networking.init();
-
-        Config.saveToFile(ModConfig);
     }
 
     public static EventManager getEventManager() {
