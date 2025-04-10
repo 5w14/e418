@@ -3,10 +3,10 @@ package ru.maxthetomas.e418.behaviour.impl;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import ru.maxthetomas.e418.E418;
@@ -16,6 +16,8 @@ import ru.maxthetomas.e418.codecs.NumberProviders;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+import java.util.Optional;
+
 public class TeleportPlayerBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "teleport_player");
 
@@ -23,21 +25,21 @@ public class TeleportPlayerBehaviour extends Behaviour {
             NumberProviders.CODEC.fieldOf("x").forGetter(TeleportPlayerBehaviour::getX),
             NumberProviders.CODEC.fieldOf("y").forGetter(TeleportPlayerBehaviour::getY),
             NumberProviders.CODEC.fieldOf("z").forGetter(TeleportPlayerBehaviour::getZ),
-            Level.RESOURCE_KEY_CODEC.optionalFieldOf("level", null).forGetter(TeleportPlayerBehaviour::getLevel),
+            ResourceLocation.CODEC.lenientOptionalFieldOf("level").forGetter(TeleportPlayerBehaviour::getLevel),
             Codec.BOOL.optionalFieldOf("relative", true).forGetter(TeleportPlayerBehaviour::isRelative)
     ).apply(instance, TeleportPlayerBehaviour::new));
-    private final ResourceKey<Level> level;
+    private final ResourceLocation level;
     private final boolean relative;
     private final NumberProvider x;
     private final NumberProvider y;
     private final NumberProvider z;
 
     public TeleportPlayerBehaviour(NumberProvider x, NumberProvider y, NumberProvider z,
-                                   ResourceKey<Level> level, boolean relative) {
+                                   Optional<ResourceLocation> level, boolean relative) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.level = level;
+        this.level = level.orElse(null);
         this.relative = relative;
     }
 
@@ -59,8 +61,8 @@ public class TeleportPlayerBehaviour extends Behaviour {
         return z;
     }
 
-    public ResourceKey<Level> getLevel() {
-        return level;
+    public Optional<ResourceLocation> getLevel() {
+        return Optional.ofNullable(level);
     }
 
     public boolean isRelative() {
@@ -74,24 +76,26 @@ public class TeleportPlayerBehaviour extends Behaviour {
 
         Player player = context.getPlayer();
 
-        var newX = this.x.get(context, this).floatValue();
-        var newY = this.y.get(context, this).floatValue();
-        var newZ = this.z.get(context, this).floatValue();
+        var x = this.x.get(context, this).floatValue();
+        var y = this.y.get(context, this).floatValue();
+        var z = this.z.get(context, this).floatValue();
 
         if (player == null) {
             return;
         }
 
         if (relative) {
-            newX += (float) player.getX();
-            newY += (float) player.getY();
-            newZ += (float) player.getZ();
+            x += (float) player.getX();
+            y += (float) player.getY();
+            z += (float) player.getZ();
         }
 
         if (level != null) {
             player.teleport(new TeleportTransition(
-                    context.getServer().getLevel(level),
-                    new Vec3(newX, newY, newZ),
+                    context.getServer().getLevel(
+                            ResourceKey.create(Registries.DIMENSION, level)
+                    ),
+                    new Vec3(x, y, z),
                     Vec3.ZERO,
                     0,
                     0,
@@ -99,7 +103,7 @@ public class TeleportPlayerBehaviour extends Behaviour {
             return;
         }
 
-        player.teleportTo(newX, newY, newY);
+        player.teleportTo(x, y, z);
     }
 
     @Override

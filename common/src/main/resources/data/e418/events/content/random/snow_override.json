@@ -29,6 +29,16 @@
       ]
     }
   ],
-  "run_conditions": [],
-  "queue_conditions": []
+  "run_conditions": [
+    {
+      "type": "e418:weather",
+      "weather": "clear"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:weather",
+      "weather": "clear"
+    }
+  ]
 }

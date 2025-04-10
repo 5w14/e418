@@ -86,7 +86,7 @@ public abstract class EventRegistry<Cfg extends SourceConfig> {
      */
     public boolean eventTick(IEventCause cause) {
         if (!this.config.isEnabled()) return false;
-        if (RandomSource.create().nextFloat() < this.config.getChance()) return false;
+        if (RandomSource.create().nextFloat() > this.config.getChance()) return false;
         startEvent(cause);
         return true;
     }

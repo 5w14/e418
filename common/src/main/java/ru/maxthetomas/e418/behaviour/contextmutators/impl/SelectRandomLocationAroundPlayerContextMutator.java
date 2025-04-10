@@ -33,7 +33,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         var player = context.getPlayer();
         if (player == null) return false;
 
-        var location = Location.fromPlayerSpawnLocation(player);
+        var location = Location.fromPlayer(player);
         var random = RandomSource.create();
 
         var position = location.getPosition();
