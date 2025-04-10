@@ -29,7 +29,7 @@ public class WeatherCondition implements ICondition {
             case RAIN -> context.getServer().overworld().isRaining();
             case THUNDER -> context.getServer().overworld().isThundering();
             case ANY_NON_CLEAR -> context.getServer().overworld().getRainLevel(1F) > 0;
-            default -> true;
+            default -> false;
         };
     }
 
