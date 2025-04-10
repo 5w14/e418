@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.behaviour.contextmutators.impl.SelectPlayerLocationContextMutator;
 import ru.maxthetomas.e418.behaviour.contextmutators.impl.SelectPlayerRespawnLocationContextMutator;
+import ru.maxthetomas.e418.behaviour.contextmutators.impl.SelectRandomLocationAroundPlayerContextMutator;
 import ru.maxthetomas.e418.behaviour.contextmutators.impl.SelectRandomPlayerContextMutator;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class ContextMutators {
     public static final MapCodec<? extends IContextMutator> SELECT_RANDOM_PLAYER = register(SelectRandomPlayerContextMutator.ID, SelectRandomPlayerContextMutator.CODEC);
     public static final MapCodec<? extends IContextMutator> SELECT_PLAYER_LOCATION = register(SelectPlayerLocationContextMutator.ID, SelectPlayerLocationContextMutator.CODEC);
     public static final MapCodec<? extends IContextMutator> SELECT_PLAYER_RESPAWN_LOCATION = register(SelectPlayerRespawnLocationContextMutator.ID, SelectPlayerRespawnLocationContextMutator.CODEC);
+    public static final MapCodec<? extends IContextMutator> SELECT_RANDOM_LOCATION_AROUND_PLAYER = register(SelectRandomLocationAroundPlayerContextMutator.ID, SelectRandomLocationAroundPlayerContextMutator.CODEC);
 
     public static Codec<IContextMutator> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(IContextMutator::getType, REGISTRY::get);

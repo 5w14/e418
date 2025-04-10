@@ -49,7 +49,6 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         );
 
         context.withLocation(newLocation);
-        context.withPlayer(null);
 
         return true;
     }

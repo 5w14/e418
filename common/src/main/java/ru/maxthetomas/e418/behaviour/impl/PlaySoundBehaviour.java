@@ -3,6 +3,8 @@ package ru.maxthetomas.e418.behaviour.impl;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -13,6 +15,15 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
 import java.util.Optional;
 
+/**
+ * Plays a sound to the player or from location.
+ * <p>To configure, use context (mutators). Behaviour in all specific cases:</p>
+ * <ul>
+ * <li>If context has both <code>player</code> and <code>location</code>, the behaviour will play sound from the location to the player.</li>
+ * <li>If context has only <code>player</code>, the behaviour will play sound for the player at their location.</li>
+ * <li>If context has only <code>location</code>, the behaviour will play sound to all players nearby.</li>
+ * </ul>
+ */
 public class PlaySoundBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "play_sound");
 
@@ -50,20 +61,32 @@ public class PlaySoundBehaviour extends Behaviour {
                 new SoundEvent(getSoundEventId(), Optional.of(getRange()));
 
         if (context.getPlayer() == null) {
-            if (context.getLocation() != null) {
-                context.getLocation().getLevel().playLocalSound(
-                        context.getLocation().getBlockPosition(),
-                        soundEvent, getSoundSource(), getVolume(), getPitch(), false
-                );
-            }
+            if (context.getLocation() == null)
+                return;
 
+            context.getLocation().getLevel().playLocalSound(
+                    context.getLocation().getBlockPosition(),
+                    soundEvent, getSoundSource(), getVolume(), getPitch(), true
+            );
             return;
         }
 
-        context.getPlayer().playNotifySound(
-                soundEvent,
-                getSoundSource(), getVolume(), getPitch()
-        );
+        if (context.getLocation() != null) {
+            var eventHolder = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundEvent);
+            var position = context.getLocation().getPosition();
+
+            // Send that the event occurred only to this player.
+            context.getPlayer().connection.send(new ClientboundSoundPacket(
+                    eventHolder, getSoundSource(),
+                    position.x + 0.5f, position.y + 0.5f, position.z + 0.5f,
+                    getVolume(), getPitch(), 0x24869
+            ));
+        } else {
+            context.getPlayer().playNotifySound(
+                    soundEvent,
+                    getSoundSource(), getVolume(), getPitch()
+            );
+        }
     }
 
     @Override

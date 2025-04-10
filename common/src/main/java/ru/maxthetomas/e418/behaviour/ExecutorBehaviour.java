@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourExecutor {
     protected final List<PreActiveBehaviour> behaviours;
     protected EventContext context;
-    private List<Behaviour> activeBehaviours = List.of();
+    protected List<Behaviour> activeBehaviours = List.of();
 
     public ExecutorBehaviour(List<PreActiveBehaviour> behaviours) {
         this.behaviours = behaviours;
@@ -26,7 +26,8 @@ public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourE
      * @return true if start is successful.
      */
     protected boolean tryStartBehaviours() {
-        activeBehaviours = behaviours.stream().map(PreActiveBehaviour::create).toList();
+        if (activeBehaviours.isEmpty())
+            activeBehaviours = behaviours.stream().map(PreActiveBehaviour::create).toList();
 
         if (activeBehaviours.stream().anyMatch(v -> !v.canRun(context)))
             return false;
