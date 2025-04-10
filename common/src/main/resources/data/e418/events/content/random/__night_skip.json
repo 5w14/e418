@@ -14,7 +14,7 @@
       "behaviours": [
         {
           "type": "e418:execute_command",
-          "command": "/time set noon"
+          "command": "/time set day"
         }
       ],
       "conditions": [
