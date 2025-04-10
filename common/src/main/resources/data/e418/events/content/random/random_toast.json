@@ -4,7 +4,9 @@
   "behaviours": [
     {
       "type": "e418:show_toast",
-      "title": "Unknown entity detected."
+      "title": {
+        "translate": "e418.content.unknown_entity"
+      }
     }
   ],
   "run_conditions": [],

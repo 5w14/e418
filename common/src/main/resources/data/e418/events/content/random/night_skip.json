@@ -1,0 +1,34 @@
+{
+  "name": "...zzz...",
+  "description": "sleepy time!",
+  "behaviours": [
+    {
+      "type": "e418:broadcast_message",
+      "source": "actionbar",
+      "message": {
+        "translate": "sleep.skipping_night"
+      }
+    },
+    {
+      "type": "e418:wait_for_conditions",
+      "behaviours": [
+        {
+          "type": "e418:execute_command",
+          "command": "/time set noon"
+        }
+      ],
+      "conditions": [
+        {
+          "type": "e418:time_since_start",
+          "ticks": 100
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:is_night"
+    }
+  ],
+  "queue_conditions": []
+}
