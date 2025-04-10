@@ -2,8 +2,11 @@ package ru.maxthetomas.e418.event.registry;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import org.slf4j.Logger;
+import ru.maxthetomas.e418.config.SourceConfig;
 import ru.maxthetomas.e418.event.EventResource;
+import ru.maxthetomas.e418.event.cause.IEventCause;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +15,13 @@ import java.util.Random;
 /**
  * Registry that contains events. See {@linkplain EventRegistries} for the list of registries.
  */
-public class EventRegistry {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private final ResourceLocation id;
-    private final List<WeightedEvent> events = new ArrayList<>();
+public abstract class EventRegistry<Cfg extends SourceConfig> {
+    protected static final Logger LOGGER = LogUtils.getLogger();
+    protected final List<WeightedEvent> events = new ArrayList<>();
 
-    public EventRegistry(ResourceLocation id) {
-        this.id = id;
+    protected Cfg config;
+
+    public EventRegistry() {
     }
 
     public void clear() {
@@ -76,13 +79,32 @@ public class EventRegistry {
         return getRandomEvent(new Random());
     }
 
-    public ResourceLocation getId() {
-        return id;
+
+    /**
+     * Should be triggered any time the event could be triggered.
+     * For random, this would be when there are no ticks until next event.
+     */
+    public boolean eventTick(IEventCause cause) {
+        if (!this.config.isEnabled()) return false;
+        if (RandomSource.create().nextFloat() < this.config.getChance()) return false;
+        startEvent(cause);
+        return true;
     }
+
+    /**
+     * Actually starts the event.
+     */
+    protected abstract void startEvent(IEventCause cause);
 
     public List<WeightedEvent> getEvents() {
         return events;
     }
+
+    public Cfg getConfig() {
+        return config;
+    }
+
+    public abstract ResourceLocation getId();
 
     public record WeightedEvent(EventResource resource, int weight) {
     }

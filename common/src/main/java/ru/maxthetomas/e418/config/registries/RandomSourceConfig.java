@@ -1,8 +1,7 @@
 package ru.maxthetomas.e418.config.registries;
 
 import com.mojang.serialization.Dynamic;
-import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.SourceConfig;
 
 public class RandomSourceConfig extends SourceConfig {
     private int minTime;
@@ -42,10 +41,5 @@ public class RandomSourceConfig extends SourceConfig {
         return super.storeValues(data)
                 .set("min_time", data.createInt(minTime))
                 .set("max_time", data.createInt(maxTime));
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "random_event");
     }
 }

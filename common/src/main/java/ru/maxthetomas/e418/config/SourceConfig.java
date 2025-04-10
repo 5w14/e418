@@ -1,10 +1,9 @@
-package ru.maxthetomas.e418.config.registries;
+package ru.maxthetomas.e418.config;
 
 import com.mojang.serialization.Dynamic;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public abstract class SourceConfig {
+public class SourceConfig {
     private boolean enabled;
     private float chance;
 
@@ -28,8 +27,6 @@ public abstract class SourceConfig {
     public void setChance(float chance) {
         this.chance = Mth.clamp(chance, 0, 1);
     }
-
-    public abstract ResourceLocation getId();
 
     public void setValues(Dynamic<?> data) {
         data.get("enabled").asBoolean().ifSuccess(this::setEnabled);

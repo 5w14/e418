@@ -12,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
+import ru.maxthetomas.e418.event.registry.EventRegistries;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +40,8 @@ public class Config {
         var map = sources.getMapValues().getOrThrow();
         map.forEach((key, value) -> {
             var resouceLocationKey = ResourceLocation.tryParse(key.asString().getOrThrow());
-            SourceConfigs.setValues(resouceLocationKey, value);
+            EventRegistries.get(resouceLocationKey).get()
+                    .getConfig().setValues(value);
         });
 
         updateSources();
@@ -91,9 +93,14 @@ public class Config {
     }
 
     private void updateSources() {
-        sources = SourceConfigs.storeValues(
-                new Dynamic<>(JsonOps.INSTANCE).emptyMap()
-        );
+        var sources = new Dynamic<>(JsonOps.INSTANCE).emptyMap();
+
+        for (ResourceLocation registryId : EventRegistries.getRegistries()) {
+            var registry = EventRegistries.get(registryId);
+            sources = sources.set(registryId.toString(), registry.get().getConfig().storeValues(sources.emptyMap()));
+        }
+
+        this.sources = sources;
     }
 
     public boolean isDebug() {
