@@ -96,6 +96,19 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     }
 
     /**
+     * Gets active event's resource key
+     */
+    public ResourceLocation getResourceLocation(ActiveEvent activeEvent) {
+        for (Map.Entry<ResourceLocation, EventResource> entry : registeredEvents.entrySet()) {
+            if (entry.getValue().equals(activeEvent.resource))
+                return entry.getKey();
+        }
+
+        // Should never happen.
+        return null;
+    }
+
+    /**
      * Runs an event.
      *
      * @param resource Resource of event that should be run.

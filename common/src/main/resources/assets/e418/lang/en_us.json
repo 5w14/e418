@@ -13,5 +13,7 @@
   "e418.commands.event.invalid_registry": "Invalid event registry %s",
   "e418.commands.event.print_event_registries_summary": "Event registry summary: \n%s",
   "e418.commands.event.print_event_registries_summary.line": " - %s has %s event(s)",
-  "e418.events.sleep.insomnia": "you can feel that something is off..."
+  "e418.commands.event.stop.success": "Stopped %s event(s)",
+  "e418.commands.event.stop.success.dispose": "Force stopped %s event(s)",
+  "e418.commands.event.stop.fail": "Event not found"
 }

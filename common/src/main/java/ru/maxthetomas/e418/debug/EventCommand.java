@@ -17,6 +17,7 @@ import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
@@ -34,6 +35,7 @@ public class EventCommand {
                 .then(startEvent())
                 .then(queueEvent())
                 .then(printEvents())
+                .then(stopEvent())
         );
     }
 
@@ -51,6 +53,18 @@ public class EventCommand {
                                         Commands.literal("force")
                                                 .executes(EventCommand::executeStartSubcommand)
                                 )
+                );
+    }
+
+    /**
+     * Creates an argument tree for /event stop
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> stopEvent() {
+        return LiteralArgumentBuilder.<CommandSourceStack>literal("stop")
+                .then(
+                        RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("event", ResourceLocationArgument.id())
+                                .executes(EventCommand::executeStopSubcommand)
+                                .suggests(EventCommand::getActiveEventSuggestions)
                 );
     }
 
@@ -318,17 +332,45 @@ public class EventCommand {
     }
 
 
+    private static int executeStopSubcommand(CommandContext<CommandSourceStack> context) {
+        var eventLoc = ResourceLocationArgument.getId(context, "event");
+        var manager = E418.getEventManager();
+
+        int count = 0;
+
+        for (ActiveEvent d : manager.getActiveEvents()) {
+            if (eventLoc.equals(manager.getResourceLocation(d))) {
+                manager.stopEvent(d);
+                count++;
+            }
+        }
+
+        int finalCount = count;
+        if (count > 0) {
+            context.getSource().sendSuccess(() ->
+                    Component.translatable("e418.commands.event.stop.success",
+                            finalCount), true);
+        } else {
+            context.getSource().sendFailure(
+                    Component.translatable("e418.commands.event.stop.fail").withStyle(ChatFormatting.RED));
+        }
+
+        return count;
+    }
+
+
     /**
      * Suggests event names for every event that starts with the input
      */
-    private static CompletableFuture<Suggestions> getEventSuggestions(CommandContext<CommandSourceStack> ctx,
-                                                                      SuggestionsBuilder builder) {
+    private static CompletableFuture<Suggestions> getActiveEventSuggestions(CommandContext<CommandSourceStack> ctx,
+                                                                            SuggestionsBuilder builder) {
         var input = builder.getRemaining();
 
-        E418.getEventManager().getRegisteredEvents()
+        E418.getEventManager().getActiveEvents()
                 .stream()
                 .filter(e -> e.toString().startsWith(input))
-                .forEach((e) -> builder.suggest(e.toString(), Component.literal(E418.getEventManager().getEvent(e).description())));
+                .forEach((e) -> builder.suggest(E418.getEventManager().getResourceLocation(e).toString(),
+                        Component.literal(e.resource.description())));
 
         return builder.buildFuture();
     }
@@ -344,6 +386,18 @@ public class EventCommand {
                 .stream()
                 .filter(e -> e.toString().startsWith(input))
                 .forEach((e) -> builder.suggest(e.toString()));
+
+        return builder.buildFuture();
+    }
+
+    private static CompletableFuture<Suggestions> getEventSuggestions(CommandContext<CommandSourceStack> ctx,
+                                                                      SuggestionsBuilder builder) {
+        var input = builder.getRemaining();
+
+        E418.getEventManager().getRegisteredEvents()
+                .stream()
+                .filter(e -> e.toString().startsWith(input))
+                .forEach((e) -> builder.suggest(e.toString(), Component.literal(E418.getEventManager().getEvent(e).description())));
 
         return builder.buildFuture();
     }
