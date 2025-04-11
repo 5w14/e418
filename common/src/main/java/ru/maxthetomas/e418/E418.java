@@ -24,12 +24,12 @@ public final class E418 {
             ResourceLocation.fromNamespaceAndPath(MOD_ID, "featureless_overworld");
     private static final Config ModConfig = Config.loadConfig();
     private static final EventManager EventManager = new EventManager();
+    private static final RandomEventManager RandomEventManager = new RandomEventManager();
 
     private static MinecraftServer ManagedServer = null;
 
     public static void init() {
         E418Networking.init();
-        RandomEventManager.init();
         CommandRegistrationEvent.EVENT.register(EventCommand::register);
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
         registerListeners();
@@ -70,5 +70,9 @@ public final class E418 {
 
     public static Config getConfig() {
         return ModConfig;
+    }
+
+    public static RandomEventManager getRandomEventManager() {
+        return RandomEventManager;
     }
 }
