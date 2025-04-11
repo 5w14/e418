@@ -34,6 +34,7 @@ public class PreventChatUsageBehaviour extends Behaviour {
     @Override
     public void dispose() {
         super.dispose();
+        // TODO: For some reason, it doesn't actually unregister event. Need to be fixed.
         ChatEvent.RECEIVED.unregister(this::onChatMessage);
         E418Variables.PreventMsgUsage = false;
     }

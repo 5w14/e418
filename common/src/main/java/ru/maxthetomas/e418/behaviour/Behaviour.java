@@ -31,6 +31,8 @@ public abstract class Behaviour implements NumberRequester {
 
     /**
      * Disposes behaviour in event. Used if event with this behaviour ends.
+     * This should stop behaviour no matter what.
+     * If you want to end your behaviour i.e. smoothly, use {@link Behaviour#stop()}
      */
     public void dispose() {
         isDisposed = true;
@@ -39,7 +41,9 @@ public abstract class Behaviour implements NumberRequester {
     }
 
     /**
-     * Stops behaviour. This doesn't actually dispose behaviour, so it could smoothly end its activity.
+     * Tells behaviour to stop.
+     * Can be used to smoothly end its activity as it is not actually disposed until it needs to be.
+     * Don't forget to use {@link Behaviour#setDone(boolean)} once you're done.
      */
     public void stop() {
         dispose();
