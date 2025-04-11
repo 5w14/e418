@@ -1,0 +1,11 @@
+{
+  "name": "Prevent chat usage",
+  "description": "Test prevent chat usage",
+  "behaviours": [
+    {
+      "type": "e418:prevent_chat_usage"
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
