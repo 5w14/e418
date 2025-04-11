@@ -27,7 +27,6 @@ public class WeatherCondition implements ICondition {
 
     @Override
     public boolean check(EventContext context) {
-        // todo: if current player/location is defined, check the weather in their dimension
         return checkWeather(context);
     }
 
