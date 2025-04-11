@@ -19,6 +19,8 @@ public class PreventChatUsageBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "prevent_chat_usage");
     public static final MapCodec<PreventChatUsageBehaviour> CODEC = MapCodec.unit(PreventChatUsageBehaviour::new);
 
+    private final ChatEvent.Received onChatMessage = this::onChatMessage;
+
     @Override
     public ResourceLocation getTypeId() {
         return null;
@@ -27,15 +29,14 @@ public class PreventChatUsageBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-        ChatEvent.RECEIVED.register(this::onChatMessage);
+        ChatEvent.RECEIVED.register(onChatMessage);
         E418Variables.PreventMsgUsage = true;
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        // TODO: For some reason, it doesn't actually unregister event. Need to be fixed.
-        ChatEvent.RECEIVED.unregister(this::onChatMessage);
+        ChatEvent.RECEIVED.unregister(onChatMessage);
         E418Variables.PreventMsgUsage = false;
     }
 
