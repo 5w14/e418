@@ -10,6 +10,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
+import ru.maxthetomas.e418.util.E418Variables;
 
 /**
  * Prevents chat usage
@@ -27,12 +28,14 @@ public class PreventChatUsageBehaviour extends Behaviour {
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
         ChatEvent.RECEIVED.register(this::onChatMessage);
+        E418Variables.PreventMsgUsage = true;
     }
 
     @Override
     public void dispose() {
         super.dispose();
         ChatEvent.RECEIVED.unregister(this::onChatMessage);
+        E418Variables.PreventMsgUsage = false;
     }
 
     private EventResult onChatMessage(ServerPlayer serverPlayer, Component component) {

@@ -17,6 +17,7 @@
     "client.TextureManagerMixin",
     "common.BiomeMixin",
     "common.EntityMixin",
+    "common.MsgCommandMixin",
     "common.ServerLevelMixin",
     "common.SnowAndFreezeFeatureMixin",
     "common.StructureManagerMixin"
