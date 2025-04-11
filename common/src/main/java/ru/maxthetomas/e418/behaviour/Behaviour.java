@@ -35,6 +35,7 @@ public abstract class Behaviour implements NumberRequester {
     public void dispose() {
         isDisposed = true;
         isStopped = true;
+        setDone(true);
     }
 
     /**
