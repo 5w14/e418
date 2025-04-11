@@ -33,10 +33,9 @@ public class SnowOverrideBehaviour extends Behaviour {
     }
 
     @Override
-    public void stop() {
-        super.stop();
+    public void dispose() {
+        super.dispose();
         setSnow(false);
-        setDone(true);
     }
 
     private void setSnow(boolean value) {

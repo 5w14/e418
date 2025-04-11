@@ -24,9 +24,8 @@ public class DisableNightSkipBehaviour extends Behaviour {
     }
 
     @Override
-    public void stop() {
-        super.stop();
-        setDone(true);
+    public void dispose() {
+        super.dispose();
         E418Variables.DisableNightSkip = false;
     }
 }

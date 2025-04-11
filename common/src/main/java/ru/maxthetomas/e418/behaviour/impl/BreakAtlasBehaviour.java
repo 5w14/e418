@@ -32,10 +32,9 @@ public class BreakAtlasBehaviour extends Behaviour {
     }
 
     @Override
-    public void stop() {
-        super.stop();
+    public void dispose() {
+        super.dispose();
         setBreakAtlas(false);
-        setDone(true);
     }
 
     private void setBreakAtlas(boolean value) {

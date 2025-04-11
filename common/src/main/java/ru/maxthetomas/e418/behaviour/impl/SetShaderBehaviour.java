@@ -45,10 +45,9 @@ public class SetShaderBehaviour extends Behaviour {
     }
 
     @Override
-    public void stop() {
-        super.stop();
+    public void dispose() {
+        super.dispose();
         NetworkManager.sendToPlayer(player, new S2CSetShader(S2CSetShader.EMPTY_SHADER));
-        setDone(true);
     }
 
     @Override
