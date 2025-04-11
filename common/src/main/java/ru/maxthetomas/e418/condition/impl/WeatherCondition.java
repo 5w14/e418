@@ -4,11 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.Location;
 
 public class WeatherCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "weather");
@@ -25,11 +28,31 @@ public class WeatherCondition implements ICondition {
     @Override
     public boolean check(EventContext context) {
         // todo: if current player/location is defined, check the weather in their dimension
+        return checkWeather(context);
+    }
+
+    boolean checkWeather(EventContext context) {
+        if (context.getLocation() != null)
+            return checkWeather(context.getLocation());
+        else if (context.getPlayer() != null)
+            return checkWeather(context.getPlayer());
+        return checkWeather(context.getServer().overworld());
+    }
+
+    boolean checkWeather(Location location) {
+        return checkWeather(location.getLevel());
+    }
+
+    boolean checkWeather(ServerPlayer player) {
+        return checkWeather(player.serverLevel());
+    }
+
+    boolean checkWeather(ServerLevel level) {
         return switch (weather) {
-            case RAIN -> context.getServer().overworld().isRaining();
-            case THUNDER -> context.getServer().overworld().isThundering();
-            case ANY_NON_CLEAR -> context.getServer().overworld().getRainLevel(1F) > 0;
-            case CLEAR -> context.getServer().overworld().getRainLevel(1F) < 0.2f;
+            case RAIN -> level.isRaining();
+            case THUNDER -> level.isThundering();
+            case ANY_NON_CLEAR -> level.getRainLevel(1F) > 0;
+            case CLEAR -> level.getRainLevel(1F) < 0.2f;
         };
     }
 
