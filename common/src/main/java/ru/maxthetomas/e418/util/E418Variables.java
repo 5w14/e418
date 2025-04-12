@@ -4,7 +4,6 @@ package ru.maxthetomas.e418.util;
 public class E418Variables {
     public static boolean DisableNightSkip;
     public static boolean ShouldSnow;
-    public static boolean PreventMsgUsage;
 
     static {
         init();
@@ -13,6 +12,5 @@ public class E418Variables {
     public static void init() {
         ShouldSnow = false;
         DisableNightSkip = false;
-        PreventMsgUsage = false;
     }
 }

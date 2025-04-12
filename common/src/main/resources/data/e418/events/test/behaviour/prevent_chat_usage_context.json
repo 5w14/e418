@@ -1,0 +1,15 @@
+{
+  "name": "Prevent chat usage with context",
+  "description": "Test prevent chat usage with context",
+  "behaviours": [
+    {
+      "type": "e418:prevent_chat_usage",
+      "use_context": true
+    },
+    {
+      "type": "e418:debug_print_context"
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

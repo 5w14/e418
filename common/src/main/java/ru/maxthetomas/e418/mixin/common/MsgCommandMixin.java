@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.maxthetomas.e418.util.E418Variables;
+import ru.maxthetomas.e418.architecturyevents.CommandEvent;
 
 import java.util.Collection;
 
@@ -16,7 +16,9 @@ import java.util.Collection;
 public class MsgCommandMixin {
     @Inject(at = @At("HEAD"), method = "sendMessage", cancellable = true)
     private static void sendMessage(CommandSourceStack commandSourceStack, Collection<ServerPlayer> collection, PlayerChatMessage playerChatMessage, CallbackInfo ci) {
-        if (E418Variables.PreventMsgUsage)
+        var result = CommandEvent.MSG_RECEIVED.invoker().msgReceived(playerChatMessage);
+        if (result.isPresent() && result.isFalse()) {
             ci.cancel();
+        }
     }
 }
