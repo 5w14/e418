@@ -63,8 +63,8 @@ public class ExecuteCommandBehaviour extends Behaviour {
 
         if (context.getLocation() != null) {
             stack = stack
-                    .withLevel(context.getLocation().getLevel())
-                    .withPosition(context.getLocation().getPosition());
+                    .withLevel(context.getLocation().level())
+                    .withPosition(context.getLocation().position());
         }
 
         context.getServer().getCommands().performPrefixedCommand(stack, this.command);

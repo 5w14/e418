@@ -10,14 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import ru.maxthetomas.e418.E418;
 
-public class Location {
-    private final ServerLevel level;
-    private final Vec3 position;
-
-    public Location(ServerLevel level, Vec3 position) {
-        this.level = level;
-        this.position = position;
-    }
+public record Location(ServerLevel level, Vec3 position) {
 
     /**
      * Creates an Location from ServerPlayer's position.
@@ -50,14 +43,6 @@ public class Location {
         var level = server.get().getLevel(resourceKey);
 
         return new Location(level, position);
-    }
-
-    public ServerLevel getLevel() {
-        return level;
-    }
-
-    public Vec3 getPosition() {
-        return position;
     }
 
     public BlockPos getBlockPosition() {

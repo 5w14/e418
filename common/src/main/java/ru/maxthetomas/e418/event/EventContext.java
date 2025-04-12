@@ -83,8 +83,8 @@ public class EventContext {
         newContext.forced = forced;
         newContext.cause = cause;
         if (location != null) {
-            newContext.location = new Location(location.getLevel(),
-                    new Vec3(location.getPosition().x, location.getPosition().y, location.getPosition().z));
+            newContext.location = new Location(location.level(),
+                    new Vec3(location.position().x, location.position().y, location.position().z));
         }
 
         // TODO add more fields here

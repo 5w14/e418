@@ -39,7 +39,7 @@ public class WeatherCondition implements ICondition {
     }
 
     boolean checkWeather(Location location) {
-        return checkWeather(location.getLevel());
+        return checkWeather(location.level());
     }
 
     boolean checkWeather(ServerPlayer player) {

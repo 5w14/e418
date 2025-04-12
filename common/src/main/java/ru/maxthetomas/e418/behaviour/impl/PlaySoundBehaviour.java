@@ -64,7 +64,7 @@ public class PlaySoundBehaviour extends Behaviour {
             if (context.getLocation() == null)
                 return;
 
-            context.getLocation().getLevel().playLocalSound(
+            context.getLocation().level().playLocalSound(
                     context.getLocation().getBlockPosition(),
                     soundEvent, getSoundSource(), getVolume(), getPitch(), true
             );
@@ -73,7 +73,7 @@ public class PlaySoundBehaviour extends Behaviour {
 
         if (context.getLocation() != null) {
             var eventHolder = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundEvent);
-            var position = context.getLocation().getPosition();
+            var position = context.getLocation().position();
 
             // Send that the event occurred only to this player.
             context.getPlayer().connection.send(new ClientboundSoundPacket(

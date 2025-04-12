@@ -36,7 +36,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         var location = Location.fromPlayer(player);
         var random = RandomSource.create();
 
-        var position = location.getPosition();
+        var position = location.position();
         position.add(
                 (random.nextFloat() - 0.5f) * range * 2,
                 (random.nextFloat() - 0.5f) * range * 2,
@@ -44,7 +44,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         );
 
         var newLocation = new Location(
-                location.getLevel(),
+                location.level(),
                 position
         );
 
