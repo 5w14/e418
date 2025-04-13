@@ -1,0 +1,20 @@
+{
+  "name": "At Time",
+  "description": "Debug event that works only at exact time",
+  "behaviours": [
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:at_time",
+      "from": 10000,
+      "to": 20000
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:at_time",
+      "from": 10000,
+      "to": 20000
+    }
+  ]
+}
