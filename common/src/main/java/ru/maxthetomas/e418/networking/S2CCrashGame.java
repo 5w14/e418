@@ -14,8 +14,6 @@ public record S2CCrashGame() implements CustomPacketPayload {
     public static final Type<S2CCrashGame> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CCrashGame> STREAM_CODEC = StreamCodec.unit(new S2CCrashGame());
 
-    public final static ResourceLocation EMPTY_SHADER = ResourceLocation.withDefaultNamespace("empty");
-
     public static void receive(S2CCrashGame packet, NetworkManager.PacketContext context) {
         IntegerPointerException.youJustLostTheGame();
     }

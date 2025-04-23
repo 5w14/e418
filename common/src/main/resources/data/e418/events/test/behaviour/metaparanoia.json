@@ -1,0 +1,15 @@
+{
+  "name": "Test meta paranoia",
+  "description": "Test meta paranoia behaviour that prevents from exiting the world during events",
+  "behaviours": [
+    {
+      "type": "e418:meta_paranoia"
+    },
+    {
+      "type": "e418:timeout",
+      "ticks": 100
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

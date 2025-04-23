@@ -18,8 +18,6 @@ public record S2CSetBreakAtlas(boolean shouldBreakAtlas) implements CustomPacket
             S2CSetBreakAtlas::new
     );
 
-    public final static ResourceLocation EMPTY_SHADER = ResourceLocation.withDefaultNamespace("empty");
-
     public static void receive(S2CSetBreakAtlas packet, NetworkManager.PacketContext context) {
         E418ClientVariables.ShouldBreakAtlas = packet.shouldBreakAtlas();
     }

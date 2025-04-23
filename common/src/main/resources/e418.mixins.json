@@ -11,7 +11,8 @@
     "client.LevelRendererMixin",
     "client.TextureAtlasSpriteMixin",
     "client.WeatherEffectRendererMixin",
-    "client.WorldOpenFlowsMixin"
+    "client.WorldOpenFlowsMixin",
+    "client.PauseScreenMixin"
   ],
   "mixins": [
     "client.TextureManagerMixin",

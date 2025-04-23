@@ -18,8 +18,6 @@ public record S2CSetSnowRender(boolean shouldRenderSnow) implements CustomPacket
             S2CSetSnowRender::new
     );
 
-    public final static ResourceLocation EMPTY_SHADER = ResourceLocation.withDefaultNamespace("empty");
-
     public static void receive(S2CSetSnowRender packet, NetworkManager.PacketContext context) {
         E418ClientVariables.ShouldDisplaySnow = packet.shouldRenderSnow();
     }

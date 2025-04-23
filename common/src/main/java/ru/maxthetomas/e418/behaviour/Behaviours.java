@@ -30,6 +30,7 @@ public class Behaviours {
     public static final MapCodec<? extends Behaviour> CANCEL_TIME_SKIP = register(CancelTimeSkipBehaviour.ID, CancelTimeSkipBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> BREAK_ATLAS = register(BreakAtlasBehaviour.ID, BreakAtlasBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> PREVENT_CHAT_USAGE = register(PreventChatUsageBehaviour.ID, PreventChatUsageBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> META_PARANOIA = register(MetaParanoiaBehaviour.ID, MetaParanoiaBehaviour.CODEC);
 
     // Utilities
     public static final MapCodec<? extends Behaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);
