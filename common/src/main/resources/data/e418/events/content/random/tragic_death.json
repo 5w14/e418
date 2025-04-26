@@ -1,0 +1,39 @@
+{
+  "name": "Tragic death",
+  "description": "RIP...",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player",
+          "prevent_override": true
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:play_sound",
+          "sound": "minecraft:block.anvil.land",
+          "volume": 1.0,
+          "pitch": 1.0
+        },
+        {
+          "type": "e418:broadcast_message",
+          "message": {
+            "color": "white",
+            "text": "Entity418 was squashed by a falling anvil",
+            "hoverEvent": {
+              "action": "show_text",
+              "value": {
+                "text": "Who?",
+                "color": "red"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
