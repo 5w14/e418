@@ -28,7 +28,7 @@ public class Config {
     private static final MapCodec<Config> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
-            ResourceLocation.CODEC.listOf().fieldOf("empty_world").forGetter(Config::getEmptyWorlds),
+            ResourceLocation.CODEC.listOf().fieldOf("empty_worlds").forGetter(Config::getEmptyWorlds),
             Codec.PASSTHROUGH.fieldOf("sources").forGetter(s -> s.sources)
     ).apply(instance, Config::new));
     private final boolean shouldSkipBackupScreen;
