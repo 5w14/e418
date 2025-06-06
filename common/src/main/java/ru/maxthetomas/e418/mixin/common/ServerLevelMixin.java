@@ -103,7 +103,7 @@ public abstract class ServerLevelMixin {
         if (!(entity instanceof LivingEntity)) return;
 
         var dim = ((ServerLevel) (Object) this).dimension();
-        if (dim.location().equals(E418.NO_ENTITY_AND_STRUCTURE_DIMENSION_ID))
+        if (E418.getConfig().isEmptyWorld(dim.location()))
             cir.cancel();
     }
 
