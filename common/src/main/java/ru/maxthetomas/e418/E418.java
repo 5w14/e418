@@ -10,6 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.debug.EventCommand;
+import ru.maxthetomas.e418.event.ChatMessageEventManager;
 import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.RandomEventManager;
 import ru.maxthetomas.e418.networking.E418Networking;
@@ -25,6 +26,7 @@ public final class E418 {
     private static final Config ModConfig = Config.loadConfig();
     private static final EventManager EventManager = new EventManager();
     private static final RandomEventManager RandomEventManager = new RandomEventManager();
+    private static final ChatMessageEventManager ChatMessageEventManager = new ChatMessageEventManager();
 
     private static MinecraftServer ManagedServer = null;
 
@@ -74,5 +76,9 @@ public final class E418 {
 
     public static RandomEventManager getRandomEventManager() {
         return RandomEventManager;
+    }
+
+    public static ChatMessageEventManager getChatMessageEventManager() {
+        return ChatMessageEventManager;
     }
 }
