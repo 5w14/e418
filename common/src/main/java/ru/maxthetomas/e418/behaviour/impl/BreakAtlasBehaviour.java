@@ -9,17 +9,10 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
-import ru.maxthetomas.e418.mixin.client.WeatherEffectRendererMixin;
-import ru.maxthetomas.e418.mixin.common.BiomeMixin;
-import ru.maxthetomas.e418.mixin.common.SnowAndFreezeFeatureMixin;
 import ru.maxthetomas.e418.networking.S2CSetBreakAtlas;
 
 /**
- * Overrides every biome to start snowing. Use stop() to end.
- *
- * @see WeatherEffectRendererMixin
- * @see BiomeMixin
- * @see SnowAndFreezeFeatureMixin
+ * Breaks atlas
  */
 public class BreakAtlasBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "break_atlas");
