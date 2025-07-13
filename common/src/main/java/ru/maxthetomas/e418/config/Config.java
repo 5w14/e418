@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -28,11 +30,11 @@ public class Config {
     private static final MapCodec<Config> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
-            ResourceLocation.CODEC.listOf().fieldOf("empty_worlds").forGetter(Config::getEmptyWorlds),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("empty_worlds", List.of()).forGetter(Config::getEmptyWorldsAsList),
             Codec.PASSTHROUGH.fieldOf("sources").forGetter(s -> s.sources)
     ).apply(instance, Config::new));
     private final boolean shouldSkipBackupScreen;
-    private final List<ResourceLocation> emptyWorlds;
+    private final Set<ResourceLocation> emptyWorlds;
     private boolean isDebug = false;
     private Dynamic<?> sources;
 
@@ -40,7 +42,7 @@ public class Config {
         this.isDebug = isDebug;
         this.shouldSkipBackupScreen = shouldSkipBackupScreen;
         this.sources = sources;
-        this.emptyWorlds = emptyWorlds;
+        this.emptyWorlds = new HashSet<>(emptyWorlds);
 
         var map = sources.getMapValues().getOrThrow();
         map.forEach((key, value) -> {
@@ -121,11 +123,15 @@ public class Config {
         return shouldSkipBackupScreen;
     }
 
-    public List<ResourceLocation> getEmptyWorlds() {
+    public Set<ResourceLocation> getEmptyWorlds() {
         return emptyWorlds;
     }
 
+    public List<ResourceLocation> getEmptyWorldsAsList() {
+        return emptyWorlds.stream().toList();
+    }
+
     public boolean isEmptyWorld(ResourceLocation resourceLocation) {
-        return emptyWorlds.contains(resourceLocation);
+        return getEmptyWorlds().contains(resourceLocation);
     }
 }
