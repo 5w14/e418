@@ -12,12 +12,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
+import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -26,16 +30,19 @@ public class Config {
     private static final MapCodec<Config> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("empty_worlds", List.of()).forGetter(Config::getEmptyWorldsAsList),
             Codec.PASSTHROUGH.fieldOf("sources").forGetter(s -> s.sources)
     ).apply(instance, Config::new));
     private final boolean shouldSkipBackupScreen;
+    private final Set<ResourceLocation> emptyWorlds;
     private boolean isDebug = false;
     private Dynamic<?> sources;
 
-    public Config(boolean isDebug, boolean shouldSkipBackupScreen, Dynamic<?> sources) {
+    public Config(boolean isDebug, boolean shouldSkipBackupScreen, List<ResourceLocation> emptyWorlds, Dynamic<?> sources) {
         this.isDebug = isDebug;
         this.shouldSkipBackupScreen = shouldSkipBackupScreen;
         this.sources = sources;
+        this.emptyWorlds = new HashSet<>(emptyWorlds);
 
         var map = sources.getMapValues().getOrThrow();
         map.forEach((key, value) -> {
@@ -88,7 +95,12 @@ public class Config {
     }
 
     private static Config empty() {
-        return new Config(false, true,
+        return new Config(false, true, List.of(
+                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "lines"),
+                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "featureless_overworld"),
+                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "minimalism"),
+                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "unlabirynth")
+        ),
                 new Dynamic<>(JsonOps.INSTANCE).emptyMap());
     }
 
@@ -111,5 +123,15 @@ public class Config {
         return shouldSkipBackupScreen;
     }
 
+    public Set<ResourceLocation> getEmptyWorlds() {
+        return emptyWorlds;
+    }
 
+    public List<ResourceLocation> getEmptyWorldsAsList() {
+        return emptyWorlds.stream().toList();
+    }
+
+    public boolean isEmptyWorld(ResourceLocation resourceLocation) {
+        return getEmptyWorlds().contains(resourceLocation);
+    }
 }

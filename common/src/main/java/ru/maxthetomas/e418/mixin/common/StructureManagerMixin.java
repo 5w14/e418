@@ -23,7 +23,7 @@ public class StructureManagerMixin {
         var worldGen = (WorldGenRegion) this.level;
         @SuppressWarnings("deprecation") var sLevel = worldGen.getLevel();
         var key = sLevel.dimension().location();
-        if (key.equals(E418.NO_ENTITY_AND_STRUCTURE_DIMENSION_ID))
+        if (E418.getConfig().isEmptyWorld(key))
             cir.setReturnValue(false);
     }
 }
