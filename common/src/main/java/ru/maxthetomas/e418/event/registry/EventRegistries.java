@@ -16,6 +16,7 @@ public class EventRegistries {
     // Register
     public static final RandomEventRegistry RANDOM = create(new RandomEventRegistry());
     public static final SimpleEventRegistry WAKE_UP = create("wake_up", 0.03F);
+    public static final SimpleEventRegistry CHAT_MESSAGE = create("chat_message", 0.1F);
 
     public static Optional<? extends EventRegistry<?>> get(ResourceLocation id) {
         return Optional.ofNullable(REGISTRY.getOrDefault(id, null));
