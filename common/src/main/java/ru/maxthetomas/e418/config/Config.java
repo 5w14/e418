@@ -28,6 +28,7 @@ public class Config {
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
             Codec.PASSTHROUGH.fieldOf("sources").forGetter(s -> s.sources)
     ).apply(instance, Config::new));
+
     private final boolean shouldSkipBackupScreen;
     private boolean isDebug = false;
     private Dynamic<?> sources;

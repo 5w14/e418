@@ -16,5 +16,7 @@
   "e418.commands.event.stop.success": "Stopped %s event(s)",
   "e418.commands.event.stop.success.dispose": "Force stopped %s event(s)",
   "e418.commands.event.stop.fail": "Event not found",
+  "e418.commands.event.print_event_delays": "Random Event Delays: \n%s",
+  "e418.commands.event.print_event_delays.line": "- %s - %s tick",
   "e418.content.unknown_entity": "Unknown entity detected"
 }

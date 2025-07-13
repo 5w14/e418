@@ -2,7 +2,7 @@ package ru.maxthetomas.e418.event.registry;
 
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.event.registry.impl.RandomEventRegistry;
+import ru.maxthetomas.e418.event.registry.impl.GlobalRandomEventRegistry;
 import ru.maxthetomas.e418.event.registry.impl.SimpleEventRegistry;
 
 import java.util.HashMap;
@@ -14,7 +14,8 @@ public class EventRegistries {
     private static final Map<ResourceLocation, EventRegistry<?>> REGISTRY = new HashMap<>();
 
     // Register
-    public static final RandomEventRegistry RANDOM = create(new RandomEventRegistry());
+    public static final GlobalRandomEventRegistry GLOBAL_RANDOM = create(new GlobalRandomEventRegistry());
+    public static final SimpleEventRegistry PLAYER_RANDOM = create("player_random", 1F);
     public static final SimpleEventRegistry WAKE_UP = create("wake_up", 0.03F);
     public static final SimpleEventRegistry CHAT_MESSAGE = create("chat_message", 0.1F);
 

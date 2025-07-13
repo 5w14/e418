@@ -21,6 +21,7 @@ import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
+import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 
 import java.util.concurrent.CompletableFuture;
@@ -36,6 +37,7 @@ public class EventCommand {
                 .then(queueEvent())
                 .then(printEvents())
                 .then(stopEvent())
+                .then(eventRandomDelays())
         );
     }
 
@@ -66,6 +68,14 @@ public class EventCommand {
                                 .executes(EventCommand::executeStopSubcommand)
                                 .suggests(EventCommand::getActiveEventSuggestions)
                 );
+    }
+
+    /**
+     * Creates an argument tree for /event random_delays
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> eventRandomDelays() {
+        return LiteralArgumentBuilder.<CommandSourceStack>literal("random_delays")
+                .executes(EventCommand::executePrintRandomEventDelays);
     }
 
     /**
@@ -328,6 +338,21 @@ public class EventCommand {
                                 (e) -> Component.literal(" - ").append(formatEvent(e.resource())))
                 ), false);
 
+        return 1;
+    }
+
+    /**
+     * Prints event delays from random event manager
+     */
+    private static int executePrintRandomEventDelays(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(
+                () -> Component.translatable("e418.commands.event.print_event_delays",
+                        ComponentUtils.formatList(RandomEventManager.players.keySet(),
+                                Component.literal("\n"),
+                                (e) -> Component.translatable("e418.commands.event.print_event_delays.line",
+                                        e.toString(), RandomEventManager.players.get(e)
+                                ))
+                ), false);
         return 1;
     }
 
