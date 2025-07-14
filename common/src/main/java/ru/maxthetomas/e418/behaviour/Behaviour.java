@@ -135,6 +135,21 @@ public abstract class Behaviour implements NumberRequester {
         return isStopped;
     }
 
+    public final boolean isExecuted() {
+        return isExecuted;
+    }
+
+    /// Should only be used when restoring state.
+    protected void _resetExecuted() {
+        this.isExecuted = false;
+    }
+
+    /// @return whether the behaviour should be added to awaiting-conditions list
+    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
+        this.executor = executor;
+        return !isDone && !isDisposed;
+    }
+
     public record BehaviourState(boolean isDone, boolean isDisposed, boolean isStopped, boolean isExecuted) {
         public static final MapCodec<BehaviourState> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
                 Codec.BOOL.lenientOptionalFieldOf("is_done", false).forGetter(v -> v.isDone),

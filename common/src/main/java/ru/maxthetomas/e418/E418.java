@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.PackType;
 import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.debug.EventCommand;
-import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.ChatMessageEventManager;
 import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.RandomEventManager;
@@ -19,7 +18,6 @@ import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Variables;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class E418 {
@@ -51,19 +49,13 @@ public final class E418 {
 
         LifecycleEvent.SERVER_STOPPING.register(srv -> {
             if (srv == ManagedServer) {
-                List<ActiveEvent> activeEvents = EventManager.getActiveEvents();
-
-                for (int i = 0; i < activeEvents.size(); i++) {
-                    ActiveEvent activeEvent = activeEvents.get(i);
-                    EventManager.disposeEvent(activeEvent);
-                }
-
                 ru.maxthetomas.e418.event.EventManager.IsActive = false;
             }
         });
 
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
             if (srv == ManagedServer) {
+                EventManager.fullReset(srv);
                 ManagedServer = null;
             }
             E418Variables.init();

@@ -42,6 +42,7 @@ public class ActiveEvent implements IBehaviourExecutor {
             E418.getEventManager().disposeEvent(this);
     }
 
+
     public void disposeBehaviours() {
         for (Behaviour activeBehaviour : activeBehaviours) {
             activeBehaviour.tryDispose();
@@ -57,6 +58,17 @@ public class ActiveEvent implements IBehaviourExecutor {
     public void tick() {
         for (Behaviour activeBehaviour : activeBehaviours) {
             activeBehaviour.tick();
+        }
+
+        for (int i = 0; i < awaitingRestoreRun.size(); i++) {
+            Behaviour restoreBehaviour = awaitingRestoreRun.get(i);
+            if (!restoreBehaviour.canRun(context))
+                continue;
+            restoreBehaviour.execute(context, this);
+
+            // After successfully restored -> can remove from array
+            awaitingRestoreRun.remove(restoreBehaviour);
+            i--;
         }
     }
 
@@ -93,6 +105,21 @@ public class ActiveEvent implements IBehaviourExecutor {
         return activeBehaviours;
     }
 
+
+    List<Behaviour> awaitingRestoreRun = new ArrayList<>();
+
+    /// Restores active state for events during reloading from a save.
+    public void _restoreState() {
+        activeBehaviours.forEach(behaviour -> {
+            if (behaviour.isDisposed()) {
+                return;
+            }
+
+            if (behaviour.restoreState(context, this)) {
+                awaitingRestoreRun.add(behaviour);
+            }
+        });
+    }
 
     private static ActiveEvent createFromCodec(EventResource resource, EventContext context,
                                                long startTime, List<ActiveBehaviourDispatch<Behaviour>> activeBehaviours) {

@@ -2,6 +2,7 @@ package ru.maxthetomas.e418.behaviour.impl;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +24,18 @@ public class SetShaderBehaviour extends Behaviour {
 
     public SetShaderBehaviour(ResourceLocation shaderId) {
         this.shaderId = shaderId;
+        PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
+    }
+
+    @Override
+    public void stop() {
+        PlayerEvent.PLAYER_JOIN.unregister(this::playerJoined);
+        super.stop();
+    }
+
+    void playerJoined(ServerPlayer player) {
+        if (isExecuted() && !isDone() && this.player != null)
+            NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
     }
 
     public ResourceLocation getShaderId() {
@@ -58,6 +71,15 @@ public class SetShaderBehaviour extends Behaviour {
             NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
                     new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         }
+    }
+
+    @Override
+    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
+        if (isExecuted() && !isDone()) {
+            _resetExecuted();
+        }
+
+        return super.restoreState(context, executor);
     }
 
     @Override

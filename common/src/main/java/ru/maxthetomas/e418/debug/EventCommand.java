@@ -65,6 +65,8 @@ public class EventCommand {
                         RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("event", ResourceLocationArgument.id())
                                 .executes(EventCommand::executeStopSubcommand)
                                 .suggests(EventCommand::getActiveEventSuggestions)
+                                .then(LiteralArgumentBuilder.<CommandSourceStack>literal("dispose")
+                                        .executes(EventCommand::executeStopSubcommand))
                 );
     }
 
@@ -333,6 +335,8 @@ public class EventCommand {
 
 
     private static int executeStopSubcommand(CommandContext<CommandSourceStack> context) {
+        var isForced = context.getNodes().getLast().getNode().getName().equals("dispose");
+
         var eventLoc = ResourceLocationArgument.getId(context, "event");
         var manager = E418.getEventManager();
 
@@ -341,6 +345,8 @@ public class EventCommand {
         for (ActiveEvent d : manager.getActiveEvents()) {
             if (eventLoc.equals(manager.getResourceLocation(d))) {
                 manager.stopEvent(d);
+                if (isForced)
+                    manager.disposeEvent(d);
                 count++;
             }
         }

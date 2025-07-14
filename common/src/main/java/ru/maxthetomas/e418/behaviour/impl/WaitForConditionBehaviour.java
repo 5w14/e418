@@ -8,8 +8,6 @@ import ru.maxthetomas.e418.behaviour.ExecutorBehaviour;
 import ru.maxthetomas.e418.behaviour.PreActiveBehaviour;
 import ru.maxthetomas.e418.condition.Conditions;
 import ru.maxthetomas.e418.condition.ICondition;
-import ru.maxthetomas.e418.event.EventContext;
-import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
 import java.util.List;
 
@@ -21,19 +19,11 @@ public class WaitForConditionBehaviour extends ExecutorBehaviour {
     ).apply(instance, WaitForConditionBehaviour::new));
 
     private final List<ICondition> conditions;
-    private EventContext context;
-
     private boolean started = false;
 
     public WaitForConditionBehaviour(List<ICondition> conditions, List<PreActiveBehaviour> behaviours) {
         super(behaviours);
         this.conditions = conditions;
-    }
-
-    @Override
-    public void execute(EventContext context, IBehaviourExecutor executor) {
-        super.execute(context, executor);
-        this.context = context;
     }
 
     @Override

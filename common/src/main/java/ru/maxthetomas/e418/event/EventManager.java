@@ -37,6 +37,13 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     private void tick(MinecraftServer server) {
         if (!IsActive) return;
+        updateQueuedEvents(server);
+        updateActiveEvents();
+        activeEvents.forEach(ActiveEvent::tick);
+        InGameStorage.INSTANCE.setDirty();
+    }
+
+    public void updateQueuedEvents(MinecraftServer server) {
         // Queued events
         queuedEvents.removeIf((QueuedEvent queuedEvent) -> {
             // Check timeout time
@@ -54,6 +61,9 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             return false;
         });
 
+    }
+
+    public void updateActiveEvents() {
         // Active events
         activeEvents.removeIf((ActiveEvent event) -> {
             // Check if dirty event is done
@@ -65,9 +75,20 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             event.undirty();
             return false;
         });
+    }
+    
+    public void fullReset(MinecraftServer server) {
+        for (int i = 0; i < activeEvents.size(); i++) {
+            ActiveEvent activeEvent = activeEvents.get(i);
+            disposeEvent(activeEvent);
+            i--;
+        }
 
-        activeEvents.forEach(ActiveEvent::tick);
-        InGameStorage.INSTANCE.setDirty();
+        updateActiveEvents();
+        updateQueuedEvents(server);
+
+        activeEvents.clear();
+        queuedEvents.clear();
     }
 
     // Getters
@@ -227,10 +248,13 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         return !activeEvents.contains(event);
     }
 
-    public void _restoreActiveEvents(List<ActiveEvent> activeEvent) {
-        activeEvent.forEach(e -> e.context.withSourceEvent(e));
-        this.activeEvents.addAll(activeEvent);
-        this.activeEvents.forEach(ActiveEvent::updateState);
+    public void _restoreActiveEvents(List<ActiveEvent> restoredActiveEvents) {
+        restoredActiveEvents.forEach(e -> {
+            e.context.withSourceEvent(e);
+            e.updateState();
+            e._restoreState();
+        });
+        this.activeEvents.addAll(restoredActiveEvents);
     }
 
     /*

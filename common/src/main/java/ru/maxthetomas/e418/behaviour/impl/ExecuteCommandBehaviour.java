@@ -74,4 +74,10 @@ public class ExecuteCommandBehaviour extends Behaviour {
     public boolean canRun(EventContext context) {
         return !asPlayer || context.getPlayer() != null;
     }
+
+    @Override
+    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
+        this.executor = executor;
+        return super.restoreState(context, executor);
+    }
 }
