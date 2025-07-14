@@ -1,0 +1,25 @@
+{
+  "name": "Test set sun texture",
+  "description": "Test set sun texture behaviour that changes sun's texture",
+  "behaviours": [
+    {
+      "type": "e418:set_sun_texture",
+      "texture": "e418:textures/test1.png"
+    },
+    {
+      "type": "e418:wait_for_conditions",
+      "conditions": [
+        {
+          "type": "e418:is_night"
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:stop_event"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
