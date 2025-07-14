@@ -352,7 +352,7 @@ public class EventCommand {
                         ComponentUtils.formatList(PlayerDataManager.savedPlayers(),
                                 Component.literal("\n"),
                                 (e) -> Component.translatable("e418.commands.event.print_event_delays.line",
-                                        e.toString(), PlayerDataManager.getData(e).eventTimestamp
+                                        e.toString(), PlayerDataManager.getData(e).eventTimestamp, PlayerDataManager.getData(e).eventUnlockTimestamp
                                 ))
                 ), false);
         return 1;

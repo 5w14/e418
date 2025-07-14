@@ -21,7 +21,7 @@ public class RandomEventManager {
 
     // TODO: Put this into config
     private static final int GROUP_DISTANCE = 50;
-    private static final int TIME_OFFSET_PER_BLOCK = 900;
+    private static final int LOCK_DURATION = 2400;
 
     private static int timeToGlobalEvent = 20 * 60 * 30;
 
@@ -54,10 +54,32 @@ public class RandomEventManager {
             if (data.eventTimestamp < currentTime) {
                 // Start event
 
-                // TODO: Randomize delay
+                // Get nearby players
+                var playersInRange = minecraftServer.getPlayerList().getPlayers().stream().filter((p) -> {
+                    return (p != player &&
+                            p.level() == player.level() &&
+                            player.position().closerThan(p.position(), GROUP_DISTANCE));
+                }).toList();
+
+                var hasLocks = playersInRange.stream().anyMatch((p) -> {
+                    var pdata = PlayerDataManager.ensureData(p.getUUID(), minecraftServer);
+
+                    return pdata.eventUnlockTimestamp > currentTime;
+                });
+
+                // We prevent event start if there's a player with lock nearby.
+                if (hasLocks) {
+                    // TODO: Randomize delay with config
+                    var randomDelay = 600;
+                    data.eventTimestamp = currentTime + randomDelay;
+                    continue;
+                }
+
+                // TODO: Randomize delay with config
                 var randomDelay = 600;
                 var randomOffset = 600;
                 data.eventTimestamp = currentTime + randomDelay + randomOffset;
+                data.eventUnlockTimestamp = currentTime + LOCK_DURATION;
 
                 var cause = new PlayerRandomEventCause(uuid);
                 EventRegistries.PLAYER_RANDOM.eventTick(cause);
@@ -66,24 +88,16 @@ public class RandomEventManager {
                 if (!cause.isGroupEffectCancelled() && GROUP_DISTANCE > 0) {
                     var playerPos = player.position();
 
-                    for (ServerPlayer otherPlayer : minecraftServer.getPlayerList().getPlayers()) {
-                        // No delay if you are in other dimension (and for yourself too)
-                        if (otherPlayer == player || otherPlayer.level() != player.level()) {
-                            continue;
-                        }
+                    for (ServerPlayer otherPlayer : playersInRange) {
+                        var otherUuid = otherPlayer.getUUID();
+                        var otherData = PlayerDataManager.ensureData(otherUuid, minecraftServer);
 
                         var otherPlayerPos = otherPlayer.position();
+                        var distance = playerPos.distanceTo(otherPlayerPos);
 
-                        // Players in range will have fixed offset to next event
-                        if (playerPos.closerThan(otherPlayerPos, GROUP_DISTANCE)) {
-                            var otherUuid = otherPlayer.getUUID();
-                            var otherData = PlayerDataManager.ensureData(otherUuid, minecraftServer);
-
-                            var distance = playerPos.distanceTo(otherPlayerPos);
-
-                            // Linear offset reduction based on how far you are from player.
-                            otherData.eventTimestamp += (long) (((double) randomOffset / GROUP_DISTANCE) * (GROUP_DISTANCE-distance));
-                        }
+                        // Linear offset reduction based on how far you are from player.
+                        otherData.eventTimestamp += (long) (((double) randomOffset / GROUP_DISTANCE) * (GROUP_DISTANCE-distance));
+                        otherData.eventUnlockTimestamp = currentTime + LOCK_DURATION;
                     }
                 }
 
