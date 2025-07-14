@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Config {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -31,24 +29,23 @@ public class Config {
             Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
             ResourceLocation.CODEC.listOf().optionalFieldOf("empty_worlds", List.of()).forGetter(Config::getEmptyWorldsAsList),
-            Codec.PASSTHROUGH.fieldOf("sources").forGetter(s -> s.sources)
+            Codec.unboundedMap(ResourceLocation.CODEC, Codec.PASSTHROUGH)
+                    .optionalFieldOf("sources").forGetter(s -> Optional.of(s.sources))
     ).apply(instance, Config::new));
+
     private final boolean shouldSkipBackupScreen;
     private final Set<ResourceLocation> emptyWorlds;
     private boolean isDebug = false;
-    private Dynamic<?> sources;
+    private Map<ResourceLocation, Dynamic<?>> sources;
 
-    public Config(boolean isDebug, boolean shouldSkipBackupScreen, List<ResourceLocation> emptyWorlds, Dynamic<?> sources) {
+    public Config(boolean isDebug, boolean shouldSkipBackupScreen, List<ResourceLocation> emptyWorlds, Optional<Map<ResourceLocation, Dynamic<?>>> registryDynamics) {
         this.isDebug = isDebug;
         this.shouldSkipBackupScreen = shouldSkipBackupScreen;
-        this.sources = sources;
         this.emptyWorlds = new HashSet<>(emptyWorlds);
+        this.sources = registryDynamics.orElse(new HashMap<>());
 
-        var map = sources.getMapValues().getOrThrow();
-        map.forEach((key, value) -> {
-            var resouceLocationKey = ResourceLocation.tryParse(key.asString().getOrThrow());
-            EventRegistries.get(resouceLocationKey).get()
-                    .getConfig().setValues(value);
+        registryDynamics.orElse(Map.of()).forEach((key, value) -> {
+            EventRegistries.get(key).get().getConfig().setValues(value);
         });
 
         updateSources();
@@ -100,19 +97,16 @@ public class Config {
                 ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "featureless_overworld"),
                 ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "minimalism"),
                 ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "unlabirynth")
-        ),
-                new Dynamic<>(JsonOps.INSTANCE).emptyMap());
+        ), Optional.of(Map.of()));
     }
 
     private void updateSources() {
-        var sources = new Dynamic<>(JsonOps.INSTANCE).emptyMap();
-
         for (ResourceLocation registryId : EventRegistries.getRegistries()) {
             var registry = EventRegistries.get(registryId);
-            sources = sources.set(registryId.toString(), registry.get().getConfig().storeValues(sources.emptyMap()));
+            sources.compute(registryId, (a, b) -> registry.get().getConfig().storeValues(
+                    new Dynamic<>(JsonOps.INSTANCE, JsonOps.INSTANCE.emptyMap())
+            ));
         }
-
-        this.sources = sources;
     }
 
     public boolean isDebug() {
