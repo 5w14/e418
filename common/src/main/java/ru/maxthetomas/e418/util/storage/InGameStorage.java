@@ -11,6 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.e418.E418;
 
 public class InGameStorage extends SavedData {
@@ -25,6 +26,15 @@ public class InGameStorage extends SavedData {
 
     private CompoundTag keyValueStore = new CompoundTag();
 
+    /// Save a value into a KV-store NBT store.
+    /// It's recommended to use {@link NbtOps} methods to construct values.
+    ///
+    /// <blockquote><pre>
+    /// setValue("is_debug", NbtOps.INSTANCE.createBoolean(true))
+    /// </pre></blockquote>
+    ///
+    /// @param key   A string key to a key-value store
+    /// @param value A Tag value for key-value store
     public void setValue(String key, Tag value) {
         keyValueStore.put(key, value);
     }
@@ -34,11 +44,9 @@ public class InGameStorage extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
+    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         var result = (CompoundTag) CODEC.encode(this,
                 NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(compoundTag).getOrThrow();
-
-        result.getAllKeys();
         return result;
     }
 

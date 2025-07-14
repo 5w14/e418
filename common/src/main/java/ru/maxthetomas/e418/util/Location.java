@@ -1,5 +1,7 @@
 package ru.maxthetomas.e418.util;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
@@ -11,6 +13,10 @@ import net.minecraft.world.phys.Vec3;
 import ru.maxthetomas.e418.E418;
 
 public record Location(ServerLevel level, Vec3 position) {
+    public static final MapCodec<Location> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("dimension").forGetter(v -> v.level.dimension().location()),
+            Vec3.CODEC.fieldOf("position").forGetter(v -> v.position)
+    ).apply(instance, Location::fromDimensionIdAndVec3));
 
     /**
      * Creates an Location from ServerPlayer's position.
