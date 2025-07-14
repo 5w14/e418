@@ -16,6 +16,7 @@ import ru.maxthetomas.e418.event.RandomEventManager;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Variables;
+import ru.maxthetomas.e418.util.storage.InGameStorage;
 
 import java.util.Optional;
 
@@ -42,10 +43,18 @@ public final class E418 {
             E418Variables.init();
         });
 
+        LifecycleEvent.SERVER_STARTED.register(InGameStorage::load);
+
         LifecycleEvent.SERVER_STOPPING.register(srv -> {
             if (srv == ManagedServer) {
+                InGameStorage.INSTANCE.save(srv);
                 EventManager.getActiveEvents().forEach(EventManager::disposeEvent);
             }
+        });
+
+        LifecycleEvent.SERVER_LEVEL_SAVE.register((level) -> {
+            if (level.getServer().overworld().equals(level))
+                InGameStorage.INSTANCE.save(level.getServer());
         });
 
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
