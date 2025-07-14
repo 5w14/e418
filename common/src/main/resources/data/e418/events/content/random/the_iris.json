@@ -1,0 +1,43 @@
+{
+  "name": "The iris",
+  "description": "You feel like someone is watching you",
+  "behaviours": [
+    {
+      "type": "e418:set_moon_texture",
+      "texture": "e418:textures/the_iris.png"
+    },
+    {
+      "type": "e418:wait_for_conditions",
+      "conditions": [
+        {
+          "type": "e418:not",
+          "conditions": [
+            {
+              "type": "e418:is_night"
+            }
+          ]
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:stop_event"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:is_night"
+    }
+  ],
+  "queue_conditions": [
+    {
+      "type": "e418:not",
+      "conditions": [
+        {
+          "type": "e418:is_night"
+        }
+      ]
+    }
+  ]
+}
