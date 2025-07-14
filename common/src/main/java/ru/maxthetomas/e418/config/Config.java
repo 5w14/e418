@@ -43,7 +43,7 @@ public class Config {
         this.isDebug = isDebug;
         this.shouldSkipBackupScreen = shouldSkipBackupScreen;
         this.emptyWorlds = new HashSet<>(emptyWorlds);
-        this.sources = registryDynamics.orElse(new HashMap<>());
+        this.sources = new HashMap<>(registryDynamics.orElse(Map.of()));
 
         this.sources.forEach((key, value) -> {
             EventRegistries.get(key).get().getConfig().setValues(value);
