@@ -17,7 +17,7 @@ public class EntityMixin {
         if (self.level().isClientSide || self instanceof Player)
             return;
 
-        if (self.level().dimension().location().equals(E418.NO_ENTITY_AND_STRUCTURE_DIMENSION_ID))
+        if (E418.getConfig().isEmptyWorld(self.level().dimension().location()))
             self.remove(Entity.RemovalReason.DISCARDED);
     }
 }

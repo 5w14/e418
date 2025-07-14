@@ -21,8 +21,6 @@ import java.util.Optional;
 
 public final class E418 {
     public static final String MOD_ID = "e418";
-    public static final ResourceLocation NO_ENTITY_AND_STRUCTURE_DIMENSION_ID =
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "featureless_overworld");
     private static final Config ModConfig = Config.loadConfig();
     private static final EventManager EventManager = new EventManager();
     private static final RandomEventManager RandomEventManager = new RandomEventManager();
