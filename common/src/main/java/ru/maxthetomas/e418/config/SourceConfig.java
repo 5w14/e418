@@ -3,6 +3,7 @@ package ru.maxthetomas.e418.config;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.util.Mth;
 
+/// Default configuration for an {@link ru.maxthetomas.e418.event.registry.EventRegistry}
 public class SourceConfig {
     private boolean enabled;
     private float chance;

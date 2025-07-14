@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+/// This class registers all {@linkplain EventRegistry} instances.
 public class EventRegistries {
     private static final Map<ResourceLocation, EventRegistry<?>> REGISTRY = new HashMap<>();
 
