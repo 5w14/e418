@@ -28,7 +28,8 @@ public class Config {
     private static final MapCodec<Config> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
             Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
-            ResourceLocation.CODEC.listOf().optionalFieldOf("empty_worlds", List.of()).forGetter(Config::getEmptyWorldsAsList),
+            ResourceLocation.CODEC.listOf().lenientOptionalFieldOf("empty_worlds", List.of())
+                    .forGetter(Config::getEmptyWorldsAsList),
             Codec.unboundedMap(ResourceLocation.CODEC, Codec.PASSTHROUGH)
                     .optionalFieldOf("sources").forGetter(s -> Optional.of(s.sources))
     ).apply(instance, Config::new));
@@ -36,7 +37,7 @@ public class Config {
     private final boolean shouldSkipBackupScreen;
     private final Set<ResourceLocation> emptyWorlds;
     private boolean isDebug = false;
-    private Map<ResourceLocation, Dynamic<?>> sources;
+    private final Map<ResourceLocation, Dynamic<?>> sources;
 
     public Config(boolean isDebug, boolean shouldSkipBackupScreen, List<ResourceLocation> emptyWorlds, Optional<Map<ResourceLocation, Dynamic<?>>> registryDynamics) {
         this.isDebug = isDebug;
@@ -44,7 +45,7 @@ public class Config {
         this.emptyWorlds = new HashSet<>(emptyWorlds);
         this.sources = registryDynamics.orElse(new HashMap<>());
 
-        registryDynamics.orElse(Map.of()).forEach((key, value) -> {
+        this.sources.forEach((key, value) -> {
             EventRegistries.get(key).get().getConfig().setValues(value);
         });
 
