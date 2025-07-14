@@ -5,6 +5,7 @@ import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
@@ -21,20 +22,30 @@ public class BreakAtlasBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-        setBreakAtlas(true);
+        setBreakAtlas(context.getPlayer(), true);
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        setBreakAtlas(false);
+        setBreakAtlas(null, false);
     }
 
-    private void setBreakAtlas(boolean value) {
+    private void setBreakAtlas(ServerPlayer player, boolean value) {
         // Todo: if player rejoins server - this won't work.
         // needs a better sync solution.
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CSetBreakAtlas(value));
+
+        if (player == null) {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetBreakAtlas(value));
+        } else {
+            NetworkManager.sendToPlayer(player, new S2CSetBreakAtlas(value));
+        }
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return !context.shouldAwaitPlayer();
     }
 
     @Override

@@ -13,10 +13,18 @@ import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.event.ActiveEvent;
+import ru.maxthetomas.e418.event.EventManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InGameStorage extends SavedData {
     public static final MapCodec<InGameStorage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.PASSTHROUGH.fieldOf("kv_store").forGetter(a -> new Dynamic<Tag>(NbtOps.INSTANCE, a.keyValueStore))
+            Codec.PASSTHROUGH.fieldOf("kv_store")
+                    .forGetter(a -> new Dynamic<Tag>(NbtOps.INSTANCE, a.keyValueStore)),
+            ActiveEvent.CODEC.codec().listOf().fieldOf("active_events")
+                    .forGetter(v -> v.activeEvents)
     ).apply(instance, InGameStorage::constructByCodec));
 
     private static final Factory<InGameStorage> FACTORY = new Factory<>(InGameStorage::new,
@@ -25,6 +33,7 @@ public class InGameStorage extends SavedData {
     public static InGameStorage INSTANCE = null;
 
     private CompoundTag keyValueStore = new CompoundTag();
+    private List<ActiveEvent> activeEvents = new ArrayList<>();
 
     /// Save a value into a KV-store NBT store.
     /// It's recommended to use {@link NbtOps} methods to construct values.
@@ -45,36 +54,33 @@ public class InGameStorage extends SavedData {
 
     @Override
     public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        var result = (CompoundTag) CODEC.encode(this,
+        if (EventManager.IsActive)
+            this.activeEvents = E418.getEventManager().getActiveEvents();
+
+        return (CompoundTag) CODEC.encode(this,
                 NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(compoundTag).getOrThrow();
-        return result;
     }
 
-    public void save(MinecraftServer server) {
-        save(server, this);
-    }
-
-    public static InGameStorage load(MinecraftServer server) {
+    public static void load(MinecraftServer server) {
         INSTANCE = server.overworld().getDataStorage().get(FACTORY, E418.MOD_ID);
         if (INSTANCE == null)
             INSTANCE = new InGameStorage();
-        return INSTANCE;
-    }
 
-    public static void save(MinecraftServer server, InGameStorage inGameStorage) {
-        server.overworld().getDataStorage().set(E418.MOD_ID, inGameStorage);
+        server.overworld().getDataStorage().set(E418.MOD_ID, INSTANCE);
     }
 
     private static InGameStorage constructFactory(CompoundTag tag, HolderLookup.Provider provider) {
         return CODEC.decoder().decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst();
     }
 
-    private static InGameStorage constructByCodec(Dynamic<?> dynamic) {
+    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvent) {
         var store = new InGameStorage();
 
         var tag = dynamic.convert(NbtOps.INSTANCE).getValue();
         if (tag instanceof CompoundTag ct)
             store.keyValueStore = ct;
+
+        E418.getEventManager()._restoreActiveEvents(activeEvent);
 
         return store;
     }

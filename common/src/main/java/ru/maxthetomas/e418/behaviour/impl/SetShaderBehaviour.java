@@ -39,19 +39,29 @@ public class SetShaderBehaviour extends Behaviour {
         super.execute(context, executor);
 
         var player = context.getPlayer();
-        if (player == null) return;
-        NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
-        this.player = player;
+        if (context.hasPlayer()) {
+            NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
+            this.player = player;
+        } else {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetShader(shaderId));
+        }
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        NetworkManager.sendToPlayer(player, new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+        if (this.player != null) {
+            NetworkManager.sendToPlayer(this.player,
+                    new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+        } else {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+        }
     }
 
     @Override
     public boolean canRun(EventContext context) {
-        return context.getPlayer() != null;
+        return !context.shouldAwaitPlayer();
     }
 }

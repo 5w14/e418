@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
@@ -15,14 +14,14 @@ import ru.maxthetomas.e418.event.cause.IEventCause;
 import ru.maxthetomas.e418.util.Location;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class EventContext {
     public static final MapCodec<EventContext> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     Codec.BOOL.lenientOptionalFieldOf("forced", false).forGetter(v -> v.forced),
                     Location.CODEC.codec().optionalFieldOf("location").forGetter(v -> Optional.ofNullable(v.location)),
-                    UUIDUtil.CODEC.xmap(v -> E418.getCurrentServer().get().getPlayerList().getPlayer(v),
-                            Entity::getUUID).optionalFieldOf("player").forGetter(v -> Optional.ofNullable(v.player)),
+                    UUIDUtil.CODEC.optionalFieldOf("player").forGetter(v -> Optional.ofNullable(v.player)),
                     EventCauses.DISPATCH_CODEC.fieldOf("cause").forGetter(v -> v.cause)
             ).apply(instance, EventContext::constructByCodec));
 
@@ -34,7 +33,7 @@ public class EventContext {
     @Nullable
     private Location location;
     @Nullable
-    private ServerPlayer player;
+    private UUID player;
     @Nullable
     private IEventCause cause;
 
@@ -59,7 +58,16 @@ public class EventContext {
 
     @Nullable
     public ServerPlayer getPlayer() {
-        return player;
+        return server.getPlayerList().getPlayer(player);
+    }
+
+    public boolean hasPlayer() {
+        return player != null;
+    }
+
+    // If the event is restored, and the player with this specific UUID is not online.
+    public boolean shouldAwaitPlayer() {
+        return hasPlayer() && getPlayer() == null;
     }
 
     public boolean isForced() {
@@ -76,7 +84,7 @@ public class EventContext {
     }
 
     public EventContext withPlayer(ServerPlayer player) {
-        this.player = player;
+        this.player = player.getUUID();
         return this;
     }
 
@@ -113,7 +121,7 @@ public class EventContext {
         return newContext;
     }
 
-    private static EventContext constructByCodec(boolean forced, Optional<Location> location, Optional<ServerPlayer> player, IEventCause cause) {
+    private static EventContext constructByCodec(boolean forced, Optional<Location> location, Optional<UUID> player, IEventCause cause) {
         var context = new EventContext(E418.getCurrentServer().get());
         context.cause = cause;
         context.forced = forced;

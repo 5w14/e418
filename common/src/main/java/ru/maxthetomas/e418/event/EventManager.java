@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
+import ru.maxthetomas.e418.util.storage.InGameStorage;
 
 import java.util.*;
 
@@ -28,11 +29,14 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     private final List<QueuedEvent> queuedEvents = new ArrayList<>();
     private Map<ResourceLocation, EventResource> registeredEvents;
 
+    public static boolean IsActive = false;
+
     public EventManager() {
         TickEvent.SERVER_POST.register(this::tick);
     }
 
     private void tick(MinecraftServer server) {
+        if (!IsActive) return;
         // Queued events
         queuedEvents.removeIf((QueuedEvent queuedEvent) -> {
             // Check timeout time
@@ -63,15 +67,16 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         });
 
         activeEvents.forEach(ActiveEvent::tick);
+        InGameStorage.INSTANCE.setDirty();
     }
 
     // Getters
     public List<ActiveEvent> getActiveEvents() {
-        return activeEvents;
+        return List.copyOf(activeEvents);
     }
 
     public List<QueuedEvent> getQueuedEvents() {
-        return queuedEvents;
+        return List.copyOf(queuedEvents);
     }
 
     public @Nullable EventResource getEvent(ResourceLocation location) {
@@ -99,8 +104,12 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
      * Gets active event's resource key
      */
     public ResourceLocation getResourceLocation(ActiveEvent activeEvent) {
+        return getResourceLocation(activeEvent.resource);
+    }
+
+    public ResourceLocation getResourceLocation(EventResource resource) {
         for (Map.Entry<ResourceLocation, EventResource> entry : registeredEvents.entrySet()) {
-            if (entry.getValue().equals(activeEvent.resource))
+            if (entry.getValue().equals(resource))
                 return entry.getKey();
         }
 
@@ -216,6 +225,12 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     public boolean isDisposed(ActiveEvent event) {
         return !activeEvents.contains(event);
+    }
+
+    public void _restoreActiveEvents(List<ActiveEvent> activeEvent) {
+        activeEvent.forEach(e -> e.context.withSourceEvent(e));
+        this.activeEvents.addAll(activeEvent);
+        this.activeEvents.forEach(ActiveEvent::updateState);
     }
 
     /*

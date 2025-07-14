@@ -21,14 +21,18 @@ public class GameCrashBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CCrashGame());
+        if (!context.hasPlayer()) {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CCrashGame());
+        } else {
+            NetworkManager.sendToPlayer(context.getPlayer(), new S2CCrashGame());
+        }
         setDone(true);
     }
 
     @Override
     public boolean canRun(EventContext context) {
         // todo check if intrusive events are enabled
-        return super.canRun(context);
+        return super.canRun(context) && !context.shouldAwaitPlayer();
     }
 }

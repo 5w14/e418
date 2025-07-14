@@ -25,8 +25,13 @@ public class MetaParanoiaBehaviour extends Behaviour {
         super.execute(context, executor);
         setDone(true);
 
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CSetMetaParanoia(true));
+        if (!context.hasPlayer()) {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetMetaParanoia(true));
+        } else {
+            NetworkManager.sendToPlayer(context.getPlayer(),
+                    new S2CSetMetaParanoia(true));
+        }
 
         // TODO: remove game's ability to save while this event is happening
     }
@@ -36,5 +41,10 @@ public class MetaParanoiaBehaviour extends Behaviour {
         NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
                 new S2CSetMetaParanoia(false));
         setDone(true);
+    }
+
+    @Override
+    public boolean canRun(EventContext context) {
+        return !context.shouldAwaitPlayer();
     }
 }
