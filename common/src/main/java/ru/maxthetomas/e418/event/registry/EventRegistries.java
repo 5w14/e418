@@ -15,12 +15,6 @@ import java.util.Set;
 public class EventRegistries {
     private static final Map<ResourceLocation, EventRegistry> REGISTRY = new HashMap<>();
 
-    // Register
-    public static final EventRegistry GLOBAL_RANDOM = create("global_random");
-    public static final EventRegistry PLAYER_RANDOM = create("player_random");
-    public static final EventRegistry WAKE_UP = create("wake_up");
-    public static final EventRegistry CHAT_MESSAGE = create("chat_message");
-
     public static EventRegistry get(ResourceLocation id) {
         return REGISTRY.getOrDefault(id, null);
     }
@@ -73,7 +67,13 @@ public class EventRegistries {
     }
 
     public static void clearAll() {
-        REGISTRY.values().forEach(EventRegistry::clear);
+        REGISTRY.clear();
+    }
+
+    public static EventRegistry addRegistry(ResourceLocation location) {
+        var registry = new EventRegistry(location);
+        REGISTRY.put(location, registry);
+        return registry;
     }
 
     private static EventRegistry create(String id) {

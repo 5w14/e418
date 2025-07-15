@@ -248,19 +248,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         // cannot be named votvevents:global_random.json, so to avoid that we use folder structure:
         // event_registries/votvevents/global_random.json links to votvevents:random registry.
         object.registryUpdate().forEach((key, value) -> {
-            var path = key.getPath().split("/");
-
-            if (path.length <= 1) {
-                return;
-            }
-
-            var location = ResourceLocation.fromNamespaceAndPath(path[0], path[1]);
-            var registry = EventRegistries.get(location);
-
-            if (registry == null) {
-                LOGGER.warn("Could not add events from {}, no such registry exists: {}", key, location);
-                return;
-            }
+            var registry = EventRegistries.addRegistry(key);
 
             value.storedWeightedEvents().forEach(stored -> {
                 registry.addEvent(E418.getEventManager().getEvent(stored.id));
