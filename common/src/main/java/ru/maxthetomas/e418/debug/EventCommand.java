@@ -21,7 +21,9 @@ import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
+import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
+import ru.maxthetomas.e418.player.PlayerDataManager;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -65,6 +67,17 @@ public class EventCommand {
                         RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("event", ResourceLocationArgument.id())
                                 .executes(EventCommand::executeStopSubcommand)
                                 .suggests(EventCommand::getActiveEventSuggestions)
+                );
+    }
+
+    /**
+     * Creates an argument tree for /event print delays
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> eventRandomDelays() {
+        return LiteralArgumentBuilder.<CommandSourceStack>literal("print")
+                .then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("delays")
+                                .executes(EventCommand::executePrintRandomEventDelays)
                 );
     }
 
@@ -115,6 +128,9 @@ public class EventCommand {
                                                 .suggests(EventCommand::getEventRegistriesSuggestions)
                                                 .executes(EventCommand::executePrintEventRegistryEvents)
                                 )
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("delays")
+                                .executes(EventCommand::executePrintRandomEventDelays)
                 );
     }
 
@@ -328,6 +344,22 @@ public class EventCommand {
                                 (e) -> Component.literal(" - ").append(formatEvent(e.resource())))
                 ), false);
 
+        return 1;
+    }
+
+    /**
+     * Prints event delays from random event manager
+     */
+    private static int executePrintRandomEventDelays(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(
+                () -> Component.translatable("e418.commands.event.print_event_delays",
+                        RandomEventManager.getTimeToGlobalEvent(),
+                        ComponentUtils.formatList(PlayerDataManager.savedPlayers(),
+                                Component.literal("\n"),
+                                (e) -> Component.translatable("e418.commands.event.print_event_delays.line",
+                                        e.toString(), PlayerDataManager.getData(e).eventTimestamp, PlayerDataManager.getData(e).eventUnlockTimestamp
+                                ))
+                ), false);
         return 1;
     }
 

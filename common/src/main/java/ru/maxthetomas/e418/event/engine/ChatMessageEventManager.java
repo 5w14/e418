@@ -1,4 +1,4 @@
-package ru.maxthetomas.e418.event;
+package ru.maxthetomas.e418.event.engine;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.ChatEvent;
