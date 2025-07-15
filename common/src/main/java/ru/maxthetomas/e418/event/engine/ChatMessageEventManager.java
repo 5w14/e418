@@ -19,6 +19,7 @@ public class ChatMessageEventManager {
     private EventResult onReceived(@Nullable ServerPlayer serverPlayer, Component component) {
         assert serverPlayer != null;
 
+        // TODO: Randomize so not every message will cause an event. (would be cool to have custom system for messages idk)
         var ctx = new EventContext(serverPlayer.getServer())
                 .withPlayer(serverPlayer)
                 .withLocation(Location.fromPlayer(serverPlayer))
@@ -28,8 +29,6 @@ public class ChatMessageEventManager {
         if (e != null) {
             E418.getEventManager().queueEvent(e, ctx);
         }
-
-
 
         return EventResult.pass();
     }
