@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.util.E418Variables;
@@ -80,10 +81,18 @@ public abstract class ServerLevelMixin {
 
             var cancelTimeSkip = false;
 
+
+            // TODO: Randomize so not every wake up will cause an event.
             var cause = new WakeUpEventCause();
-            if (EventRegistries.WAKE_UP.eventTick(cause)) {
-                cancelTimeSkip = cause.isTimeSkipCancelled();
+            var ctx = new EventContext(this.getServer())
+                    .withCause(cause);
+            var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.wake_up", ctx).getRandomElement();
+
+            if (e != null) {
+                E418.getEventManager().queueEvent(e, ctx);
             }
+
+            cancelTimeSkip = cause.isTimeSkipCancelled();
 
             if (!cancelTimeSkip && this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 var l = this.serverLevelData.getDayTime() + 24000L;

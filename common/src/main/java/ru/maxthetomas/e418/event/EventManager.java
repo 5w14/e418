@@ -245,27 +245,16 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         EventRegistries.clearAll();
 
         // Due to limitations of file names on Windows, a file
-        // cannot be named votvevents:random.json, so to avoid that we use folder structure:
-        // event_registries/votvevents/random.json links to votvevents:random registry.
+        // cannot be named votvevents:global_random.json, so to avoid that we use folder structure:
+        // event_registries/votvevents/global_random.json links to votvevents:random registry.
         object.registryUpdate().forEach((key, value) -> {
-            var path = key.getPath().split("/");
+            var registry = EventRegistries.addRegistry(key);
 
-            if (path.length <= 1) {
-                return;
-            }
-
-            var location = ResourceLocation.fromNamespaceAndPath(path[0], path[1]);
-            var registry = EventRegistries.get(location);
-
-            if (registry.isEmpty()) {
-                LOGGER.warn("Could not add events from {}, no such registry exists: {}", key, location);
-                return;
-            }
-
-            var reg = registry.get();
             value.storedWeightedEvents().forEach(stored -> {
-                reg.addEvent(stored.toWeightedEvent());
+                registry.addEvent(E418.getEventManager().getEvent(stored.id));
             });
+
+            value.storedTags().forEach(registry::addTag);
         });
 
         LOGGER.info("Successfully reloaded events!");
@@ -275,9 +264,10 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
                                    Map<ResourceLocation, AddToRegistryData> registryUpdate) {
     }
 
-    public record AddToRegistryData(List<StoredWeightedEvent> storedWeightedEvents) {
+    public record AddToRegistryData(List<StoredWeightedEvent> storedWeightedEvents, List<String> storedTags) {
         public static final MapCodec<AddToRegistryData> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                StoredWeightedEvent.CODEC.listOf().fieldOf("events").forGetter(AddToRegistryData::storedWeightedEvents)
+                StoredWeightedEvent.CODEC.listOf().fieldOf("events").forGetter(AddToRegistryData::storedWeightedEvents),
+                Codec.STRING.listOf().fieldOf("tags").forGetter(AddToRegistryData::storedTags)
         ).apply(instance, AddToRegistryData::new));
     }
 
