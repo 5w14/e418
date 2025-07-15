@@ -1,5 +1,5 @@
 {
-  "causes":[
+  "tags":[
     "actions.minecraft.chat_message"
   ],
   "events": [

@@ -3,7 +3,7 @@ package ru.maxthetomas.e418.util;
 import java.util.*;
 
 public class WeightedList<T> {
-    public List<Entry<T>> values;
+    public List<Entry<T>> values = new ArrayList<>();
 
     public void add(int weight, T value){
         values.add(new Entry<>(weight, value));

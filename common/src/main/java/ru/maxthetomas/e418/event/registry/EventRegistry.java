@@ -7,6 +7,7 @@ import ru.maxthetomas.e418.config.SourceConfig;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.util.WeightedList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +19,7 @@ import java.util.Random;
 public class EventRegistry {
     protected static final Logger LOGGER = LogUtils.getLogger();
     protected WeightedList<EventResource> events = new WeightedList<>();
-    protected List<String> tags = List.of();
+    protected List<String> tags = new ArrayList<>();
     protected ResourceLocation id;
 
     public EventRegistry(ResourceLocation id) {
@@ -27,6 +28,7 @@ public class EventRegistry {
 
     public void clear() {
         events.clear();
+        tags.clear();
     }
 
     public void addEvent(EventResource resource) {
