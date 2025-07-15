@@ -45,9 +45,9 @@ public class Config {
         this.emptyWorlds = new HashSet<>(emptyWorlds);
         this.sources = new HashMap<>(registryDynamics.orElse(Map.of()));
 
-        this.sources.forEach((key, value) -> {
-            EventRegistries.get(key).get().getConfig().setValues(value);
-        });
+        //this.sources.forEach((key, value) -> {
+        //    EventRegistries.get(key).getConfig().setValues(value);
+        //});
 
         updateSources();
     }
@@ -104,9 +104,9 @@ public class Config {
     private void updateSources() {
         for (ResourceLocation registryId : EventRegistries.getRegistries()) {
             var registry = EventRegistries.get(registryId);
-            sources.compute(registryId, (a, b) -> registry.get().getConfig().storeValues(
-                    new Dynamic<>(JsonOps.INSTANCE, JsonOps.INSTANCE.emptyMap())
-            ));
+            //sources.compute(registryId, (a, b) -> registry.get().getConfig().storeValues(
+            //        new Dynamic<>(JsonOps.INSTANCE, JsonOps.INSTANCE.emptyMap())
+            //));
         }
     }
 

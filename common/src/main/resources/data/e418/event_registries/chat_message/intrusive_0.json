@@ -1,0 +1,9 @@
+{
+  "tags":[
+    "actions.minecraft.chat_message",
+    "intrusive.intrusive_0"
+  ],
+  "events": [
+    "e418:example/fake_player_left_message"
+  ]
+}
