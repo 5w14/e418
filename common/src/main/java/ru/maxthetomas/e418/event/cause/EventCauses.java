@@ -3,7 +3,6 @@ package ru.maxthetomas.e418.event.cause;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.cause.impl.*;
 
 import java.util.HashMap;
@@ -25,10 +24,4 @@ public class EventCauses {
         CAUSES.put(resourceLocation, codec);
         return codec;
     }
-
-    public static MapCodec<IEventCause> register(String name, MapCodec<IEventCause> codec) {
-        CAUSES.put(ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, name), codec);
-        return codec;
-    }
-
 }
