@@ -316,7 +316,7 @@ public class EventCommand {
                         ComponentUtils.formatList(EventRegistries.getRegistries(),
                                 Component.literal("\n"),
                                 (e) -> Component.translatable("e418.commands.event.print_event_registries_summary.line",
-                                        e.toString(), EventRegistries.get(e).get().getEvents().size()
+                                        e.toString(), EventRegistries.get(e).getEvents().size()
                                 ))
                 ), false);
 
@@ -330,7 +330,7 @@ public class EventCommand {
         var registryKey = ResourceLocationArgument.getId(context, "registry");
         var registry = EventRegistries.get(registryKey);
 
-        if (registry.isEmpty()) {
+        if (registry == null) {
             context.getSource().sendFailure(Component.translatable("e418.commands.event.invalid_registry", registryKey.toString())
                     .withStyle(ChatFormatting.RED));
             return 0;
@@ -339,9 +339,9 @@ public class EventCommand {
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_registry",
                         Component.literal(registryKey.toString()),
-                        ComponentUtils.formatList(registry.get().getEvents(),
+                        ComponentUtils.formatList(registry.getEvents(),
                                 Component.literal("\n"),
-                                (e) -> Component.literal(" - ").append(formatEvent(e.resource())))
+                                (e) -> Component.literal(" - ").append(formatEvent(e.element())))
                 ), false);
 
         return 1;

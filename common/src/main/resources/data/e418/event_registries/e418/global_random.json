@@ -1,4 +1,7 @@
 {
+  "causes":[
+    "random.global"
+  ],
   "events": [
     "e418:content/random/snow_override",
     "e418:content/random/teleport_into_ground",

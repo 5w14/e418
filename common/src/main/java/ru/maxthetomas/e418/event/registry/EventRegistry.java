@@ -2,13 +2,11 @@ package ru.maxthetomas.e418.event.registry;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.config.SourceConfig;
 import ru.maxthetomas.e418.event.EventResource;
-import ru.maxthetomas.e418.event.cause.IEventCause;
+import ru.maxthetomas.e418.util.WeightedList;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -17,30 +15,30 @@ import java.util.Random;
  * <br>
  * See {@linkplain EventRegistries} for the list of registries.
  */
-public abstract class EventRegistry<Cfg extends SourceConfig> {
+public class EventRegistry {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    protected final List<WeightedEvent> events = new ArrayList<>();
+    protected WeightedList<EventResource> events = new WeightedList<>();
+    protected List<String> tags = List.of();
+    protected ResourceLocation id;
 
-    protected Cfg config;
-
-    public EventRegistry() {
+    public EventRegistry(ResourceLocation id) {
+        this.id = id;
     }
 
     public void clear() {
         events.clear();
     }
 
-    public void addEvent(WeightedEvent weightedEvent) {
-        if (weightedEvent == null) return;
-        events.add(weightedEvent);
-    }
-
-    public void addEvent(EventResource resource, int weight) {
-        addEvent(new WeightedEvent(resource, weight));
-    }
-
     public void addEvent(EventResource resource) {
-        addEvent(resource, 1);
+        events.add(1, resource);
+    }
+
+    public void addEvent(int weight, EventResource resource) {
+        events.add(weight, resource);
+    }
+
+    public void addTag(String cause) {
+        tags.add(cause);
     }
 
     /**
@@ -50,26 +48,7 @@ public abstract class EventRegistry<Cfg extends SourceConfig> {
      * @return Randomly picked event.
      */
     public EventResource getRandomEvent(Random random) {
-        if (events.isEmpty()) {
-            return null;
-        }
-
-        int totalWeight = 0;
-        for (WeightedEvent event : events) {
-            totalWeight += event.weight();
-        }
-
-        int randomWeight = random.nextInt(totalWeight);
-        int cumulativeWeight = 0;
-
-        for (WeightedEvent event : events) {
-            cumulativeWeight += event.weight;
-            if (randomWeight < cumulativeWeight) {
-                return event.resource();
-            }
-        }
-
-        return events.getLast().resource();
+        return events.getRandomElement(random);
     }
 
     /**
@@ -81,33 +60,17 @@ public abstract class EventRegistry<Cfg extends SourceConfig> {
         return getRandomEvent(new Random());
     }
 
-
-    /**
-     * Should be triggered any time the event could be triggered.
-     * For random, this would be when there are no ticks until next event.
-     */
-    public boolean eventTick(IEventCause cause) {
-        if (!this.config.isEnabled()) return false;
-        if (RandomSource.create().nextFloat() > this.config.getChance()) return false;
-        startEvent(cause);
-        return true;
+    public List<WeightedList.Entry<EventResource>> getEvents() {
+        return events.values;
     }
 
-    /**
-     * Actually starts the event.
-     */
-    protected abstract void startEvent(IEventCause cause);
-
-    public List<WeightedEvent> getEvents() {
-        return events;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public Cfg getConfig() {
-        return config;
+    public ResourceLocation getId() {
+        return id;
     }
 
-    public abstract ResourceLocation getId();
-
-    public record WeightedEvent(EventResource resource, int weight) {
-    }
+    public record WeightedEvent(EventResource resource, int weight) { }
 }

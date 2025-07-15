@@ -1,4 +1,7 @@
 {
+  "causes":[
+    "actions.minecraft.wake_up"
+  ],
   "events": [
     "e418:content/wake_up/cancel_time_skip"
   ]

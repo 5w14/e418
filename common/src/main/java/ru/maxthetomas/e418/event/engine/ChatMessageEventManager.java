@@ -5,8 +5,11 @@ import dev.architectury.event.events.common.ChatEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
+import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
+import ru.maxthetomas.e418.util.Location;
 
 public class ChatMessageEventManager {
     public ChatMessageEventManager() {
@@ -14,7 +17,21 @@ public class ChatMessageEventManager {
     }
 
     private EventResult onReceived(@Nullable ServerPlayer serverPlayer, Component component) {
-        EventRegistries.CHAT_MESSAGE.eventTick(new ChatMessageCause(component));
+        assert serverPlayer != null;
+
+        // TODO: Only go through valid random events
+        var e = EventRegistries.getEventsWithTag("action.minecraft.chat_message").getRandomElement();
+
+        if (e != null) {
+            var ctx = new EventContext(serverPlayer.getServer())
+                    .withPlayer(serverPlayer)
+                    .withLocation(Location.fromPlayer(serverPlayer))
+                    .withCause(new ChatMessageCause(component));
+
+            E418.getEventManager().queueEvent(e, ctx);
+        }
+
+
 
         return EventResult.pass();
     }
