@@ -12,6 +12,7 @@
     "client.TextureAtlasSpriteMixin",
     "client.WeatherEffectRendererMixin",
     "client.WorldOpenFlowsMixin",
+    "client.SkyRendererMixin",
     "client.PauseScreenMixin"
   ],
   "mixins": [

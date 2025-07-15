@@ -31,6 +31,8 @@ public class Behaviours {
     public static final MapCodec<? extends Behaviour> BREAK_ATLAS = register(BreakAtlasBehaviour.ID, BreakAtlasBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> PREVENT_CHAT_USAGE = register(PreventChatUsageBehaviour.ID, PreventChatUsageBehaviour.CODEC);
     public static final MapCodec<? extends Behaviour> META_PARANOIA = register(MetaParanoiaBehaviour.ID, MetaParanoiaBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> SET_SUN_TEXTURE = register(SetSunTextureBehaviour.ID, SetSunTextureBehaviour.CODEC);
+    public static final MapCodec<? extends Behaviour> SET_MOON_TEXTURE = register(SetMoonTextureBehaviour.ID, SetMoonTextureBehaviour.CODEC);
 
     // Utilities
     public static final MapCodec<? extends Behaviour> MUTATE_CONTEXT = register(MutateContextBehaviour.ID, MutateContextBehaviour.CODEC);
