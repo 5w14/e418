@@ -23,7 +23,6 @@ public class Conditions {
     public static MapCodec<? extends ICondition> PLAYERS_NEARBY = register(PlayersNearbyCondition.ID, PlayersNearbyCondition.CODEC);
     public static MapCodec<? extends ICondition> TIME_SINCE_START = register(TimeSinceEventStartCondition.ID, TimeSinceEventStartCondition.CODEC);
     public static MapCodec<? extends ICondition> AT_TIME = register(AtTimeCondition.ID, AtTimeCondition.CODEC);
-    public static MapCodec<? extends ICondition> HAS_TEXT = register(HasTextCondition.ID, HasTextCondition.CODEC);
 
     // Utility conditions
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
@@ -34,6 +33,9 @@ public class Conditions {
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
     public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> E418.getConfig().isDebug());
 
+    // Chat conditions
+    public static MapCodec<? extends ICondition> MATCHES = register(MatchesCondition.ID, MatchesCondition.CODEC);
+    public static MapCodec<? extends ICondition> STARTS_WITH = register(StartsWithCondition.ID, StartsWithCondition.CODEC);
 
     public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));

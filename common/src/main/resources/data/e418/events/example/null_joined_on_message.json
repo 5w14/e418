@@ -21,8 +21,8 @@
   ],
   "run_conditions": [
     {
-      "type": "e418:has_text",
-      "text": "null"
+      "type": "e418:chat/matches",
+      "regex": "null"
     }
   ],
   "queue_conditions": []

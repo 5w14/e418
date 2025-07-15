@@ -9,16 +9,16 @@ import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
 
-public class HasTextCondition implements ICondition {
-    public static final MapCodec<HasTextCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("text").forGetter(HasTextCondition::getText)
-    ).apply(instance, HasTextCondition::new));
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "has_text");
+public class StartsWithCondition implements ICondition {
+    public static final MapCodec<StartsWithCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.STRING.fieldOf("prefix").forGetter(StartsWithCondition::getPrefix)
+    ).apply(instance, StartsWithCondition::new));
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "chat/starts_with");
 
-    private final String text;
+    private final String prefix;
 
-    HasTextCondition(String text) {
-        this.text = text;
+    StartsWithCondition(String prefix) {
+        this.prefix = prefix;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class HasTextCondition implements ICondition {
         var message = ((ChatMessageCause) cause).context;
         var messageText = message.getString().toLowerCase();
 
-        return messageText.contains(text.toLowerCase());
+        return messageText.startsWith(prefix);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class HasTextCondition implements ICondition {
         return ID;
     }
 
-    public String getText() {
-        return text;
+    public String getPrefix() {
+        return prefix;
     }
 }
