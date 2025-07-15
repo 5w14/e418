@@ -4,10 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
-import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
-import ru.maxthetomas.e418.event.cause.impl.RandomEventCause;
-import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
+import ru.maxthetomas.e418.event.cause.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +17,8 @@ public class EventCauses {
 
     public static final MapCodec<? extends IEventCause> CHAT_MESSAGE = register(ChatMessageCause.TYPE, ChatMessageCause.CODEC);
     public static final MapCodec<? extends IEventCause> CONSOLE_COMMAND = register(ConsoleCommandEventCause.TYPE, ConsoleCommandEventCause.CODEC);
-    public static final MapCodec<? extends IEventCause> RANDOM_EVENT = register(RandomEventCause.TYPE, RandomEventCause.CODEC);
+    public static final MapCodec<? extends IEventCause> GLOBAL_RANDOM = register(GlobalRandomEventCause.TYPE, GlobalRandomEventCause.CODEC);
+    public static final MapCodec<? extends IEventCause> PLAYER_RANDOM = register(PlayerRandomEventCause.TYPE, PlayerRandomEventCause.CODEC);
     public static final MapCodec<? extends IEventCause> WAKE_UP = register(WakeUpEventCause.TYPE, WakeUpEventCause.CODEC);
 
     public static MapCodec<? extends IEventCause> register(ResourceLocation resourceLocation, MapCodec<? extends IEventCause> codec) {
