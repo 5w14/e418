@@ -38,7 +38,6 @@ public class EventCommand {
                 .then(queueEvent())
                 .then(printEvents())
                 .then(stopEvent())
-                .then(eventRandomDelays())
         );
     }
 
@@ -72,11 +71,14 @@ public class EventCommand {
     }
 
     /**
-     * Creates an argument tree for /event random_delays
+     * Creates an argument tree for /event print delays
      */
     private static LiteralArgumentBuilder<CommandSourceStack> eventRandomDelays() {
-        return LiteralArgumentBuilder.<CommandSourceStack>literal("random_delays")
-                .executes(EventCommand::executePrintRandomEventDelays);
+        return LiteralArgumentBuilder.<CommandSourceStack>literal("print")
+                .then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("delays")
+                                .executes(EventCommand::executePrintRandomEventDelays)
+                );
     }
 
     /**
@@ -126,6 +128,9 @@ public class EventCommand {
                                                 .suggests(EventCommand::getEventRegistriesSuggestions)
                                                 .executes(EventCommand::executePrintEventRegistryEvents)
                                 )
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("delays")
+                                .executes(EventCommand::executePrintRandomEventDelays)
                 );
     }
 
