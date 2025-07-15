@@ -82,14 +82,13 @@ public class RandomEventManager {
 
                 // TODO: Only go through valid random events
                 var success = false;
-                var e = EventRegistries.getEventsWithTag("random.player").getRandomElement();
+                var ctx = new EventContext(minecraftServer)
+                        .withPlayer(player)
+                        .withLocation(Location.fromPlayer(player))
+                        .withCause(cause);
+                var e = EventRegistries.getQueueableEventsWithTag("random.player", ctx).getRandomElement();
 
                 if (e != null) {
-                    var ctx = new EventContext(minecraftServer)
-                            .withPlayer(player)
-                            .withLocation(Location.fromPlayer(player))
-                            .withCause(cause);
-
                     success = E418.getEventManager().queueEvent(e, ctx);
                 }
 
@@ -133,12 +132,11 @@ public class RandomEventManager {
 
             // TODO: Only go through valid random events
             var success = false;
-            var e = EventRegistries.getEventsWithTag("random.global").getRandomElement();
+            var ctx = new EventContext(minecraftServer)
+                    .withCause(cause);
+            var e = EventRegistries.getQueueableEventsWithTag("random.global", ctx).getRandomElement();
 
             if (e != null) {
-                var ctx = new EventContext(minecraftServer)
-                        .withCause(cause);
-
                 success = E418.getEventManager().queueEvent(e, ctx);
             }
 

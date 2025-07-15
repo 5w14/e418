@@ -37,8 +37,8 @@ public class EventRegistry {
         events.add(weight, resource);
     }
 
-    public void addTag(String cause) {
-        tags.add(cause);
+    public void addTag(String tag) {
+        tags.add(tag);
     }
 
     /**

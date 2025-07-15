@@ -19,15 +19,13 @@ public class ChatMessageEventManager {
     private EventResult onReceived(@Nullable ServerPlayer serverPlayer, Component component) {
         assert serverPlayer != null;
 
-        // TODO: Only go through valid random events
-        var e = EventRegistries.getEventsWithTag("action.minecraft.chat_message").getRandomElement();
+        var ctx = new EventContext(serverPlayer.getServer())
+                .withPlayer(serverPlayer)
+                .withLocation(Location.fromPlayer(serverPlayer))
+                .withCause(new ChatMessageCause(component));
 
+        var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx).getRandomElement();
         if (e != null) {
-            var ctx = new EventContext(serverPlayer.getServer())
-                    .withPlayer(serverPlayer)
-                    .withLocation(Location.fromPlayer(serverPlayer))
-                    .withCause(new ChatMessageCause(component));
-
             E418.getEventManager().queueEvent(e, ctx);
         }
 

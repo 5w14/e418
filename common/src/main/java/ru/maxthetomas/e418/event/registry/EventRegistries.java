@@ -2,6 +2,7 @@ package ru.maxthetomas.e418.event.registry;
 
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.util.WeightedList;
 
@@ -44,6 +45,27 @@ public class EventRegistries {
         for (EventRegistry reg : regs) {
             for (WeightedList.Entry<EventResource> e : reg.events.values) {
                 weightedList.add(e.weight(), e.element());
+            }
+        }
+
+        return weightedList;
+    }
+
+    /**
+     * @param tag Event cause
+     * @param ctx Context of event
+     * @return A weighted list of events from registries with specified tag and that can be queued.
+     */
+    public static WeightedList<EventResource> getQueueableEventsWithTag(String tag, EventContext ctx) {
+        var weightedList = new WeightedList<EventResource>();
+
+        var regs = getRegistriesWithTag(tag);
+
+        for (EventRegistry reg : regs) {
+            for (WeightedList.Entry<EventResource> e : reg.events.values) {
+                if (e.element().canQueue(ctx)) {
+                    weightedList.add(e.weight(), e.element());
+                }
             }
         }
 

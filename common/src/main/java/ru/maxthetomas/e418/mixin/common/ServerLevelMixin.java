@@ -82,12 +82,11 @@ public abstract class ServerLevelMixin {
             var cancelTimeSkip = false;
 
             var cause = new WakeUpEventCause();
-            var e = EventRegistries.getEventsWithTag("action.minecraft.wake_up").getRandomElement();
+            var ctx = new EventContext(this.getServer())
+                    .withCause(cause);
+            var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.wake_up", ctx).getRandomElement();
 
             if (e != null) {
-                var ctx = new EventContext(this.getServer())
-                        .withCause(cause);
-
                 E418.getEventManager().queueEvent(e, ctx);
             }
 

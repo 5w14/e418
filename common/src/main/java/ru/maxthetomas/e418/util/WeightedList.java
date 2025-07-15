@@ -1,11 +1,5 @@
 package ru.maxthetomas.e418.util;
 
-
-import com.microsoft.aad.msal4j.ManagedIdentityApplication;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import ru.maxthetomas.e418.event.EventResource;
-
 import java.util.*;
 
 public class WeightedList<T> {
