@@ -1,0 +1,29 @@
+{
+  "name": "Example null joined",
+  "description": "null joined because of message event",
+  "behaviours": [
+    {
+      "type": "e418:broadcast_message",
+      "message": {
+        "color": "yellow",
+        "translate": "multiplayer.player.joined",
+        "with": [
+          {
+            "text": "Null",
+            "clickEvent": {
+              "action": "suggest_command",
+              "value": "/tell Null"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "run_conditions": [
+    {
+      "type": "e418:has_text",
+      "text": "null"
+    }
+  ],
+  "queue_conditions": []
+}

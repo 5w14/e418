@@ -23,6 +23,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> PLAYERS_NEARBY = register(PlayersNearbyCondition.ID, PlayersNearbyCondition.CODEC);
     public static MapCodec<? extends ICondition> TIME_SINCE_START = register(TimeSinceEventStartCondition.ID, TimeSinceEventStartCondition.CODEC);
     public static MapCodec<? extends ICondition> AT_TIME = register(AtTimeCondition.ID, AtTimeCondition.CODEC);
+    public static MapCodec<? extends ICondition> HAS_TEXT = register(HasTextCondition.ID, HasTextCondition.CODEC);
 
     // Utility conditions
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);

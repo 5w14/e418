@@ -14,7 +14,9 @@ public class ChatMessageEventManager {
     }
 
     private EventResult onReceived(@Nullable ServerPlayer serverPlayer, Component component) {
-        EventRegistries.CHAT_MESSAGE.eventTick(new ChatMessageCause(component));
+        serverPlayer.server.execute(() -> {
+            EventRegistries.CHAT_MESSAGE.eventTick(new ChatMessageCause(component));
+        });
 
         return EventResult.pass();
     }
