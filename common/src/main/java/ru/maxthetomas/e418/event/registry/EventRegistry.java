@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Registry that contains events. See {@linkplain EventRegistries} for the list of registries.
+ * Registry that contains events. Can be configured through from config through {@linkplain SourceConfig} and it's variations.
+ * <br>
+ * See {@linkplain EventRegistries} for the list of registries.
  */
 public abstract class EventRegistry<Cfg extends SourceConfig> {
     protected static final Logger LOGGER = LogUtils.getLogger();
