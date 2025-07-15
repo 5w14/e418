@@ -1,0 +1,30 @@
+{
+  "name": "Test set moon texture",
+  "description": "Test set moon texture behaviour that changes moon's texture",
+  "behaviours": [
+    {
+      "type": "e418:set_moon_texture",
+      "texture": "e418:textures/test1.png"
+    },
+    {
+      "type": "e418:wait_for_conditions",
+      "conditions": [
+        {
+          "type": "e418:not",
+          "conditions": [
+            {
+              "type": "e418:is_night"
+            }
+          ]
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:stop_event"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}

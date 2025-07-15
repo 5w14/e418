@@ -5,13 +5,13 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.config.registries.RandomSourceConfig;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.IEventCause;
-import ru.maxthetomas.e418.event.cause.impl.RandomEventCause;
+import ru.maxthetomas.e418.event.cause.impl.GlobalRandomEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
 
-public class RandomEventRegistry extends EventRegistry<RandomSourceConfig> {
+public class GlobalRandomEventRegistry extends EventRegistry<RandomSourceConfig> {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "random");
 
-    public RandomEventRegistry() {
+    public GlobalRandomEventRegistry() {
         super();
         this.config = new RandomSourceConfig(true, 20 * 60 * 30, 20 * 60 * 90);
     }
@@ -19,7 +19,7 @@ public class RandomEventRegistry extends EventRegistry<RandomSourceConfig> {
     @Override
     protected void startEvent(IEventCause cause) {
         if (cause == null)
-            cause = new RandomEventCause();
+            cause = new GlobalRandomEventCause();
 
         var event = this.getRandomEvent();
         E418.getEventManager().runEvent(event,

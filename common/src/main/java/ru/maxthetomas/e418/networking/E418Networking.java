@@ -10,5 +10,7 @@ public class E418Networking {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CCrashGame.TYPE, S2CCrashGame.STREAM_CODEC, S2CCrashGame::receive);
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetBreakAtlas.TYPE, S2CSetBreakAtlas.STREAM_CODEC, S2CSetBreakAtlas::receive);
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetMetaParanoia.TYPE, S2CSetMetaParanoia.STREAM_CODEC, S2CSetMetaParanoia::receive);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetSun.TYPE, S2CSetSun.STREAM_CODEC, S2CSetSun::receive);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, S2CSetMoon.TYPE, S2CSetMoon.STREAM_CODEC, S2CSetMoon::receive);
     }
 }
