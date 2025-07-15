@@ -1,6 +1,9 @@
 {
+  "tags":[
+    "random.player",
+    "intrusive.0"
+  ],
   "events": [
-    "e418:content/random/snow_override",
     "e418:content/random/teleport_into_ground",
     "e418:content/random/cave_sound",
     "e418:content/random/random_toast",

@@ -2,6 +2,7 @@ package ru.maxthetomas.e418.debug;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -129,6 +130,13 @@ public class EventCommand {
                                         RequiredArgumentBuilder.<CommandSourceStack, ResourceLocation>argument("registry", ResourceLocationArgument.id())
                                                 .suggests(EventCommand::getEventRegistriesSuggestions)
                                                 .executes(EventCommand::executePrintEventRegistryEvents)
+                                )
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("events_by_tag")
+                                .executes(EventCommand::executePrintEventRegistriesSummary)
+                                .then(
+                                        RequiredArgumentBuilder.<CommandSourceStack, String>argument("tag", StringArgumentType.string())
+                                                .executes(EventCommand::executePrintEventsByTagInRegistry)
                                 )
                 ).then(
                         LiteralArgumentBuilder.<CommandSourceStack>literal("delays")
@@ -318,7 +326,7 @@ public class EventCommand {
                         ComponentUtils.formatList(EventRegistries.getRegistries(),
                                 Component.literal("\n"),
                                 (e) -> Component.translatable("e418.commands.event.print_event_registries_summary.line",
-                                        e.toString(), EventRegistries.get(e).get().getEvents().size()
+                                        e.toString(), EventRegistries.get(e).getEvents().size()
                                 ))
                 ), false);
 
@@ -332,7 +340,7 @@ public class EventCommand {
         var registryKey = ResourceLocationArgument.getId(context, "registry");
         var registry = EventRegistries.get(registryKey);
 
-        if (registry.isEmpty()) {
+        if (registry == null) {
             context.getSource().sendFailure(Component.translatable("e418.commands.event.invalid_registry", registryKey.toString())
                     .withStyle(ChatFormatting.RED));
             return 0;
@@ -341,9 +349,30 @@ public class EventCommand {
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_registry",
                         Component.literal(registryKey.toString()),
-                        ComponentUtils.formatList(registry.get().getEvents(),
+                        ComponentUtils.formatList(registry.getEvents(),
                                 Component.literal("\n"),
-                                (e) -> Component.literal(" - ").append(formatEvent(e.resource())))
+                                (e) -> Component.translatable("e418.commands.event.print_event_registry.line", formatEvent(e.element()), e.weight())),
+                        ComponentUtils.formatList(registry.getTags(),
+                                Component.literal("\n"),
+                                (e) -> Component.literal(" - ").append(e))
+                ), false);
+
+        return 1;
+    }
+
+    /**
+     * Prints events from registries with tag
+     */
+    private static int executePrintEventsByTagInRegistry(CommandContext<CommandSourceStack> context) {
+        var tag = StringArgumentType.getString(context, "tag");
+        var events = EventRegistries.getEventsWithTag(tag);
+
+        context.getSource().sendSuccess(
+                () -> Component.translatable("e418.commands.event.print_events_by_tag",
+                        tag,
+                        ComponentUtils.formatList(events.values,
+                                Component.literal("\n"),
+                                (e) -> Component.translatable("e418.commands.event.print_events_by_tag.line", formatEvent(e.element()), e.weight()))
                 ), false);
 
         return 1;

@@ -7,24 +7,30 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.IEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
 
-public class SimpleEventRegistry extends EventRegistry<SourceConfig> {
-    protected ResourceLocation id;
+public class ChatMessageEventRegistry extends EventRegistry<SourceConfig> {
+    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "chat_message");
 
-    public SimpleEventRegistry(ResourceLocation id, float defaultChance) {
-        this.id = id;
+    public ChatMessageEventRegistry(float defaultChance) {
         this.config = new SourceConfig(true, defaultChance);
     }
 
     @Override
     protected void startEvent(IEventCause cause) {
-        var event = getRandomEvent();
+        var events = getEvents();
         var ctx = new EventContext(E418.getCurrentServer().get())
                 .withCause(cause);
-        E418.getEventManager().runEvent(event, ctx);
+
+        for (WeightedEvent event : events) {
+            if (!event.resource().canRun(ctx)) {
+                continue;
+            }
+
+            E418.getEventManager().runEvent(event.resource(), ctx);
+        }
     }
 
     @Override
     public ResourceLocation getId() {
-        return id;
+        return ID;
     }
 }
