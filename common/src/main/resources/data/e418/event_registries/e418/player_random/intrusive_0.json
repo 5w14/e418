@@ -1,6 +1,7 @@
 {
   "tags":[
-    "random.player"
+    "random.player",
+    "intrusive.0"
   ],
   "events": [
     "e418:content/random/teleport_into_ground",
