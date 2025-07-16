@@ -4,7 +4,6 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.ChatEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
@@ -13,12 +12,10 @@ import ru.maxthetomas.e418.util.Location;
 
 public class ChatMessageEventManager {
     public ChatMessageEventManager() {
-        ChatEvent.RECEIVED.register(this::onReceived);
+        ChatEvent.RECEIVED.register((serverPlayer, component) -> serverPlayer != null ? onReceived(serverPlayer, component) : null);
     }
 
-    private EventResult onReceived(@Nullable ServerPlayer serverPlayer, Component component) {
-        assert serverPlayer != null;
-
+    private EventResult onReceived(ServerPlayer serverPlayer, Component component) {
         // TODO: Randomize so not every message will cause an event. (would be cool to have custom system for messages idk)
         var ctx = new EventContext(serverPlayer.getServer())
                 .withPlayer(serverPlayer)

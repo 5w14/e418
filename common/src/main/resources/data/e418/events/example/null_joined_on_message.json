@@ -19,11 +19,11 @@
       }
     }
   ],
-  "run_conditions": [
+  "run_conditions": [],
+  "queue_conditions": [
     {
       "type": "e418:chat/matches",
       "regex": "null"
     }
-  ],
-  "queue_conditions": []
+  ]
 }
