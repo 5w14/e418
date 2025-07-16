@@ -53,12 +53,12 @@ public class Config {
      * Deserializes a JSON object and sets config values.
      */
     public static boolean deserializeConfig(JsonObject object) {
-        return CONFIG_VALUES.stream().map(v ->
-                v.deserializeFromMapAndUpdate(object)).anyMatch(v -> !v);
+        return CONFIG_VALUES.stream().allMatch(v ->
+                v.deserializeFromMapAndUpdate(object));
     }
 
     /**
-     * Serialzies a config into a JSON object.
+     * Serializes a config into a JSON object.
      */
     public static JsonObject serializeConfig() {
         var object = new JsonObject();

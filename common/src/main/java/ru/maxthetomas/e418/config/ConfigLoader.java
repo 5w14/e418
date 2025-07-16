@@ -26,7 +26,7 @@ public class ConfigLoader {
 
             var result = Config.deserializeConfig(configJson.getAsJsonObject());
             if (!result) {
-                LOGGER.warn("Error while config deserizalization!");
+                LOGGER.warn("Error while config deserialization!");
             }
         } catch (IOException e) {
             LOGGER.error("Could not load config!", e);
