@@ -10,6 +10,9 @@ import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+/// Adds a new component to the item in hand
+///
+/// <li> <code>component</code> - Component to add
 public class ModifyHeldItemComponents extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "modify_held_item_components");
 

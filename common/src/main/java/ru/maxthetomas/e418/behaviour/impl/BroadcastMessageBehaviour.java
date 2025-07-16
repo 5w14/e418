@@ -14,6 +14,13 @@ import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+/// Sends a message to players
+///
+/// <li> <code>chat</code/> - Sends message into chat
+///
+/// <li> <code>actionbar</code> - Shows message in the actionbar
+///
+/// <li> <code>title</code> - Shows message as title
 public class BroadcastMessageBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "broadcast_message");
     public static final MapCodec<? extends Behaviour> CODEC = RecordCodecBuilder.<BroadcastMessageBehaviour>mapCodec(instance ->

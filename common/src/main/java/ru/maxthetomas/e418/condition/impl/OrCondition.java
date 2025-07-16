@@ -14,6 +14,9 @@ import ru.maxthetomas.e418.event.EventContext;
 import java.util.List;
 import java.util.stream.Stream;
 
+/// Returns true only when one or more conditions are true
+///
+/// <li> <code>conditions</code> - Conditions to check
 public class OrCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "or");
     public static final MapCodec<OrCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

@@ -11,9 +11,7 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetBreakAtlas;
 
-/**
- * Breaks atlas
- */
+/// Breaks game's texture atlas to make textures look glitchy
 public class BreakAtlasBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "break_atlas");
     public static final MapCodec<BreakAtlasBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(BreakAtlasBehaviour::new));

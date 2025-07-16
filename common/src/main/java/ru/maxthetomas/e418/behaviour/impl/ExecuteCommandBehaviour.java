@@ -10,6 +10,11 @@ import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+/// Executes minecraft command
+///
+/// <li> <code>command</code> - Command itself
+///
+/// <li> <code>as_player</code> - Makes so it's executed as player in the context
 public class ExecuteCommandBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "execute_command");
     public static final MapCodec<ExecuteCommandBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

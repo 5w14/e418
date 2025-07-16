@@ -14,6 +14,9 @@ import ru.maxthetomas.e418.event.EventContext;
 import java.util.List;
 import java.util.stream.Stream;
 
+/// Inverses conditions
+///
+/// <li> <code>conditions</code> - Conditions to inverse
 public class NotCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "not");
     public static final MapCodec<NotCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
