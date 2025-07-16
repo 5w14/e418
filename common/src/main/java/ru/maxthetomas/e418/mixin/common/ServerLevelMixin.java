@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
@@ -112,7 +113,7 @@ public abstract class ServerLevelMixin {
         if (!(entity instanceof LivingEntity)) return;
 
         var dim = ((ServerLevel) (Object) this).dimension();
-        if (E418.getConfig().isEmptyWorld(dim.location()))
+        if (Config.isEmptyWorld(dim.location()))
             cir.cancel();
     }
 

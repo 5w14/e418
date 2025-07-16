@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.impl.*;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> NOT = register(NotCondition.ID, NotCondition.CODEC);
     public static MapCodec<? extends ICondition> AND = register(AndCondition.ID, AndCondition.CODEC);
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
-    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> E418.getConfig().isDebug());
+    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> Config.isDebug());
 
     // Chat conditions
     public static MapCodec<? extends ICondition> MATCHES = register(MatchesCondition.ID, MatchesCondition.CODEC);

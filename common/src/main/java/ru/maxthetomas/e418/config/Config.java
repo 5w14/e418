@@ -1,132 +1,146 @@
 package ru.maxthetomas.e418.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.event.registry.EventRegistries;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
 public class Config {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_PATH = Platform.getConfigFolder().resolve("e418.json");
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final MapCodec<Config> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.BOOL.fieldOf("is_debug").forGetter(Config::isDebug),
-            Codec.BOOL.fieldOf("skip_backup_screen").forGetter(Config::shouldSkipBackupScreen),
-            ResourceLocation.CODEC.listOf().lenientOptionalFieldOf("empty_worlds", List.of())
-                    .forGetter(Config::getEmptyWorldsAsList),
-            Codec.unboundedMap(ResourceLocation.CODEC, Codec.PASSTHROUGH)
-                    .optionalFieldOf("sources").forGetter(s -> Optional.of(s.sources))
-    ).apply(instance, Config::new));
+    private static final List<Value<?>> CONFIG_VALUES = new ArrayList<>();
 
-    private final boolean shouldSkipBackupScreen;
-    private final Set<ResourceLocation> emptyWorlds;
-    private boolean isDebug = false;
-    private final Map<ResourceLocation, Dynamic<?>> sources;
+    public static Value<Boolean> forceDebug = field("force_debug", Codec.BOOL, false);
+    public static Value<Boolean> shouldSkipDebugScreen = field("skip_debug_screen", Codec.BOOL, true);
+    public static Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds",
+            ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of(
+                    E418.resLoc("lines"),
+                    E418.resLoc("featureless_overworld"),
+                    E418.resLoc("minimalism"),
+                    E418.resLoc("unlabirynth")
+            ));
 
-    public Config(boolean isDebug, boolean shouldSkipBackupScreen, List<ResourceLocation> emptyWorlds, Optional<Map<ResourceLocation, Dynamic<?>>> registryDynamics) {
-        this.isDebug = isDebug;
-        this.shouldSkipBackupScreen = shouldSkipBackupScreen;
-        this.emptyWorlds = new HashSet<>(emptyWorlds);
-        this.sources = new HashMap<>(registryDynamics.orElse(Map.of()));
+    public static boolean isDebug() {
+        return Platform.isDevelopmentEnvironment() || forceDebug.get();
+    }
 
-        //this.sources.forEach((key, value) -> {
-        //    EventRegistries.get(key).getConfig().setValues(value);
-        //});
+    public static boolean shouldSkipBackupScreen() {
+        return shouldSkipDebugScreen.get();
+    }
 
-        updateSources();
+    public static boolean isEmptyWorld(ResourceLocation location) {
+        return emptyWorlds.get().contains(location);
+    }
+
+
+    private static <T> Value<T> field(String name, Codec<T> codec, T defaultValue) {
+        var value = new Value<T>(name, defaultValue, codec);
+        CONFIG_VALUES.add(value);
+        return value;
     }
 
     /**
-     * Reads config file and returns filled config
-     *
-     * @return filled config
+     * Deserializes a JSON object and sets config values.
      */
-    public static Config loadConfig() {
-        try {
-            if (Files.exists(CONFIG_PATH)) {
-                var reader = Files.newBufferedReader(CONFIG_PATH, StandardCharsets.UTF_8);
-                var json = JsonParser.parseReader(reader);
-                reader.close();
-                var config = CODEC.decode(JsonOps.INSTANCE, JsonOps.INSTANCE.getMap(json).getOrThrow());
-                return config.getOrThrow();
-            } else {
-                var config = empty();
-                saveToFile(config);
-                return config;
+    public static boolean deserializeConfig(JsonObject object) {
+        return CONFIG_VALUES.stream().map(v ->
+                v.deserializeFromMapAndUpdate(object)).anyMatch(v -> !v);
+    }
+
+    /**
+     * Serialzies a config into a JSON object.
+     */
+    public static JsonObject serializeConfig() {
+        var object = new JsonObject();
+        CONFIG_VALUES.forEach(v ->
+                v.serializeAndAddToObject(object));
+        return object;
+    }
+
+    public static class Value<T> {
+        private final String serializedName;
+        private final Codec<T> serializer;
+        private final T defaultValue;
+
+        private Supplier<T> supplier;
+
+        public Value(String serializedName, T defValue, Codec<T> serializer) {
+            this.serializedName = serializedName;
+            this.supplier = () -> defValue;
+            this.serializer = serializer;
+            this.defaultValue = defValue;
+        }
+
+        public Codec<T> getSerializer() {
+            return serializer;
+        }
+
+        /**
+         * Sets a value.
+         */
+        public void set(T value) {
+            supplier = () -> value;
+        }
+
+        /**
+         * Tries to deserialize the element.
+         *
+         * @return whether the deserialization was successful.
+         */
+        public boolean deserializeAndUpdate(JsonElement element) {
+            var result = this.getSerializer().decode(JsonOps.INSTANCE, element);
+            result.ifSuccess(v -> {
+                this.set(v.getFirst());
+            });
+
+            result.ifError((err) -> {
+                LOGGER.error("Error while loading value {} from configuration file: {}", this.serializedName, err.toString());
+            });
+
+
+            return result.isSuccess();
+        }
+
+        /**
+         * Tries to find in a given object and deserialize the element.
+         *
+         * @return whether the deserialization was successful.
+         */
+        public boolean deserializeFromMapAndUpdate(JsonObject object) {
+            var field = object.get(serializedName);
+            if (field == null) {
+                this.set(this.defaultValue);
+                return false;
             }
-        } catch (Exception exc) {
-            LOGGER.error("Cannot load config!", exc);
+
+            return this.deserializeAndUpdate(field);
         }
 
-        return empty();
-    }
-
-    /**
-     * Saves config to file
-     *
-     * @param config instance to save
-     */
-    public static void saveToFile(Config config) {
-        try {
-            var record = CODEC.encode(config, JsonOps.INSTANCE, JsonOps.INSTANCE.mapBuilder());
-            var json = record.build(JsonOps.INSTANCE.empty()).getOrThrow();
-            Files.writeString(CONFIG_PATH, GSON.toJson(json), StandardCharsets.UTF_8);
-        } catch (IOException exception) {
-            LOGGER.error("Failed to save configuration", exception);
+        public DataResult<JsonElement> serialize() {
+            return this.getSerializer().encode(this.get(), JsonOps.INSTANCE, JsonOps.INSTANCE.empty());
         }
-    }
 
-    private static Config empty() {
-        return new Config(false, true, List.of(
-                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "lines"),
-                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "featureless_overworld"),
-                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "minimalism"),
-                ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "unlabirynth")
-        ), Optional.of(Map.of()));
-    }
+        public boolean serializeAndAddToObject(JsonObject object) {
+            var serialized = this.serialize();
+            serialized.ifSuccess(result -> {
+                object.add(this.serializedName, result);
+            });
 
-    private void updateSources() {
-        for (ResourceLocation registryId : EventRegistries.getRegistries()) {
-            var registry = EventRegistries.get(registryId);
-            //sources.compute(registryId, (a, b) -> registry.get().getConfig().storeValues(
-            //        new Dynamic<>(JsonOps.INSTANCE, JsonOps.INSTANCE.emptyMap())
-            //));
+            return serialized.isSuccess();
         }
-    }
 
-    public boolean isDebug() {
-        return Platform.isDevelopmentEnvironment() || isDebug;
-    }
-
-    public boolean shouldSkipBackupScreen() {
-        return shouldSkipBackupScreen;
-    }
-
-    public Set<ResourceLocation> getEmptyWorlds() {
-        return emptyWorlds;
-    }
-
-    public List<ResourceLocation> getEmptyWorldsAsList() {
-        return emptyWorlds.stream().toList();
-    }
-
-    public boolean isEmptyWorld(ResourceLocation resourceLocation) {
-        return getEmptyWorlds().contains(resourceLocation);
+        public T get() {
+            return supplier.get();
+        }
     }
 }

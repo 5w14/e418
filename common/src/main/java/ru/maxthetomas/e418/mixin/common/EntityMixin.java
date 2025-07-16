@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 
 @Mixin(LivingEntity.class)
 public class EntityMixin {
@@ -17,7 +17,7 @@ public class EntityMixin {
         if (self.level().isClientSide || self instanceof Player)
             return;
 
-        if (E418.getConfig().isEmptyWorld(self.level().dimension().location()))
+        if (Config.isEmptyWorld(self.level().dimension().location()))
             self.remove(Entity.RemovalReason.DISCARDED);
     }
 }

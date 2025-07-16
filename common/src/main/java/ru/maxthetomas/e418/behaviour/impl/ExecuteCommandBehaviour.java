@@ -7,6 +7,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
@@ -58,7 +59,7 @@ public class ExecuteCommandBehaviour extends Behaviour {
         stack = stack.withPermission(2);
 
         // Remove command output for operators, to not spoil ongoing events.
-        if (!E418.getConfig().isDebug())
+        if (!Config.isDebug())
             stack = stack.withSuppressedOutput();
 
         if (context.getLocation() != null) {
