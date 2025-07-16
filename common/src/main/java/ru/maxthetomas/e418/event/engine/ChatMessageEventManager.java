@@ -22,7 +22,7 @@ public class ChatMessageEventManager {
                 .withLocation(Location.fromPlayer(serverPlayer))
                 .withCause(new ChatMessageCause(component));
 
-        var e = EventRegistries.getQueueableEventsWithTag("actions.minecraft.chat_message", ctx).getRandomElement();
+        var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx).getRandomElement();
         if (e != null) {
             E418.getEventManager().queueEvent(e, ctx);
         }
