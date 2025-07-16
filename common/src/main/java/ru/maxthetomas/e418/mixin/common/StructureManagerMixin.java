@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 
 @Mixin(StructureManager.class)
 public class StructureManagerMixin {
@@ -23,7 +23,7 @@ public class StructureManagerMixin {
         var worldGen = (WorldGenRegion) this.level;
         @SuppressWarnings("deprecation") var sLevel = worldGen.getLevel();
         var key = sLevel.dimension().location();
-        if (E418.getConfig().isEmptyWorld(key))
+        if (Config.isEmptyWorld(key))
             cir.setReturnValue(false);
     }
 }

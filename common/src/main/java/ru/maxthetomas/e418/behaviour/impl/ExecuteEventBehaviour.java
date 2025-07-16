@@ -9,6 +9,9 @@ import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+/// Executes event
+///
+/// <li> <code>event</code> - Event to execute
 public class ExecuteEventBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "execute_event");
     public static final MapCodec<ExecuteEventBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

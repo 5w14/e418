@@ -14,6 +14,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetMetaParanoia;
 import ru.maxthetomas.e418.util.E418Variables;
 
+/// Makes that you won't be able to leave
 public class MetaParanoiaBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "meta_paranoia");
     public static final MapCodec<MetaParanoiaBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(MetaParanoiaBehaviour::new));

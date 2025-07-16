@@ -1,6 +1,6 @@
 {
   "tags": [
-    "actions.minecraft.chat_message",
+    "action.minecraft.chat_message",
     "intrusive.intrusive_0"
   ],
   "events": [

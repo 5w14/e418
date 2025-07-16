@@ -8,6 +8,10 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
+/// Returns true only when in range of time of the day
+///
+/// <li> <code>from</code> - Time min
+/// <li> <code>to</code> - Time max
 public class AtTimeCondition implements ICondition {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "at_time");
     public static MapCodec<AtTimeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

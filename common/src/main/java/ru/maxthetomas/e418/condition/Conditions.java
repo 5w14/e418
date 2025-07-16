@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.impl.*;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> PLAYERS_NEARBY = register(PlayersNearbyCondition.ID, PlayersNearbyCondition.CODEC);
     public static MapCodec<? extends ICondition> TIME_SINCE_START = register(TimeSinceEventStartCondition.ID, TimeSinceEventStartCondition.CODEC);
     public static MapCodec<? extends ICondition> AT_TIME = register(AtTimeCondition.ID, AtTimeCondition.CODEC);
+    public static MapCodec<? extends ICondition> IN_BIOME = register(InBiomeCondition.ID, InBiomeCondition.CODEC);
 
     // Utility conditions
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
@@ -31,7 +33,7 @@ public class Conditions {
     public static MapCodec<? extends ICondition> NOT = register(NotCondition.ID, NotCondition.CODEC);
     public static MapCodec<? extends ICondition> AND = register(AndCondition.ID, AndCondition.CODEC);
     public static MapCodec<? extends ICondition> RANDOM = register(RandomCondition.ID, RandomCondition.CODEC);
-    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> E418.getConfig().isDebug());
+    public static MapCodec<? extends ICondition> DEBUG_MODE = registerSimple("debug_mode", (ctx) -> Config.isDebug());
 
     // Chat conditions
     public static MapCodec<? extends ICondition> MATCHES = register(MatchesCondition.ID, MatchesCondition.CODEC);

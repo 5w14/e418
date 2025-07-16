@@ -7,9 +7,15 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+/// Executes minecraft command
+///
+/// <li> <code>command</code> - Command itself
+///
+/// <li> <code>as_player</code> - Makes so it's executed as player in the context
 public class ExecuteCommandBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "execute_command");
     public static final MapCodec<ExecuteCommandBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -58,7 +64,7 @@ public class ExecuteCommandBehaviour extends Behaviour {
         stack = stack.withPermission(2);
 
         // Remove command output for operators, to not spoil ongoing events.
-        if (!E418.getConfig().isDebug())
+        if (!Config.isDebug())
             stack = stack.withSuppressedOutput();
 
         if (context.getLocation() != null) {

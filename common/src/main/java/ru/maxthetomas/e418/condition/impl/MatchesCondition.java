@@ -11,6 +11,9 @@ import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
 
 import java.util.regex.Pattern;
 
+/// Returns true only when regex is true in chat message
+///
+/// <li> <code>regex</code> - Regex to check
 public class MatchesCondition implements ICondition {
     public static final MapCodec<MatchesCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("regex").forGetter(MatchesCondition::getRegex)
