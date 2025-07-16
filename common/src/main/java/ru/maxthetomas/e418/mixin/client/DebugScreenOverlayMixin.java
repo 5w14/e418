@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 
 @Mixin(DebugScreenOverlay.class)
 public class DebugScreenOverlayMixin {
@@ -19,7 +20,7 @@ public class DebugScreenOverlayMixin {
             ordinal = 0
     )
     public BlockState modifyHitBlockState(BlockState value) {
-        if (E418.getConfig().isDebug())
+        if (Config.isDebug())
             return value;
 
         var regName = value.getBlock().arch$registryName();

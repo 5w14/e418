@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 
 @Mixin(WorldOpenFlows.class)
 public abstract class WorldOpenFlowsMixin {
@@ -19,7 +19,7 @@ public abstract class WorldOpenFlowsMixin {
 
     @Inject(at = @At("HEAD"), method = "openWorldCheckWorldStemCompatibility", cancellable = true)
     public void modifyAllowsForBackupSkin(LevelStorageSource.LevelStorageAccess levelStorageAccess, WorldStem worldStem, PackRepository packRepository, Runnable runnable, CallbackInfo ci) {
-        if (E418.getConfig().shouldSkipBackupScreen()) {
+        if (Config.shouldSkipBackupScreen()) {
             // This skips the method execution and mimics
             // it's function without backup checks.
 

@@ -6,7 +6,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.GlobalRandomEventCause;
 import ru.maxthetomas.e418.event.cause.impl.PlayerRandomEventCause;
@@ -14,11 +13,10 @@ import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.player.PlayerDataManager;
 import ru.maxthetomas.e418.util.Location;
 
-import java.util.*;
+import java.util.Random;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Config CONFIG = E418.getConfig();
     private static final Random RANDOM = new Random();
 
     // TODO: Put this into config
@@ -37,7 +35,7 @@ public class RandomEventManager {
         timeToGlobalEvent = min + RANDOM.nextInt(max - min);
     }
 
-    public static int getTimeToGlobalEvent(){
+    public static int getTimeToGlobalEvent() {
         return timeToGlobalEvent;
     }
 
@@ -111,13 +109,11 @@ public class RandomEventManager {
                             var distance = playerPos.distanceTo(otherPlayerPos);
 
                             // Linear offset reduction based on how far you are from player.
-                            otherData.eventTimestamp += (long) (((double) randomOffset / GROUP_DISTANCE) * (GROUP_DISTANCE-distance));
+                            otherData.eventTimestamp += (long) (((double) randomOffset / GROUP_DISTANCE) * (GROUP_DISTANCE - distance));
                             otherData.eventUnlockTimestamp = currentTime + LOCK_DURATION;
                         }
                     }
-                }
-                else
-                {
+                } else {
                     // TODO: Randomize delay with config
                     var randomDelay = 500;
                     data.eventTimestamp = currentTime + randomDelay;

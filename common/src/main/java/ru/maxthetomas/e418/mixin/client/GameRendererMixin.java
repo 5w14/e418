@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 
 @Mixin(GameRenderer.class)
@@ -16,7 +16,7 @@ public class GameRendererMixin {
 
     @Inject(method = "togglePostEffect", at = @At("HEAD"), cancellable = true)
     public void togglePostEffectOverride(CallbackInfo ci) {
-        if (!E418.getConfig().isDebug()) {
+        if (!Config.isDebug()) {
             this.effectActive = true;
             ci.cancel();
         }
