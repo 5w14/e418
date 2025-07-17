@@ -1,17 +1,17 @@
 {
-  "name": "At biome",
-  "description": "Debug event that works only at beach",
+  "name": "In biome",
+  "description": "Debug event that works only in beach",
   "behaviours": [
   ],
   "run_conditions": [
     {
-      "type": "e418:at_biome",
+      "type": "e418:in_biome",
       "biome": "minecraft:beach"
     }
   ],
   "queue_conditions": [
     {
-      "type": "e418:at_biome",
+      "type": "e418:in_biome",
       "biome": "minecraft:beach"
     }
   ]
