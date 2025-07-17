@@ -23,6 +23,7 @@ public class PreventChatUsageBehaviour extends Behaviour {
     public static final MapCodec<PreventChatUsageBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("use_context", false).forGetter(PreventChatUsageBehaviour::isUsingContext)
     ).apply(instance, PreventChatUsageBehaviour::new));
+    public static final MapCodec<PreventChatUsageBehaviour> STATE_CODEC = MapCodec.unit(PreventChatUsageBehaviour::new);
 
     private final ChatEvent.Received onChatMessage = this::onChatMessage;
     private final CommandEvent.MsgReceived onMsg = this::onMsg;
@@ -34,6 +35,9 @@ public class PreventChatUsageBehaviour extends Behaviour {
         this.usingContext = usingContext;
     }
 
+    private PreventChatUsageBehaviour() {
+    }
+
     @Override
     public ResourceLocation getTypeId() {
         return null;
@@ -42,7 +46,6 @@ public class PreventChatUsageBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-
 
         if (usingContext) {
             var contextTarget = context.getPlayer();

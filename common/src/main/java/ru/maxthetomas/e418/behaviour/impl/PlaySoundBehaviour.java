@@ -38,11 +38,13 @@ public class PlaySoundBehaviour extends Behaviour {
             ).apply(instance, PlaySoundBehaviour::new)
     );
 
-    private final ResourceLocation soundEventId;
-    private final SoundSource source;
-    private final float volume;
-    private final float range;
-    private final float pitch;
+    public static final MapCodec<PlaySoundBehaviour> STATE_CODEC = MapCodec.unit(PlaySoundBehaviour::new);
+
+    private ResourceLocation soundEventId;
+    private SoundSource source;
+    private float volume;
+    private float range;
+    private float pitch;
 
     public PlaySoundBehaviour(ResourceLocation soundEventId, float volume, float range, float pitch, SoundSource source) {
         this.soundEventId = soundEventId;
@@ -50,6 +52,9 @@ public class PlaySoundBehaviour extends Behaviour {
         this.volume = volume;
         this.range = range;
         this.pitch = pitch;
+    }
+
+    private PlaySoundBehaviour() {
     }
 
     @Override

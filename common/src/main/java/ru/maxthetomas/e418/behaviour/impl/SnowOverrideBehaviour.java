@@ -1,7 +1,5 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
@@ -26,7 +24,8 @@ import ru.maxthetomas.e418.util.E418Variables;
  */
 public class SnowOverrideBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "snow_override");
-    public static final MapCodec<SnowOverrideBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(SnowOverrideBehaviour::new));
+    public static final MapCodec<SnowOverrideBehaviour> CODEC = MapCodec.unit(SnowOverrideBehaviour::new);
+    public static final MapCodec<SnowOverrideBehaviour> STATE_CODEC = MapCodec.unit(SnowOverrideBehaviour::new);
 
     public SnowOverrideBehaviour() {
         PlayerEvent.PLAYER_JOIN.register(this::playerJoin);

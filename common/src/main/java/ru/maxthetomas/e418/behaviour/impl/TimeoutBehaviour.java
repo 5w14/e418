@@ -19,13 +19,17 @@ public class TimeoutBehaviour extends Behaviour {
     public static final MapCodec<TimeoutBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             NumberProviders.CODEC.fieldOf("ticks").forGetter(TimeoutBehaviour::getTicks)
     ).apply(instance, TimeoutBehaviour::new));
+    public static final MapCodec<TimeoutBehaviour> STATE_CODEC = MapCodec.unit(TimeoutBehaviour::new);
 
-    private final NumberProvider ticks;
+    private NumberProvider ticks;
     private EventContext context;
     private long endTick;
 
     public TimeoutBehaviour(NumberProvider ticks) {
         this.ticks = ticks;
+    }
+
+    private TimeoutBehaviour() {
     }
 
     public NumberProvider getTicks() {

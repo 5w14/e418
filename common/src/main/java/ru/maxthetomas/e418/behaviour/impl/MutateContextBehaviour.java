@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.behaviour.ActiveBehaviourDispatch;
 import ru.maxthetomas.e418.behaviour.ExecutorBehaviour;
 import ru.maxthetomas.e418.behaviour.PreActiveBehaviour;
 import ru.maxthetomas.e418.behaviour.contextmutators.ContextMutators;
@@ -15,6 +16,7 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
 import java.util.List;
+import java.util.function.Function;
 
 /// Changes event's context
 ///
@@ -28,6 +30,18 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(MutateContextBehaviour::getPreActiveBehaviours),
             Conditions.DISPATCH_CODEC.listOf().optionalFieldOf("run_conditions", List.of()).forGetter(MutateContextBehaviour::getRunConditions)
     ).apply(instance, MutateContextBehaviour::new));
+
+    public static final MapCodec<MutateContextBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            CODEC.fieldOf("data").forGetter(Function.identity()),
+            EventContext.CODEC.fieldOf("stored_context").forGetter(v -> v.storedMutatedContext),
+            ActiveBehaviourDispatch.DISPATCH_CODEC.listOf().fieldOf("active_behaviours").forGetter(v -> v.activeBehaviours)
+    ).apply(instance, (self, context, children) -> {
+        self.storedMutatedContext = context;
+        self.behaviours.clear();
+        self.activeBehaviours = children;
+        return self;
+    }));
+
 
     public final List<IContextMutator> contextMutators;
     public final List<ICondition> runConditions;
@@ -110,5 +124,10 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
+        return super.restoreState(context, executor);
     }
 }

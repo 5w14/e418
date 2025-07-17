@@ -23,12 +23,17 @@ public class ExecuteCommandBehaviour extends Behaviour {
             Codec.BOOL.optionalFieldOf("as_player", false).forGetter(ExecuteCommandBehaviour::isAsPlayer)
     ).apply(instance, ExecuteCommandBehaviour::new));
 
-    private final String command;
-    private final boolean asPlayer;
+    public static final MapCodec<ExecuteCommandBehaviour> STATE_CODEC = MapCodec.unit(ExecuteCommandBehaviour::new);
+
+    private String command;
+    private boolean asPlayer;
 
     public ExecuteCommandBehaviour(String command, boolean asPlayer) {
         this.command = command;
         this.asPlayer = asPlayer;
+    }
+
+    private ExecuteCommandBehaviour() {
     }
 
     @Override

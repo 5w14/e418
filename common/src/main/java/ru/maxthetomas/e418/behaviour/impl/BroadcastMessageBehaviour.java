@@ -30,12 +30,17 @@ public class BroadcastMessageBehaviour extends Behaviour {
             ).apply(instance, BroadcastMessageBehaviour::new)
     );
 
+    public static final MapCodec<? extends Behaviour> STATE_CODEC = MapCodec.unit(BroadcastMessageBehaviour::new);
+
     Component message;
     MessageSource source;
 
     public BroadcastMessageBehaviour(Component message, MessageSource source) {
         this.message = message;
         this.source = source;
+    }
+
+    private BroadcastMessageBehaviour() {
     }
 
     @Override

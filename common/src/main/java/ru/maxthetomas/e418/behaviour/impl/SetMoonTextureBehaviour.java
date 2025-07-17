@@ -18,11 +18,15 @@ public class SetMoonTextureBehaviour extends Behaviour {
     public static final MapCodec<SetMoonTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetMoonTextureBehaviour::getTextureResource)
     ).apply(instance, SetMoonTextureBehaviour::new));
+    public static final MapCodec<SetMoonTextureBehaviour> STATE_CODEC = MapCodec.unit(SetMoonTextureBehaviour::new);
 
-    ResourceLocation textureResource;
+    private ResourceLocation textureResource;
 
     public SetMoonTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
+    }
+
+    private SetMoonTextureBehaviour() {
     }
 
     @Override

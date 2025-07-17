@@ -12,6 +12,8 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetShader;
 
+import java.util.UUID;
+
 /// Gives player a custom shader
 ///
 /// <li> <code>shader</code> - Shader to use
@@ -22,12 +24,17 @@ public class SetShaderBehaviour extends Behaviour {
                     .forGetter(SetShaderBehaviour::getShaderId)
     ).apply(instance, SetShaderBehaviour::new));
 
-    private final ResourceLocation shaderId;
-    private ServerPlayer player = null;
+    public static final MapCodec<SetShaderBehaviour> STATE_CODEC = MapCodec.unit(SetShaderBehaviour::new);
+
+    private ResourceLocation shaderId;
+    private UUID playerUUID = null;
 
     public SetShaderBehaviour(ResourceLocation shaderId) {
         this.shaderId = shaderId;
         PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
+    }
+
+    private SetShaderBehaviour() {
     }
 
     @Override
@@ -37,7 +44,8 @@ public class SetShaderBehaviour extends Behaviour {
     }
 
     void playerJoined(ServerPlayer player) {
-        if (isExecuted() && !isDone() && this.player != null)
+        if (isExecuted() && !isDone() && (this.playerUUID == null
+                || player.getUUID().equals(this.playerUUID)))
             NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
     }
 
@@ -55,9 +63,9 @@ public class SetShaderBehaviour extends Behaviour {
         super.execute(context, executor);
 
         var player = context.getPlayer();
-        if (context.hasPlayer()) {
+        if (context.hasPlayer() && player != null) {
             NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
-            this.player = player;
+            this.playerUUID = player.getUUID();
         } else {
             NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
                     new S2CSetShader(shaderId));
@@ -67,8 +75,10 @@ public class SetShaderBehaviour extends Behaviour {
     @Override
     public void dispose() {
         super.dispose();
-        if (this.player != null) {
-            NetworkManager.sendToPlayer(this.player,
+        if (this.playerUUID != null) {
+            var player = E418.getCurrentServer().get().getPlayerList().getPlayer(this.playerUUID);
+            if (player == null) return;
+            NetworkManager.sendToPlayer(player,
                     new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         } else {
             NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),

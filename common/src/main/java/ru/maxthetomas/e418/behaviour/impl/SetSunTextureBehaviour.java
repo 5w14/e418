@@ -18,11 +18,15 @@ public class SetSunTextureBehaviour extends Behaviour {
     public static final MapCodec<SetSunTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetSunTextureBehaviour::getTextureResource)
     ).apply(instance, SetSunTextureBehaviour::new));
+    public static final MapCodec<SetSunTextureBehaviour> STATE_CODEC = MapCodec.unit(SetSunTextureBehaviour::new);
 
     ResourceLocation textureResource;
 
     public SetSunTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
+    }
+
+    private SetSunTextureBehaviour() {
     }
 
     @Override

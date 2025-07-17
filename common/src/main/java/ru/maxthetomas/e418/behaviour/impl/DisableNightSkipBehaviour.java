@@ -11,7 +11,8 @@ import ru.maxthetomas.e418.util.E418Variables;
 /// Makes so that you cannot sleep
 public class DisableNightSkipBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "disable_night_skip");
-    public static final MapCodec<DisableNightSkipBehaviour> CODEC = MapCodec.unit(new DisableNightSkipBehaviour());
+    public static final MapCodec<DisableNightSkipBehaviour> CODEC = MapCodec.unit(DisableNightSkipBehaviour::new);
+    public static final MapCodec<DisableNightSkipBehaviour> STATE_CODEC = MapCodec.unit(DisableNightSkipBehaviour::new);
 
     @Override
     public ResourceLocation getTypeId() {

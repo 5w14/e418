@@ -1,7 +1,5 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +13,8 @@ import ru.maxthetomas.e418.networking.S2CSetBreakAtlas;
 /// Breaks game's texture atlas to make textures look glitchy
 public class BreakAtlasBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "break_atlas");
-    public static final MapCodec<BreakAtlasBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(BreakAtlasBehaviour::new));
+    public static final MapCodec<BreakAtlasBehaviour> CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
+    public static final MapCodec<BreakAtlasBehaviour> STATE_CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
 
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {

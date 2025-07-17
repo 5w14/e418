@@ -17,11 +17,15 @@ public class ExecuteEventBehaviour extends Behaviour {
     public static final MapCodec<ExecuteEventBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("event").forGetter(ExecuteEventBehaviour::getEventId)
     ).apply(instance, ExecuteEventBehaviour::new));
+    public static final MapCodec<ExecuteEventBehaviour> STATE_CODEC = MapCodec.unit(ExecuteEventBehaviour::new);
 
-    private final ResourceLocation eventId;
+    private ResourceLocation eventId;
 
     public ExecuteEventBehaviour(ResourceLocation eventId) {
         this.eventId = eventId;
+    }
+
+    private ExecuteEventBehaviour() {
     }
 
     @Override

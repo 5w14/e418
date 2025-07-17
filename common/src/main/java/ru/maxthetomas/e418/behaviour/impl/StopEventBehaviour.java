@@ -1,7 +1,5 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
@@ -12,7 +10,8 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 /// Stops the event
 public class StopEventBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "stop_event");
-    public static final MapCodec<StopEventBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(StopEventBehaviour::new));
+    public static final MapCodec<StopEventBehaviour> CODEC = MapCodec.unit(StopEventBehaviour::new);
+    public static final MapCodec<StopEventBehaviour> STATE_CODEC = MapCodec.unit(StopEventBehaviour::new);
 
     @Override
     public ResourceLocation getTypeId() {

@@ -1,5 +1,6 @@
 package ru.maxthetomas.e418.behaviour;
 
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -118,7 +119,10 @@ public abstract class Behaviour implements NumberRequester {
      */
     public final void setDone(boolean value) {
         isDone = value;
-        executor.dirty();
+        if (executor != null)
+            executor.dirty();
+        else
+            LogUtils.getLogger().warn("Could not update executor in {} because it's not defined!", getClass().getName());
     }
 
     /**
