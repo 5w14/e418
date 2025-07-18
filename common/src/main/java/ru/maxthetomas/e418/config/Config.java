@@ -10,6 +10,7 @@ import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.codecs.impl.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,10 @@ public class Config {
                     E418.resLoc("minimalism"),
                     E418.resLoc("unlabirynth")
             ));
+    public static Value<Range> globalRandomEventDelay = field("global_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> playerRandomEventDelay = field("player_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> playerRandomEventOffset = field("player_random_event_offset", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> playerRandomEventLock = field("player_random_event_lock", Range.CODEC.codec(), new Range(1200, 2400));
 
     public static boolean isDebug() {
         return Platform.isDevelopmentEnvironment() || forceDebug.get();
