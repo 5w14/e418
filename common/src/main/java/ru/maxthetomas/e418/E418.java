@@ -15,6 +15,7 @@ import ru.maxthetomas.e418.event.engine.ChatMessageEventManager;
 import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418ClientVariables;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 
 import java.util.Optional;
@@ -42,6 +43,7 @@ public final class E418 {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
             ManagedServer = srv;
             E418Variables.init();
+            E418Random.init(srv);
         });
 
         LifecycleEvent.SERVER_STOPPING.register(srv -> {

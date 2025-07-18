@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.contextmutators.IContextMutator;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
 
 public class SelectRandomLocationAroundPlayerContextMutator implements IContextMutator {
@@ -47,7 +48,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         if (randomSequence != null) {
             random = context.getServer().overworld().getRandomSequence(randomSequence);
         } else {
-            random = context.getServer().overworld().getRandom();
+            random = E418Random.EVENT_GENERIC;
         }
 
         var position = location.position();

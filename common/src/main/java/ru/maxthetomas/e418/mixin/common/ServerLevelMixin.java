@@ -26,6 +26,7 @@ import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 
 import java.util.List;
@@ -87,7 +88,7 @@ public abstract class ServerLevelMixin {
 
             var cancelTimeSkip = false;
 
-            var random = this.getRandomSequence(E418.resLoc("event_engine/random_player"));
+            var random = E418Random.EVENT_ENGINE_WAKE_UP;
 
             if (random.nextFloat() > 0.5) {
                 var cause = new WakeUpEventCause();

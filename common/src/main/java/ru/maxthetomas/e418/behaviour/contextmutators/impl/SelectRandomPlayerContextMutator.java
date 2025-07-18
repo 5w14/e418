@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.contextmutators.IContextMutator;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.E418Random;
 
 /**
  * Mutates context to have random player.
@@ -48,13 +49,13 @@ public class SelectRandomPlayerContextMutator implements IContextMutator {
 
         if (playerList.isEmpty())
             return false;
-        
+
         RandomSource random;
 
         if (randomSequence != null) {
             random = context.getServer().overworld().getRandomSequence(randomSequence);
         } else {
-            random = context.getServer().overworld().getRandom();
+            random = E418Random.EVENT_GENERIC;
         }
 
         ServerPlayer target = playerList.get(random.nextIntBetweenInclusive(0, playerList.size() - 1));

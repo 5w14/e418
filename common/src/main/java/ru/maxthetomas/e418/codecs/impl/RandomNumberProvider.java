@@ -9,6 +9,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.codecs.NumberProvider;
 import ru.maxthetomas.e418.codecs.NumberRequester;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.E418Random;
 
 public record RandomNumberProvider(float min, float max,
                                    ResourceLocation randomSequence) implements NumberProvider {
@@ -33,7 +34,7 @@ public record RandomNumberProvider(float min, float max,
         if (randomSequence != null) {
             source = context.getServer().overworld().getRandomSequence(randomSequence);
         } else {
-            source = context.getServer().overworld().getRandom();
+            source = E418Random.EVENT_GENERIC;
         }
 
         return min + (source.nextFloat() * max - min);

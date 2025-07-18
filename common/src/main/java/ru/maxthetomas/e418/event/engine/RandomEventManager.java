@@ -11,6 +11,7 @@ import ru.maxthetomas.e418.event.cause.impl.GlobalRandomEventCause;
 import ru.maxthetomas.e418.event.cause.impl.PlayerRandomEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.player.PlayerDataManager;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
 
 public class RandomEventManager {
@@ -43,7 +44,7 @@ public class RandomEventManager {
             var data = PlayerDataManager.ensureData(uuid, minecraftServer);
 
             if (data.eventTimestamp < currentTime) {
-                var random = minecraftServer.overworld().getRandomSequence(E418.resLoc("event_engine/random_player"));
+                var random = E418Random.EVENT_ENGINE_GLOBAL;
                 // Start event
 
                 // Get nearby players
@@ -120,7 +121,7 @@ public class RandomEventManager {
         if (timeToGlobalEvent <= 0) {
             var cause = new GlobalRandomEventCause();
 
-            var random = minecraftServer.overworld().getRandomSequence(E418.resLoc("event_engine/random_global"));
+            var random = E418Random.EVENT_ENGINE_PLAYER;
 
             var success = false;
             var ctx = new EventContext(minecraftServer)

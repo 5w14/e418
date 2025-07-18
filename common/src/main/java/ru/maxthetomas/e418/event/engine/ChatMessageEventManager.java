@@ -8,6 +8,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
 
 public class ChatMessageEventManager {
@@ -24,7 +25,7 @@ public class ChatMessageEventManager {
                 .withLocation(Location.fromPlayer(serverPlayer))
                 .withCause(new ChatMessageCause(component));
 
-        var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx).getRandomElement();
+        var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx).getRandomElement(E418Random.EVENT_ENGINE_WAKE_UP);
         if (e != null) {
             E418.getEventManager().queueEvent(e, ctx);
         }

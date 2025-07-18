@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.E418Random;
 
 /// Returns true only when gamble was worth it
 ///
@@ -36,7 +37,7 @@ public class RandomCondition implements ICondition {
             return random.nextFloat() < chance;
         }
 
-        return context.getServer().overworld().getRandom().nextFloat() < chance;
+        return E418Random.EVENT_GENERIC.nextFloat() < chance;
     }
 
     @Override
