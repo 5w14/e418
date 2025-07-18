@@ -43,7 +43,13 @@ public final class E418 {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
             ManagedServer = srv;
             E418Variables.init();
-            E418Random.init(srv);
+
+        });
+
+        LifecycleEvent.SERVER_LEVEL_LOAD.register(lvl -> {
+            if (lvl == ManagedServer.overworld()) {
+                E418Random.init(lvl);
+            }
         });
 
         LifecycleEvent.SERVER_STOPPING.register(srv -> {
