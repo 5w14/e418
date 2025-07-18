@@ -19,7 +19,7 @@ public record RandomNumberProvider(float min, float max,
     public static MapCodec<RandomNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.fieldOf("min").forGetter(RandomNumberProvider::min),
             Codec.FLOAT.fieldOf("max").forGetter(RandomNumberProvider::max),
-            ResourceLocation.CODEC.optionalFieldOf("random_sequence", null).forGetter(RandomNumberProvider::randomSequence)
+            ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE).forGetter(RandomNumberProvider::randomSequence)
     ).apply(instance, RandomNumberProvider::new));
 
     @Override
@@ -31,12 +31,8 @@ public record RandomNumberProvider(float min, float max,
     public Number get(EventContext context, NumberRequester requester) {
         RandomSource source;
 
-        if (randomSequence != null) {
-            source = context.getServer().overworld().getRandomSequence(randomSequence);
-        } else {
-            source = E418Random.EVENT_GENERIC;
-        }
-
+        source = context.getServer().overworld().getRandomSequence(randomSequence);
+        
         return min + (source.nextFloat() * max - min);
     }
 }

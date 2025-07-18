@@ -19,7 +19,7 @@ public class SelectRandomPlayerContextMutator implements IContextMutator {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "select_random_player");
     public static final MapCodec<SelectRandomPlayerContextMutator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("prevent_override", false).forGetter(SelectRandomPlayerContextMutator::isPreventOverride),
-            ResourceLocation.CODEC.optionalFieldOf("random_sequence", null).forGetter(SelectRandomPlayerContextMutator::getRandomSequence)
+            ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE).forGetter(SelectRandomPlayerContextMutator::getRandomSequence)
     ).apply(instance, SelectRandomPlayerContextMutator::new));
 
     private final boolean preventOverride;
@@ -52,11 +52,7 @@ public class SelectRandomPlayerContextMutator implements IContextMutator {
 
         RandomSource random;
 
-        if (randomSequence != null) {
-            random = context.getServer().overworld().getRandomSequence(randomSequence);
-        } else {
-            random = E418Random.EVENT_GENERIC;
-        }
+        random = context.getServer().overworld().getRandomSequence(randomSequence);
 
         ServerPlayer target = playerList.get(random.nextIntBetweenInclusive(0, playerList.size() - 1));
         context.withPlayer(target);

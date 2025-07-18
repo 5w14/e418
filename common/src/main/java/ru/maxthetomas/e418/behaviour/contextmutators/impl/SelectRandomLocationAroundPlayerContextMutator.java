@@ -17,7 +17,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
             instance -> instance.group(
                     Codec.FLOAT.optionalFieldOf("radius", 16.0f)
                             .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRange),
-                    ResourceLocation.CODEC.optionalFieldOf("random_sequence", null)
+                    ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE)
                             .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRandomSequence)
             ).apply(instance, SelectRandomLocationAroundPlayerContextMutator::new));
 
@@ -45,11 +45,8 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         var location = Location.fromPlayer(player);
 
         RandomSource random;
-        if (randomSequence != null) {
-            random = context.getServer().overworld().getRandomSequence(randomSequence);
-        } else {
-            random = E418Random.EVENT_GENERIC;
-        }
+
+        random = context.getServer().overworld().getRandomSequence(randomSequence);
 
         var position = location.position();
         position.add(
