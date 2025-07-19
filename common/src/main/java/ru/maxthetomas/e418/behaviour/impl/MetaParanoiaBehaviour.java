@@ -22,8 +22,10 @@ public class MetaParanoiaBehaviour extends Behaviour {
     }
 
     void playerJoin(ServerPlayer player) {
-        if (isExecuted() && !isDone())
-            NetworkManager.sendToPlayer(player, new S2CSetMetaParanoia(true));
+        if (isExecuted() && !isDone() && context.hasPlayer() && context.getPlayer() != null)
+            player.server.execute(() -> {
+                NetworkManager.sendToPlayer(context.getPlayer(), new S2CSetMetaParanoia(true));
+            });
     }
 
     @Override
@@ -34,10 +36,10 @@ public class MetaParanoiaBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-
         setMetaParanoia(true);
 
         // TODO: remove game's ability to save while this event is happening
+        // why? -max
     }
 
     private void setMetaParanoia(boolean value) {
@@ -57,15 +59,6 @@ public class MetaParanoiaBehaviour extends Behaviour {
         super.dispose();
         PlayerEvent.PLAYER_JOIN.unregister(this::playerJoin);
         setMetaParanoia(false);
-    }
-
-    @Override
-    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
-        if (isExecuted() && !isDone()) {
-            _resetExecuted();
-        }
-
-        return super.restoreState(context, executor);
     }
 
     @Override

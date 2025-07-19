@@ -37,7 +37,7 @@ public class ExecuteEventBehaviour extends Behaviour {
         var evt = manager.getEvent(getEventId());
 
         if (evt == null) {
-            LogUtils.getLogger().warn("Cannot execute event {} - No event with such event registered!", eventId);
+            LogUtils.getLogger().warn("Cannot execute event {} - No event with such ID registered!", eventId);
             return;
         }
 

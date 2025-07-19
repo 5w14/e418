@@ -61,6 +61,11 @@ public class EventContext {
         return server.getPlayerList().getPlayer(player);
     }
 
+    @Nullable
+    public UUID getPlayerUUID() {
+        return player;
+    }
+
     public boolean hasPlayer() {
         return player != null;
     }

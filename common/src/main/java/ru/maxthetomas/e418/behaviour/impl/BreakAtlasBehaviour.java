@@ -1,6 +1,7 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
 import com.mojang.serialization.MapCodec;
+import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,6 +16,24 @@ public class BreakAtlasBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "break_atlas");
     public static final MapCodec<BreakAtlasBehaviour> CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
     public static final MapCodec<BreakAtlasBehaviour> STATE_CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
+
+    public BreakAtlasBehaviour() {
+        register();
+    }
+
+    void register() {
+        PlayerEvent.PLAYER_JOIN.register(this::onPlayerJoin);
+    }
+
+    void unregister() {
+        PlayerEvent.PLAYER_JOIN.unregister(this::onPlayerJoin);
+    }
+
+    void onPlayerJoin(ServerPlayer player) {
+        if (isExecuted() && !isDone() && player.getUUID().equals(context.getPlayerUUID())) {
+            setBreakAtlas(player, true);
+        }
+    }
 
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
