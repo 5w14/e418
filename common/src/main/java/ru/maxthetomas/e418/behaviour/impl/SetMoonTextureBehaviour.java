@@ -20,16 +20,12 @@ public class SetMoonTextureBehaviour extends Behaviour {
     public static final MapCodec<SetMoonTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetMoonTextureBehaviour::getTextureResource)
     ).apply(instance, SetMoonTextureBehaviour::new));
-    public static final MapCodec<SetMoonTextureBehaviour> STATE_CODEC = MapCodec.unit(SetMoonTextureBehaviour::new);
+    public static final MapCodec<SetMoonTextureBehaviour> STATE_CODEC = CODEC;
 
     private ResourceLocation textureResource;
 
     public SetMoonTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
-        register();
-    }
-
-    private SetMoonTextureBehaviour() {
         register();
     }
 
@@ -43,7 +39,8 @@ public class SetMoonTextureBehaviour extends Behaviour {
 
     void playerJoin(ServerPlayer player) {
         player.getServer().execute(() -> {
-            NetworkManager.sendToPlayer(player, new S2CSetMoon(textureResource));
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetMoon(textureResource));
         });
     }
 

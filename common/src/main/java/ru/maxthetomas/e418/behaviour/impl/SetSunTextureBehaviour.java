@@ -20,16 +20,12 @@ public class SetSunTextureBehaviour extends Behaviour {
     public static final MapCodec<SetSunTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetSunTextureBehaviour::getTextureResource)
     ).apply(instance, SetSunTextureBehaviour::new));
-    public static final MapCodec<SetSunTextureBehaviour> STATE_CODEC = MapCodec.unit(SetSunTextureBehaviour::new);
+    public static final MapCodec<SetSunTextureBehaviour> STATE_CODEC = CODEC;
 
     ResourceLocation textureResource;
 
     public SetSunTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
-        register();
-    }
-
-    private SetSunTextureBehaviour() {
         register();
     }
 
@@ -43,7 +39,8 @@ public class SetSunTextureBehaviour extends Behaviour {
 
     void playerJoin(ServerPlayer player) {
         player.getServer().execute(() -> {
-            NetworkManager.sendToPlayer(player, new S2CSetSun(textureResource));
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetSun(textureResource));
         });
     }
 
