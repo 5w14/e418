@@ -16,6 +16,8 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  */
 public abstract class Behaviour implements NumberRequester {
     protected IBehaviourExecutor executor;
+    protected EventContext context;
+
     private boolean isDisposed = false;
     private boolean isStopped = false;
     private boolean isExecuted = false;
@@ -31,6 +33,7 @@ public abstract class Behaviour implements NumberRequester {
     public void execute(EventContext context, IBehaviourExecutor executor) {
         isExecuted = true;
         this.executor = executor;
+        this.context = context;
     }
 
     /**
@@ -151,6 +154,7 @@ public abstract class Behaviour implements NumberRequester {
     /// @return whether the behaviour should be added to awaiting-conditions list
     public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
         this.executor = executor;
+        this.context = context;
         return !isDone && !isDisposed;
     }
 

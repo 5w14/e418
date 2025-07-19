@@ -62,8 +62,10 @@ public class ActiveEvent implements IBehaviourExecutor {
 
         for (int i = 0; i < awaitingRestoreRun.size(); i++) {
             Behaviour restoreBehaviour = awaitingRestoreRun.get(i);
+
             if (!restoreBehaviour.canRun(context))
                 continue;
+
             restoreBehaviour.execute(context, this);
 
             // After successfully restored -> can remove from array

@@ -22,7 +22,6 @@ public class TimeoutBehaviour extends Behaviour {
     public static final MapCodec<TimeoutBehaviour> STATE_CODEC = MapCodec.unit(TimeoutBehaviour::new);
 
     private NumberProvider ticks;
-    private EventContext context;
     private long endTick;
 
     public TimeoutBehaviour(NumberProvider ticks) {

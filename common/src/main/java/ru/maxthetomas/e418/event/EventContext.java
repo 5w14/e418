@@ -47,7 +47,7 @@ public class EventContext {
         return server;
     }
 
-    public ActiveEvent getSourceEvent() {
+    public @Nullable ActiveEvent getSourceEvent() {
         return sourceEvent;
     }
 

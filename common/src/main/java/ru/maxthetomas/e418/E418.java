@@ -41,10 +41,12 @@ public final class E418 {
 
     private static void registerListeners() {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
-            ru.maxthetomas.e418.event.EventManager.IsActive = true;
-
-            ManagedServer = srv;
+            EventManager.getActiveEvents().forEach(EventManager::disposeEvent);
+            EventManager.fullReset(null);
             E418Variables.init();
+
+            ru.maxthetomas.e418.event.EventManager.IsActive = true;
+            ManagedServer = srv;
         });
 
         LifecycleEvent.SERVER_STARTED.register(InGameStorage::load);

@@ -35,6 +35,7 @@ public class SetShaderBehaviour extends Behaviour {
     }
 
     private SetShaderBehaviour() {
+        PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
     }
 
     @Override
@@ -46,7 +47,9 @@ public class SetShaderBehaviour extends Behaviour {
     void playerJoined(ServerPlayer player) {
         if (isExecuted() && !isDone() && (this.playerUUID == null
                 || player.getUUID().equals(this.playerUUID)))
-            NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
+            player.getServer().execute(() -> {
+                NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
+            });
     }
 
     public ResourceLocation getShaderId() {
@@ -74,7 +77,6 @@ public class SetShaderBehaviour extends Behaviour {
 
     @Override
     public void dispose() {
-        super.dispose();
         if (this.playerUUID != null) {
             var player = E418.getCurrentServer().get().getPlayerList().getPlayer(this.playerUUID);
             if (player == null) return;
@@ -84,15 +86,8 @@ public class SetShaderBehaviour extends Behaviour {
             NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
                     new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         }
-    }
 
-    @Override
-    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
-        if (isExecuted() && !isDone()) {
-            _resetExecuted();
-        }
-
-        return super.restoreState(context, executor);
+        super.dispose();
     }
 
     @Override

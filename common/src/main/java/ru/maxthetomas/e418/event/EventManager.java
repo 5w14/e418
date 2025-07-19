@@ -76,8 +76,8 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             return false;
         });
     }
-    
-    public void fullReset(MinecraftServer server) {
+
+    public void fullReset(@Nullable MinecraftServer server) {
         for (int i = 0; i < activeEvents.size(); i++) {
             ActiveEvent activeEvent = activeEvents.get(i);
             disposeEvent(activeEvent);
@@ -85,7 +85,8 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         }
 
         updateActiveEvents();
-        updateQueuedEvents(server);
+        if (server != null)
+            updateQueuedEvents(server);
 
         activeEvents.clear();
         queuedEvents.clear();

@@ -27,7 +27,7 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ContextMutators.DISPATCH_CODEC.listOf().fieldOf("mutators").forGetter(MutateContextBehaviour::getContextMutators),
-            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(MutateContextBehaviour::getPreActiveBehaviours),
+            PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter((a) -> List.of()),
             Conditions.DISPATCH_CODEC.listOf().optionalFieldOf("run_conditions", List.of()).forGetter(MutateContextBehaviour::getRunConditions)
     ).apply(instance, MutateContextBehaviour::new));
 
@@ -37,7 +37,6 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
             ActiveBehaviourDispatch.DISPATCH_CODEC.listOf().fieldOf("active_behaviours").forGetter(v -> v.activeBehaviours)
     ).apply(instance, (self, context, children) -> {
         self.storedMutatedContext = context;
-        self.behaviours.clear();
         self.activeBehaviours = children;
         return self;
     }));
@@ -116,9 +115,8 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
         }
 
         // Check if all behaviours can run
-        for (var preActiveBehaviour : behaviours) {
-            // todo find a better way to check if behaviour can run
-            if (!preActiveBehaviour.create().canRun(mutatedContext)) {
+        for (var behaviour : activeBehaviours) {
+            if (!behaviour.canRun(mutatedContext)) {
                 return false;
             }
         }
@@ -128,6 +126,9 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
 
     @Override
     public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
-        return super.restoreState(context, executor);
+        this.context = context;
+        this.executor = executor;
+        activeBehaviours.forEach(v -> v.restoreState(this.storedMutatedContext, this));
+        return false;
     }
 }
