@@ -9,14 +9,17 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.codecs.NumberProvider;
 import ru.maxthetomas.e418.codecs.NumberRequester;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.E418Random;
 
-public record RandomNumberProvider(float min, float max) implements NumberProvider {
+public record RandomNumberProvider(float min, float max,
+                                   ResourceLocation randomSequence) implements NumberProvider {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(
             E418.MOD_ID, "random"
     );
     public static MapCodec<RandomNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.fieldOf("min").forGetter(RandomNumberProvider::min),
-            Codec.FLOAT.fieldOf("max").forGetter(RandomNumberProvider::max)
+            Codec.FLOAT.fieldOf("max").forGetter(RandomNumberProvider::max),
+            ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE).forGetter(RandomNumberProvider::randomSequence)
     ).apply(instance, RandomNumberProvider::new));
 
     @Override
@@ -26,9 +29,10 @@ public record RandomNumberProvider(float min, float max) implements NumberProvid
 
     @Override
     public Number get(EventContext context, NumberRequester requester) {
-        var code = ((context.getSourceEvent().hashCode() + requester.hashCode()
-                + context.getSourceEvent().startTime) << 8) ^ 0x24869;
-        var source = RandomSource.create(code);
+        RandomSource source;
+
+        source = context.getServer().overworld().getRandomSequence(randomSequence);
+        
         return min + (source.nextFloat() * max - min);
     }
 }

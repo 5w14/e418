@@ -11,28 +11,20 @@ import ru.maxthetomas.e418.event.cause.impl.GlobalRandomEventCause;
 import ru.maxthetomas.e418.event.cause.impl.PlayerRandomEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.player.PlayerDataManager;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
-
-import java.util.Random;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Random RANDOM = new Random();
 
     // TODO: Put this into config
     private static final int GROUP_DISTANCE = 50;
-    private static final int LOCK_DURATION = 2400;
 
     private static int timeToGlobalEvent = 20 * 60 * 30;
 
     public RandomEventManager() {
         TickEvent.SERVER_POST.register(this::tick);
-        // TODO: VALUES FROM config
-        refreshTimer(1200, 2400);
-    }
-
-    private static void refreshTimer(int min, int max) {
-        timeToGlobalEvent = min + RANDOM.nextInt(max - min);
+        // TODO: Load time from save data
     }
 
     public static int getTimeToGlobalEvent() {
@@ -52,6 +44,7 @@ public class RandomEventManager {
             var data = PlayerDataManager.ensureData(uuid, minecraftServer);
 
             if (data.eventTimestamp < currentTime) {
+                var random = E418Random.EVENT_ENGINE_GLOBAL;
                 // Start event
 
                 // Get nearby players
@@ -70,7 +63,7 @@ public class RandomEventManager {
                 // We prevent event start if there's a player with lock nearby.
                 if (hasLocks) {
                     // TODO: Randomize delay with config
-                    var randomDelay = 600;
+                    var randomDelay = random.nextInt(600, 1200);
                     data.eventTimestamp = currentTime + randomDelay;
                     continue;
                 }
@@ -78,13 +71,12 @@ public class RandomEventManager {
 
                 var cause = new PlayerRandomEventCause(uuid);
 
-                // TODO: Only go through valid random events
                 var success = false;
                 var ctx = new EventContext(minecraftServer)
                         .withPlayer(player)
                         .withLocation(Location.fromPlayer(player))
                         .withCause(cause);
-                var e = EventRegistries.getQueueableEventsWithTag("random.player", ctx).getRandomElement();
+                var e = EventRegistries.getQueueableEventsWithTag("random.player", ctx).getRandomElement(random);
 
                 if (e != null) {
                     success = E418.getEventManager().queueEvent(e, ctx);
@@ -92,10 +84,13 @@ public class RandomEventManager {
 
                 if (success) {
                     // TODO: Randomize delay with config
-                    var randomDelay = 600;
-                    var randomOffset = 600;
+
+                    var randomDelay = random.nextInt(600, 1200);
+                    var randomOffset = random.nextInt(600, 1200);
+                    var randomLock = random.nextInt(2000, 2400);
+
                     data.eventTimestamp = currentTime + randomDelay + randomOffset;
-                    data.eventUnlockTimestamp = currentTime + LOCK_DURATION;
+                    data.eventUnlockTimestamp = currentTime + randomLock;
 
                     // Delay event time for players nearby
                     if (success && !cause.isGroupEffectCancelled() && GROUP_DISTANCE > 0) {
@@ -110,7 +105,7 @@ public class RandomEventManager {
 
                             // Linear offset reduction based on how far you are from player.
                             otherData.eventTimestamp += (long) (((double) randomOffset / GROUP_DISTANCE) * (GROUP_DISTANCE - distance));
-                            otherData.eventUnlockTimestamp = currentTime + LOCK_DURATION;
+                            otherData.eventUnlockTimestamp = currentTime + randomLock;
                         }
                     }
                 } else {
@@ -126,11 +121,12 @@ public class RandomEventManager {
         if (timeToGlobalEvent <= 0) {
             var cause = new GlobalRandomEventCause();
 
-            // TODO: Only go through valid random events
+            var random = E418Random.EVENT_ENGINE_PLAYER;
+
             var success = false;
             var ctx = new EventContext(minecraftServer)
                     .withCause(cause);
-            var e = EventRegistries.getQueueableEventsWithTag("random.global", ctx).getRandomElement();
+            var e = EventRegistries.getQueueableEventsWithTag("random.global", ctx).getRandomElement(random);
 
             if (e != null) {
                 success = E418.getEventManager().queueEvent(e, ctx);
@@ -138,9 +134,9 @@ public class RandomEventManager {
 
             // TODO: Put these values to config
             if (success) {
-                refreshTimer(2400, 4800);
+                timeToGlobalEvent = random.nextInt(2400, 4800);
             } else {
-                refreshTimer(1200, 2400);
+                timeToGlobalEvent = random.nextInt(1200, 2400);
             }
         }
     }

@@ -1,9 +1,11 @@
 package ru.maxthetomas.e418.mixin.common;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameRules;
@@ -24,6 +26,7 @@ import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 
 import java.util.List;
@@ -59,6 +62,9 @@ public abstract class ServerLevelMixin {
     @Shadow
     public abstract @NotNull MinecraftServer getServer();
 
+    @Shadow
+    public abstract RandomSource getRandomSequence(ResourceLocation arg);
+
     @ModifyVariable(at = @At("STORE"), method = "tick", ordinal = 0)
     public int modifySleepingPercentage(int input) {
         return 101; // Disable sleep through night logic.
@@ -82,18 +88,20 @@ public abstract class ServerLevelMixin {
 
             var cancelTimeSkip = false;
 
+            var random = E418Random.EVENT_ENGINE_WAKE_UP;
 
-            // TODO: Randomize so not every wake up will cause an event.
-            var cause = new WakeUpEventCause();
-            var ctx = new EventContext(this.getServer())
-                    .withCause(cause);
-            var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.wake_up", ctx).getRandomElement();
+            if (random.nextFloat() > 0.5) {
+                var cause = new WakeUpEventCause();
+                var ctx = new EventContext(this.getServer())
+                        .withCause(cause);
+                var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.wake_up", ctx).getRandomElement(random);
 
-            if (e != null) {
-                E418.getEventManager().queueEvent(e, ctx);
+                if (e != null) {
+                    E418.getEventManager().queueEvent(e, ctx);
+                }
+
+                cancelTimeSkip = cause.isTimeSkipCancelled();
             }
-
-            cancelTimeSkip = cause.isTimeSkipCancelled();
 
             if (!cancelTimeSkip && this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 var l = this.serverLevelData.getDayTime() + 24000L;
