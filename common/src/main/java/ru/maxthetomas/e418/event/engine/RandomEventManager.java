@@ -17,7 +17,6 @@ import ru.maxthetomas.e418.util.Location;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-
     private static int timeToGlobalEvent = 20 * 60 * 30;
 
     public RandomEventManager() {
