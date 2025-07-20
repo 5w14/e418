@@ -1,15 +1,18 @@
 package ru.maxthetomas.e418.util;
 
-import java.util.*;
+import net.minecraft.util.RandomSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WeightedList<T> {
     public List<Entry<T>> values = new ArrayList<>();
 
-    public void add(int weight, T value){
+    public void add(int weight, T value) {
         values.add(new Entry<>(weight, value));
     }
 
-    public T getRandomElement(Random random) {
+    public T getRandomElement(RandomSource random) {
         if (values.isEmpty()) {
             return null;
         }
@@ -33,10 +36,10 @@ public class WeightedList<T> {
     }
 
     /**
-     * Executes {@code getRandomEvent} with a new {@linkplain Random}
+     * Executes {@code getRandomEvent} with a new {@linkplain RandomSource}
      */
     public T getRandomElement() {
-        return getRandomElement(new Random());
+        return getRandomElement(RandomSource.create());
     }
 
     public void clear() {
@@ -55,6 +58,7 @@ public class WeightedList<T> {
         return values.size();
     }
 
-    public record Entry<T>(int weight, T element) {}
+    public record Entry<T>(int weight, T element) {
+    }
 }
 

@@ -2,12 +2,16 @@ package ru.maxthetomas.e418.event.registry;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.config.SourceConfig;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.util.WeightedList;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Registry that contains events. Can be configured through from config through {@linkplain SourceConfig} and it's variations.
@@ -47,7 +51,7 @@ public class EventRegistry {
      * @param random Random number supplier to use for selecting an event.
      * @return Randomly picked event.
      */
-    public EventResource getRandomEvent(Random random) {
+    public EventResource getRandomEvent(RandomSource random) {
         return events.getRandomElement(random);
     }
 
@@ -57,7 +61,7 @@ public class EventRegistry {
     public EventResource getRandomEvent() {
         // Todo: avoid using new Random()'s
 //        LOGGER.warn("New random created when getting random event in registry {}", id);
-        return getRandomEvent(new Random());
+        return getRandomEvent(RandomSource.create());
     }
 
     public List<WeightedList.Entry<EventResource>> getEvents() {
@@ -72,5 +76,6 @@ public class EventRegistry {
         return id;
     }
 
-    public record WeightedEvent(EventResource resource, int weight) { }
+    public record WeightedEvent(EventResource resource, int weight) {
+    }
 }

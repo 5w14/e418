@@ -15,6 +15,7 @@ import ru.maxthetomas.e418.event.engine.ChatMessageEventManager;
 import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418ClientVariables;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
 
@@ -47,6 +48,12 @@ public final class E418 {
 
             ru.maxthetomas.e418.event.EventManager.IsActive = true;
             ManagedServer = srv;
+        });
+
+        LifecycleEvent.SERVER_LEVEL_LOAD.register(lvl -> {
+            if (lvl == ManagedServer.overworld()) {
+                E418Random.init(lvl);
+            }
         });
 
         LifecycleEvent.SERVER_STARTED.register(InGameStorage::load);

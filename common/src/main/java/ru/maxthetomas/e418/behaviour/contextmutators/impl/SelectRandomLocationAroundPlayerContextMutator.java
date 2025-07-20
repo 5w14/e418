@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.contextmutators.IContextMutator;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
 
 public class SelectRandomLocationAroundPlayerContextMutator implements IContextMutator {
@@ -15,17 +16,25 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
     public static final MapCodec<SelectRandomLocationAroundPlayerContextMutator> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.FLOAT.optionalFieldOf("radius", 16.0f)
-                            .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRange)
+                            .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRange),
+                    ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE)
+                            .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRandomSequence)
             ).apply(instance, SelectRandomLocationAroundPlayerContextMutator::new));
 
     private final float range;
+    private final ResourceLocation randomSequence;
 
-    public SelectRandomLocationAroundPlayerContextMutator(float range) {
+    public SelectRandomLocationAroundPlayerContextMutator(float range, ResourceLocation randomSequence) {
         this.range = range;
+        this.randomSequence = randomSequence;
     }
 
     public float getRange() {
         return range;
+    }
+
+    private ResourceLocation getRandomSequence() {
+        return randomSequence;
     }
 
     @Override
@@ -34,7 +43,10 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         if (player == null) return false;
 
         var location = Location.fromPlayer(player);
-        var random = RandomSource.create();
+
+        RandomSource random;
+
+        random = context.getServer().overworld().getRandomSequence(randomSequence);
 
         var position = location.position();
         position.add(
