@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.GlobalRandomEventCause;
 import ru.maxthetomas.e418.event.cause.impl.PlayerRandomEventCause;
@@ -16,10 +17,6 @@ import ru.maxthetomas.e418.util.Location;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    // TODO: Put this into config
-    private static final int GROUP_DISTANCE = 50;
-
     private static int timeToGlobalEvent = 20 * 60 * 30;
 
     public RandomEventManager() {
@@ -47,11 +44,13 @@ public class RandomEventManager {
                 var random = E418Random.EVENT_ENGINE_GLOBAL;
                 // Start event
 
+                var range = Config.playerRandomEventGroupDistance.get();
+
                 // Get nearby players
                 var playersInRange = minecraftServer.getPlayerList().getPlayers().stream().filter((p) -> {
                     return (p != player &&
                             p.level() == player.level() &&
-                            player.position().closerThan(p.position(), GROUP_DISTANCE));
+                            player.position().closerThan(p.position(), range));
                 }).toList();
 
                 var hasLocks = playersInRange.stream().anyMatch((p) -> {
@@ -62,7 +61,6 @@ public class RandomEventManager {
 
                 // We prevent event start if there's a player with lock nearby.
                 if (hasLocks) {
-                    // TODO: Randomize delay with config
                     var randomDelay = random.nextInt(600, 1200);
                     data.eventTimestamp = currentTime + randomDelay;
                     continue;
@@ -83,17 +81,15 @@ public class RandomEventManager {
                 }
 
                 if (success) {
-                    // TODO: Randomize delay with config
-
-                    var randomDelay = random.nextInt(600, 1200);
-                    var randomOffset = random.nextInt(600, 1200);
-                    var randomLock = random.nextInt(2000, 2400);
+                    var randomDelay = Config.playerRandomEventDelay.get().randomValue(random);
+                    var randomOffset = Config.playerRandomEventOffset.get().randomValue(random);
+                    var randomLock = Config.playerRandomEventLock.get().randomValue(random);
 
                     data.eventTimestamp = currentTime + randomDelay + randomOffset;
                     data.eventUnlockTimestamp = currentTime + randomLock;
 
                     // Delay event time for players nearby
-                    if (success && !cause.isGroupEffectCancelled() && GROUP_DISTANCE > 0) {
+                    if (success && !cause.isGroupEffectCancelled() && range > 0) {
                         var playerPos = player.position();
 
                         for (ServerPlayer otherPlayer : playersInRange) {
@@ -104,13 +100,12 @@ public class RandomEventManager {
                             var distance = playerPos.distanceTo(otherPlayerPos);
 
                             // Linear offset reduction based on how far you are from player.
-                            otherData.eventTimestamp += (long) (((double) randomOffset / GROUP_DISTANCE) * (GROUP_DISTANCE - distance));
+                            otherData.eventTimestamp += (long) (((double) randomOffset / range) * (range - distance));
                             otherData.eventUnlockTimestamp = currentTime + randomLock;
                         }
                     }
                 } else {
-                    // TODO: Randomize delay with config
-                    var randomDelay = 500;
+                    var randomDelay = Config.playerRandomEventDelayFailure.get().randomValue(random);
                     data.eventTimestamp = currentTime + randomDelay;
                 }
             }
@@ -132,11 +127,10 @@ public class RandomEventManager {
                 success = E418.getEventManager().queueEvent(e, ctx);
             }
 
-            // TODO: Put these values to config
             if (success) {
-                timeToGlobalEvent = random.nextInt(2400, 4800);
+                timeToGlobalEvent = Config.globalRandomEventDelay.get().randomValue(random);
             } else {
-                timeToGlobalEvent = random.nextInt(1200, 2400);
+                timeToGlobalEvent = Config.globalRandomEventDelayFailure.get().randomValue(random);
             }
         }
     }

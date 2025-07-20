@@ -90,7 +90,7 @@ public abstract class ServerLevelMixin {
 
             var random = E418Random.EVENT_ENGINE_WAKE_UP;
 
-            if (random.nextFloat() > 0.5) {
+            if (random.nextFloat() < Config.wakeUpEventChance.get()) {
                 var cause = new WakeUpEventCause();
                 var ctx = new EventContext(this.getServer())
                         .withCause(cause);

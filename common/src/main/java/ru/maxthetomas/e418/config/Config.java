@@ -10,6 +10,7 @@ import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.codecs.impl.Range;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,18 @@ public class Config {
                     E418.resLoc("minimalism"),
                     E418.resLoc("unlabirynth")
             ));
+
+    public static Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
+
+    public static Value<Range> globalRandomEventDelay = field("global_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> globalRandomEventDelayFailure = field("global_random_event_delay_failure", Range.CODEC.codec(), new Range(600, 1200));
+
+    public static Value<Float> playerRandomEventGroupDistance = field("player_random_event_group_distance", Codec.floatRange(0f, 50f), 50f);
+    public static Value<Range> playerRandomEventDelay = field("player_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> playerRandomEventDelayFailure = field("player_random_event_delay", Range.CODEC.codec(), new Range(600, 1200));
+    public static Value<Range> playerRandomEventOffset = field("player_random_event_offset", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> playerRandomEventLock = field("player_random_event_lock", Range.CODEC.codec(), new Range(1200, 2400));
+
 
     public static boolean isDebug() {
         return Platform.isDevelopmentEnvironment() || forceDebug.get();
