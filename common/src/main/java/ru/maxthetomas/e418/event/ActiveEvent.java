@@ -95,7 +95,9 @@ public class ActiveEvent implements IBehaviourExecutor {
     }
 
 
-    /// Restores active state for events during reloading from a save.
+    /**
+     * Restores active state for events during reloading from a save.
+     */
     public void _restoreState() {
         activeBehaviours.forEach(behaviour -> {
             if (behaviour.isDisposed()) {

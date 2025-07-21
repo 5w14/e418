@@ -146,7 +146,9 @@ public abstract class Behaviour implements NumberRequester {
         return isExecuted;
     }
 
-    /// Should only be used when restoring state.
+    /**
+     * Should only be used when restoring state.
+     */
     protected void _resetExecuted() {
         this.isExecuted = false;
     }

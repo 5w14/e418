@@ -8,7 +8,9 @@ import ru.maxthetomas.e418.event.cause.impl.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/// Registry for EventCauses for serialization.
+/**
+ * Registry for EventCauses for serialization.
+ */
 public class EventCauses {
     private static final Map<ResourceLocation, MapCodec<? extends IEventCause>> CAUSES = new HashMap<>();
     public static Codec<IEventCause> DISPATCH_CODEC = ResourceLocation.CODEC

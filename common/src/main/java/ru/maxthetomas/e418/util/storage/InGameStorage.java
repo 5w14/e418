@@ -35,15 +35,18 @@ public class InGameStorage extends SavedData {
     private CompoundTag keyValueStore = new CompoundTag();
     private List<ActiveEvent> activeEvents = new ArrayList<>();
 
-    /// Save a value into a KV-store NBT store.
-    /// It's recommended to use {@link NbtOps} methods to construct values.
-    ///
-    /// <blockquote><pre>
-    /// setValue("is_debug", NbtOps.INSTANCE.createBoolean(true))
-    /// </pre></blockquote>
-    ///
-    /// @param key   A string key to a key-value store
-    /// @param value A Tag value for key-value store
+    /**
+     * Saves a value into a KV-store NBT store.
+     * It's recommended to use {@link NbtOps} methods to construct values.
+     * 
+     * Example usage:
+     * <blockquote><pre>
+     * setValue("is_debug", NbtOps.INSTANCE.createBoolean(true))
+     * </pre></blockquote>
+     * 
+     * @param key   A string key to a key-value store.
+     * @param value A Tag value for the key-value store.
+     */
     public void setValue(String key, Tag value) {
         keyValueStore.put(key, value);
     }
