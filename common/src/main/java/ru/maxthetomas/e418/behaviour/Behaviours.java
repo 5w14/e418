@@ -77,13 +77,13 @@ public class Behaviours {
         return DataResult.error(() -> "Unknown behaviour: " + id);
     }
 
-
     /**
      * Register the codec for {@linkplain Behaviour} into internal registry.
      * Used within static contexts, before mod initialization.
      *
-     * @param id    The id to register the codec to.
-     * @param codec The codec to register.
+     * @param id         The id to register the codec to.
+     * @param codec      The codec to register.
+     * @param stateCodec The state codec to register.
      * @return The second param, {@code codec}.
      */
     public static MapCodec<? extends Behaviour> register(ResourceLocation id, MapCodec<? extends Behaviour> codec, MapCodec<? extends Behaviour> stateCodec) {
