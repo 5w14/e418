@@ -14,9 +14,12 @@ import ru.maxthetomas.e418.event.EventContext;
 import java.util.List;
 import java.util.stream.Stream;
 
-/// Returns true only when all conditions are true
-///
-/// <li> <code>conditions</code> - Conditions to check
+/**
+ * Returns true only when all conditions are true.
+ * <ul>
+ *   <li><code>conditions</code> - Conditions to check.</li>
+ * </ul>
+ */
 public class AndCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "and");
     public static final MapCodec<AndCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

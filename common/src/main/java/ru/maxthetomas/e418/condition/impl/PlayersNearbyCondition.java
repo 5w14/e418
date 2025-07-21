@@ -9,11 +9,14 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
-/// Returns true only when there's enough players in the radius
-///
-/// <li> <code>radius</code> - Range where it counts players in blocks/meters
-/// <li> <code>min_players_nearby</code> - Minimal amount of players to trigger
-/// <li> <code>max_players_nearby</code> - Maximal amount of players to trigger
+/**
+ * Returns true only when there are enough players within the radius.
+ * <ul>
+ *   <li><code>radius</code> - Range where it counts players in blocks/meters.</li>
+ *   <li><code>min_players_nearby</code> - Minimum number of players required to trigger.</li>
+ *   <li><code>max_players_nearby</code> - Maximum number of players allowed to trigger.</li>
+ * </ul>
+ */
 public class PlayersNearbyCondition implements ICondition {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "players_nearby");
     public static MapCodec<PlayersNearbyCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

@@ -9,7 +9,9 @@ import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
-/// Stops the event
+/**
+ * Stops the event.
+ */
 public class StopEventBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "stop_event");
     public static final MapCodec<StopEventBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(StopEventBehaviour::new));

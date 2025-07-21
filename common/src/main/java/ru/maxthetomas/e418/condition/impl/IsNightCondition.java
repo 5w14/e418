@@ -6,7 +6,9 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
-/// Returns true only when it is the nighttime in the overworld.
+/**
+ * Returns true only when it is nighttime in the overworld.
+ */
 public class IsNightCondition implements ICondition {
     public static final MapCodec<IsNightCondition> CODEC = MapCodec.unit(IsNightCondition::new);
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "is_night");

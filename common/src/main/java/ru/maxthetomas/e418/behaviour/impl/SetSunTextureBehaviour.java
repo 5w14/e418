@@ -10,9 +10,12 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetSun;
 
-/// Changes the sun's texture
-///
-/// <li> <code>texture</code> - New texture to use
+/**
+ * Changes the sun's texture.
+ * <ul>
+ *   <li><code>texture</code> - New texture to use.</li>
+ * </ul>
+ */
 public class SetSunTextureBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_sun_texture");
     public static final MapCodec<SetSunTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

@@ -9,9 +9,12 @@ import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
 
-/// Returns true only when chat messages first word was same as prefix
-///
-/// <li> <code>prefix</code> - Word to match
+/**
+ * Returns true only when the chat message's first word matches the prefix.
+ * <ul>
+ *   <li><code>prefix</code> - Word to match.</li>
+ * </ul>
+ */
 public class StartsWithCondition implements ICondition {
     public static final MapCodec<StartsWithCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("prefix").forGetter(StartsWithCondition::getPrefix)
