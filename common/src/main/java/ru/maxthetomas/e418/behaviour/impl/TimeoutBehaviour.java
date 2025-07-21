@@ -66,15 +66,4 @@ public class TimeoutBehaviour extends Behaviour {
         E418.getEventManager().stopEvent(event);
         setDone(true);
     }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-
-    @Override
-    public void restoreState(EventContext context, IBehaviourExecutor executor) {
-        super.restoreState(context, executor);
-    }
 }
