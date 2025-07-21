@@ -55,12 +55,10 @@ public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourE
     }
 
     @Override
-    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
-        this.context = context;
-        this.executor = executor;
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
         activeBehaviours.forEach(v -> v.restoreState(context, this));
         dirty();
-        return super.restoreState(context, executor);
     }
 
     @Override

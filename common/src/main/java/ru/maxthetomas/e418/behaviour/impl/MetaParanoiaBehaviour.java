@@ -60,9 +60,4 @@ public class MetaParanoiaBehaviour extends Behaviour {
         PlayerEvent.PLAYER_JOIN.unregister(this::playerJoin);
         setMetaParanoia(false);
     }
-
-    @Override
-    public boolean canRun(EventContext context) {
-        return !context.shouldAwaitPlayer();
-    }
 }

@@ -37,4 +37,10 @@ public class GameCrashBehaviour extends Behaviour {
         // todo check if intrusive events are enabled
         return super.canRun(context) && !context.shouldAwaitPlayer();
     }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+        dispose();
+    }
 }

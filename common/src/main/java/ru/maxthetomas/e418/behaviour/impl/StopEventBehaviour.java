@@ -25,4 +25,11 @@ public class StopEventBehaviour extends Behaviour {
         var event = context.getSourceEvent();
         E418.getEventManager().stopEvent(event);
     }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+        if ((isDisposed() || isDone() || isExecuted()) && context.getSourceEvent() != null)
+            E418.getEventManager().stopEvent(context.getSourceEvent());
+    }
 }

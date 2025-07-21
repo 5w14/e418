@@ -59,19 +59,6 @@ public class ActiveEvent implements IBehaviourExecutor {
         for (Behaviour activeBehaviour : activeBehaviours) {
             activeBehaviour.tick();
         }
-
-        for (int i = 0; i < awaitingRestoreRun.size(); i++) {
-            Behaviour restoreBehaviour = awaitingRestoreRun.get(i);
-
-            if (!restoreBehaviour.canRun(context))
-                continue;
-
-            restoreBehaviour.execute(context, this);
-
-            // After successfully restored -> can remove from array
-            awaitingRestoreRun.remove(restoreBehaviour);
-            i--;
-        }
     }
 
     @Override
@@ -108,8 +95,6 @@ public class ActiveEvent implements IBehaviourExecutor {
     }
 
 
-    List<Behaviour> awaitingRestoreRun = new ArrayList<>();
-
     /// Restores active state for events during reloading from a save.
     public void _restoreState() {
         activeBehaviours.forEach(behaviour -> {
@@ -117,9 +102,7 @@ public class ActiveEvent implements IBehaviourExecutor {
                 return;
             }
 
-            if (behaviour.restoreState(context, this)) {
-                awaitingRestoreRun.add(behaviour);
-            }
+            behaviour.restoreState(context, this);
         });
     }
 

@@ -29,5 +29,17 @@ public class CancelTimeSkipBehaviour extends Behaviour {
             wakeUpCause.cancelTimeSkip();
         }
     }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+
+        if (isDone()) {
+            var cause = context.getCause();
+            if (cause instanceof WakeUpEventCause wakeUpCause) {
+                wakeUpCause.cancelTimeSkip();
+            }
+        }
+    }
 }
 

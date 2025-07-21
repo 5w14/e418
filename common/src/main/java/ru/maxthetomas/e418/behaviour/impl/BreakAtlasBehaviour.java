@@ -12,6 +12,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetBreakAtlas;
 
 /// Breaks game's texture atlas to make textures look glitchy
+/// Will affect only one player if the context has a player.
 public class BreakAtlasBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "break_atlas");
     public static final MapCodec<BreakAtlasBehaviour> CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
@@ -30,7 +31,7 @@ public class BreakAtlasBehaviour extends Behaviour {
     }
 
     void onPlayerJoin(ServerPlayer player) {
-        if (isExecuted() && !isDone() && player.getUUID().equals(context.getPlayerUUID())) {
+        if (isExecuted() && !isDone() && (!context.hasPlayer() || context.getPlayerUUID().equals(player.getUUID()))) {
             setBreakAtlas(player, true);
         }
     }
@@ -44,7 +45,8 @@ public class BreakAtlasBehaviour extends Behaviour {
     @Override
     public void dispose() {
         super.dispose();
-        setBreakAtlas(null, false);
+        unregister();
+        setBreakAtlas(context.getPlayer(), false);
     }
 
     private void setBreakAtlas(ServerPlayer player, boolean value) {
@@ -57,11 +59,6 @@ public class BreakAtlasBehaviour extends Behaviour {
         } else {
             NetworkManager.sendToPlayer(player, new S2CSetBreakAtlas(value));
         }
-    }
-
-    @Override
-    public boolean canRun(EventContext context) {
-        return !context.shouldAwaitPlayer();
     }
 
     @Override

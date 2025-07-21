@@ -4,8 +4,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
@@ -24,7 +26,11 @@ public class SetShaderBehaviour extends Behaviour {
                     .forGetter(SetShaderBehaviour::getShaderId)
     ).apply(instance, SetShaderBehaviour::new));
 
-    public static final MapCodec<SetShaderBehaviour> STATE_CODEC = MapCodec.unit(SetShaderBehaviour::new);
+    public static final MapCodec<SetShaderBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceLocation.CODEC.optionalFieldOf("shader", ResourceLocation.withDefaultNamespace("empty"))
+                    .forGetter(SetShaderBehaviour::getShaderId),
+            UUIDUtil.CODEC.lenientOptionalFieldOf("player_uuid", null).forGetter(v -> v.playerUUID)
+    ).apply(instance, SetShaderBehaviour::new));
 
     private ResourceLocation shaderId;
     private UUID playerUUID = null;
@@ -34,7 +40,9 @@ public class SetShaderBehaviour extends Behaviour {
         PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
     }
 
-    private SetShaderBehaviour() {
+    private SetShaderBehaviour(ResourceLocation shaderId, @Nullable UUID playerUUID) {
+        this.playerUUID = playerUUID;
+        this.shaderId = shaderId;
         PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
     }
 
@@ -88,10 +96,5 @@ public class SetShaderBehaviour extends Behaviour {
         }
 
         super.dispose();
-    }
-
-    @Override
-    public boolean canRun(EventContext context) {
-        return !context.shouldAwaitPlayer();
     }
 }

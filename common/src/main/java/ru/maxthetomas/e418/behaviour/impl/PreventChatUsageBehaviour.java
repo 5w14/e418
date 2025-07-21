@@ -5,15 +5,19 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.ChatEvent;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.architecturyevents.CommandEvent;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
+
+import java.util.UUID;
 
 /// Prevents chat usage
 ///
@@ -21,21 +25,31 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 public class PreventChatUsageBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "prevent_chat_usage");
     public static final MapCodec<PreventChatUsageBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            // TODO: proposal - rename this to "global" or something, and invert behaviour
+            // or have the same approach as in other behaviours, which will affect player if the context has one
+            // - max
             Codec.BOOL.optionalFieldOf("use_context", false).forGetter(PreventChatUsageBehaviour::isUsingContext)
     ).apply(instance, PreventChatUsageBehaviour::new));
-    public static final MapCodec<PreventChatUsageBehaviour> STATE_CODEC = MapCodec.unit(PreventChatUsageBehaviour::new);
+
+    public static final MapCodec<PreventChatUsageBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            UUIDUtil.CODEC.lenientOptionalFieldOf("player_target", null).forGetter(v -> v.playerTarget)
+    ).apply(instance, PreventChatUsageBehaviour::new));
 
     private final ChatEvent.Received onChatMessage = this::onChatMessage;
     private final CommandEvent.MsgReceived onMsg = this::onMsg;
 
     private boolean usingContext = false;
-    private ServerPlayer target;
+    private UUID playerTarget;
 
     public PreventChatUsageBehaviour(boolean usingContext) {
         this.usingContext = usingContext;
+        ChatEvent.RECEIVED.register(onChatMessage);
+        CommandEvent.MSG_RECEIVED.register(onMsg);
     }
 
-    private PreventChatUsageBehaviour() {
+    private PreventChatUsageBehaviour(@Nullable UUID playerTarget) {
+        this.playerTarget = playerTarget;
+        this.usingContext = this.playerTarget != null;
     }
 
     @Override
@@ -50,15 +64,11 @@ public class PreventChatUsageBehaviour extends Behaviour {
         if (usingContext) {
             var contextTarget = context.getPlayer();
             if (contextTarget != null) {
-                target = contextTarget;
+                playerTarget = contextTarget.getUUID();
             } else {
                 setDone(true);
-                return;
             }
         }
-
-        ChatEvent.RECEIVED.register(onChatMessage);
-        CommandEvent.MSG_RECEIVED.register(onMsg);
     }
 
 
@@ -70,29 +80,39 @@ public class PreventChatUsageBehaviour extends Behaviour {
     }
 
     private EventResult onChatMessage(ServerPlayer serverPlayer, Component component) {
-        if (usingContext) {
-            if (serverPlayer == target) {
-                return EventResult.interruptFalse();
-            }
+        if (!isExecuted() || isDisposed() || isDone())
             return EventResult.pass();
-        } else {
+
+        if (playerTarget == null || playerTarget.equals(serverPlayer.getUUID())) {
             return EventResult.interruptFalse();
         }
+
+        return EventResult.pass();
     }
 
     private EventResult onMsg(PlayerChatMessage msg) {
-        if (usingContext) {
-            if (msg.sender().equals(target.getUUID())) {
-                return EventResult.interruptFalse();
-            }
+        if (!isExecuted() || isDisposed() || isDone())
             return EventResult.pass();
-        } else {
+
+        if (playerTarget == null || playerTarget.equals(msg.sender())) {
             return EventResult.interruptFalse();
         }
+
+        return EventResult.pass();
+
     }
 
     public boolean isUsingContext() {
         return usingContext;
+    }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+        if (!isDone() && !isDisposed() && isExecuted()) {
+            if (usingContext)
+                playerTarget = context.getPlayerUUID();
+        }
     }
 }
 

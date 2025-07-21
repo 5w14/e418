@@ -151,11 +151,10 @@ public abstract class Behaviour implements NumberRequester {
         this.isExecuted = false;
     }
 
-    /// @return whether the behaviour should be added to awaiting-conditions list
-    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
         this.executor = executor;
         this.context = context;
-        return !isDone && !isDisposed;
+        this.executor.dirty();
     }
 
     public record BehaviourState(boolean isDone, boolean isDisposed, boolean isStopped, boolean isExecuted) {

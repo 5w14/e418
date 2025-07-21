@@ -125,10 +125,11 @@ public class MutateContextBehaviour extends ExecutorBehaviour {
     }
 
     @Override
-    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
-        this.context = context;
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        // Does not have a super.restoreState() call as it modifies the restoreCall for active behaviours
         this.executor = executor;
+        this.context = context;
         activeBehaviours.forEach(v -> v.restoreState(this.storedMutatedContext, this));
-        return false;
+        dirty();
     }
 }

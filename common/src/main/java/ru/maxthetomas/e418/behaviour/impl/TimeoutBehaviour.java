@@ -72,10 +72,9 @@ public class TimeoutBehaviour extends Behaviour {
         super.dispose();
     }
 
+
     @Override
-    public boolean restoreState(EventContext context, IBehaviourExecutor executor) {
-        this.context = context;
-        this.executor = executor;
-        return super.restoreState(context, executor);
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
     }
 }
