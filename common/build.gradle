@@ -10,3 +10,53 @@ dependencies {
 
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 }
+
+// Add a configuration for the no-data version
+configurations {
+    noData {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+// Create a special "transformation configuration" for each platform
+['Fabric', 'NeoForge'].each { platform ->
+    configurations.create("transformProduction${platform}NoData") {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+// Task to filter resources without data directory
+tasks.register('processNoDataResources', Copy) {
+    from sourceSets.main.resources.srcDirs
+    into "${buildDir}/resources-nodata/main"
+    exclude 'data/**' // Exclude data directory
+
+    // Copy all other resources
+    include '**/*'
+}
+
+// Task to create a JAR without data resources
+// This is an internal task, not meant for distribution
+tasks.register('jarNoData', Jar) {
+    dependsOn processNoDataResources
+    dependsOn classes
+
+    // Don't add to archives - this is an intermediate file
+    archiveClassifier = 'nodata-dev'
+    destinationDirectory = file("${buildDir}/tmp/jarNoData")
+
+    from sourceSets.main.output.classesDirs
+    from "${buildDir}/resources-nodata/main"
+}
+
+// Configure the artifact for the noData configuration
+artifacts {
+    noData jarNoData
+
+    // Configure the transformation artifacts for each platform
+    ['Fabric', 'NeoForge'].each { platform ->
+        "transformProduction${platform}NoData" jarNoData
+    }
+}

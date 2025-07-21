@@ -57,6 +57,14 @@ subprojects {
                 artifactId = base.archivesName.get()
                 from components.java
             }
+
+            // Add the nodata jar to publications if the task exists for this subproject
+            if (tasks.findByName('remapNoDataJar')) {
+                nodata(MavenPublication) {
+                    artifactId = "${base.archivesName.get()}-nodata"
+                    artifact remapNoDataJar
+                }
+            }
         }
 
         // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
