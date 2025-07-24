@@ -7,9 +7,12 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
-/// Returns true only when in certain biome
-///
-/// <li> <code>biome</code> - Biome to trigger
+/**
+ * Returns true only when in a certain biome.
+ * <ul>
+ *   <li><code>biome</code> - Biome to trigger.</li>
+ * </ul>
+ */
 public class InBiomeCondition implements ICondition {
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "in_biome");
     public static MapCodec<InBiomeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

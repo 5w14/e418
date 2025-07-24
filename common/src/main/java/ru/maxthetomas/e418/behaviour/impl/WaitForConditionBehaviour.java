@@ -14,10 +14,13 @@ import ru.maxthetomas.e418.condition.ICondition;
 import java.util.List;
 import java.util.function.Function;
 
-/// Waits until conditions are true and executes behaviours
-///
-/// <li> <code>conditions</code> - Conditions to run
-/// <li> <code>behaviours</code> - Behaviours to execute
+/**
+ * Waits until conditions are true and executes behaviours.
+ * <ul>
+ *   <li><code>conditions</code> - Conditions to run.</li>
+ *   <li><code>behaviours</code> - Behaviours to execute.</li>
+ * </ul>
+ */
 public class WaitForConditionBehaviour extends ExecutorBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "wait_for_conditions");
     public static final MapCodec<WaitForConditionBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

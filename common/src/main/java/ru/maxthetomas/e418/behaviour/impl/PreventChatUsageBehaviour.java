@@ -19,9 +19,12 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
 import java.util.UUID;
 
-/// Prevents chat usage
-///
-/// <li> <code>use_context</code> - To mute only player in the context
+/**
+ * Prevents chat usage.
+ * <ul>
+ *   <li><code>use_context</code> – If true, only the player in the context will be muted.</li>
+ * </ul>
+ */
 public class PreventChatUsageBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "prevent_chat_usage");
     public static final MapCodec<PreventChatUsageBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

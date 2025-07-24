@@ -10,9 +10,12 @@ import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.util.E418Random;
 
-/// Returns true only when gamble was worth it
-///
-/// <li> <code>chance</code> - Chance in range (0-1) to trigger
+/**
+ * Returns true only when the gamble was worth it.
+ * <ul>
+ *   <li><code>chance</code> - Chance in range (0-1) to trigger.</li>
+ * </ul>
+ */
 public class RandomCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "random");
     public static final MapCodec<RandomCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

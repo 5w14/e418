@@ -14,11 +14,14 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CShowToast;
 
-/// Gives player a custom achievement
-///
-/// <li> <code>title</code> - Achievement's title
-/// <li> <code>description</code> - Achievement's description
-/// <li> <code>stack</code> - Achievement's picture
+/**
+ * Gives the player a custom achievement.
+ * <ul>
+ *   <li><code>title</code> - Achievement's title.</li>
+ *   <li><code>description</code> - Achievement's description.</li>
+ *   <li><code>stack</code> - Achievement's picture.</li>
+ * </ul>
+ */
 public class ShowToastBehaviour extends Behaviour {
     // TODO add "toast_type" argument
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "show_toast");

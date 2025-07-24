@@ -13,9 +13,12 @@ import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
-/// Stops event after specified amount of ticks
-///
-/// <li> <code>ticks</code> - Ticks to stop
+/**
+ * Stops the event after a specified amount of ticks.
+ * <ul>
+ *   <li><code>ticks</code> - Number of ticks after which to stop.</li>
+ * </ul>
+ */
 public class TimeoutBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "timeout");
     public static final MapCodec<TimeoutBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

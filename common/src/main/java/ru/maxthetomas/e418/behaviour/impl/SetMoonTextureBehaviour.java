@@ -12,9 +12,12 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetMoon;
 
-/// Changes the moon's texture
-///
-/// <li> <code>texture</code> - New texture to use
+/**
+ * Changes the moon's texture.
+ * <ul>
+ *   <li><code>texture</code> – The new texture to use.</li>
+ * </ul>
+ */
 public class SetMoonTextureBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_moon_texture");
     public static final MapCodec<SetMoonTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

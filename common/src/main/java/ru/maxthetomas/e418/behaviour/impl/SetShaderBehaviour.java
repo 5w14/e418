@@ -16,9 +16,12 @@ import ru.maxthetomas.e418.networking.S2CSetShader;
 
 import java.util.UUID;
 
-/// Gives player a custom shader
-///
-/// <li> <code>shader</code> - Shader to use
+/**
+ * Applies a custom shader effect to a player or all players.
+ * <ul>
+ *   <li><code>shader</code> – The shader to use.</li>
+ * </ul>
+ */
 public class SetShaderBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_shader");
     public static final MapCodec<SetShaderBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

@@ -9,9 +9,12 @@ import ru.maxthetomas.e418.codecs.NumberProviders;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
-/// Returns true only when enough ticks have passed
-///
-/// <li> <code>ticks</code> - Ticks to trigger
+/**
+ * Returns true only when enough ticks have passed.
+ * <ul>
+ *   <li><code>ticks</code> - Ticks to trigger.</li>
+ * </ul>
+ */
 public class TimeSinceEventStartCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "time_since_start");
     public static MapCodec<TimeSinceEventStartCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

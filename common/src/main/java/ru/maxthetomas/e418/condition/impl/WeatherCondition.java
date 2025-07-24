@@ -13,9 +13,12 @@ import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.util.Location;
 
-/// Returns true only when there's required weather
-///
-/// <li> <code>weather</code> - Weather that will trigger
+/**
+ * Returns true only when the required weather is present.
+ * <ul>
+ *   <li><code>weather</code> - Weather that will trigger.</li>
+ * </ul>
+ */
 public class WeatherCondition implements ICondition {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "weather");
     public static final MapCodec<WeatherCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

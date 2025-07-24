@@ -15,7 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-/// Prints event's context
+/**
+ * Prints event's context
+ */
 public class DebugPrintContextBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "debug_print_context");
     public static final MapCodec<DebugPrintContextBehaviour> CODEC = MapCodec.unit(DebugPrintContextBehaviour::new);

@@ -8,7 +8,9 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.util.E418Variables;
 
-/// Makes so that you cannot sleep
+/**
+ * Makes so that you cannot sleep
+ */
 public class DisableNightSkipBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "disable_night_skip");
     public static final MapCodec<DisableNightSkipBehaviour> CODEC = MapCodec.unit(DisableNightSkipBehaviour::new);

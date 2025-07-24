@@ -18,13 +18,16 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
 import java.util.Optional;
 
-/// Teleports player to specified coordinates
-///
-/// <li> <code>x</code> - X coordinate
-/// <li> <code>y</code> - Y coordinate
-/// <li> <code>z</code> - Z coordinate
-/// <li> <code>level</code> - Dimension
-/// <li> <code>relative</code> - Should we add this coordinates to current
+/**
+ * Teleports the player to specified coordinates.
+ * <ul>
+ *   <li><code>x</code> - X coordinate.</li>
+ *   <li><code>y</code> - Y coordinate.</li>
+ *   <li><code>z</code> - Z coordinate.</li>
+ *   <li><code>level</code> - Dimension.</li>
+ *   <li><code>relative</code> - Whether to add these coordinates to the current position.</li>
+ * </ul>
+ */
 public class TeleportPlayerBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "teleport_player");
 

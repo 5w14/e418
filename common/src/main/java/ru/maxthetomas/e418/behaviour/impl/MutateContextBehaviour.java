@@ -18,11 +18,14 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import java.util.List;
 import java.util.function.Function;
 
-/// Changes event's context
-///
-/// <li><code>mutators</code> - Mutators that it'll use
-/// <li><code>behaviours</code> - Behaviours that will use the new context
-/// <li><code>run_conditions</code> - when do we want this to run
+/**
+ * Changes the event's context.
+ * <ul>
+ *   <li><code>mutators</code> – Mutators that it will use.</li>
+ *   <li><code>behaviours</code> – Behaviours that will use the new context.</li>
+ *   <li><code>run_conditions</code> – When this should run.</li>
+ * </ul>
+ */
 public class MutateContextBehaviour extends ExecutorBehaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
