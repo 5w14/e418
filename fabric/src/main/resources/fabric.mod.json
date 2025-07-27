@@ -29,10 +29,10 @@
     "e418.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
-    "minecraft": "~1.21.4",
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "~${minecraft_version}",
     "java": ">=21",
-    "architectury": ">=15.0.3",
+    "architectury": ">=${architectury_version}",
     "fabric-api": "*"
   },
   "suggests": {
