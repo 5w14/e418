@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventManager;
+import ru.maxthetomas.e418.event.QueuedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,9 @@ public class InGameStorage extends SavedData {
             Codec.PASSTHROUGH.fieldOf("kv_store")
                     .forGetter(a -> new Dynamic<Tag>(NbtOps.INSTANCE, a.keyValueStore)),
             ActiveEvent.CODEC.codec().listOf().fieldOf("active_events")
-                    .forGetter(v -> v.activeEvents)
+                    .forGetter(v -> v.activeEvents),
+            QueuedEvent.CODEC.codec().listOf().fieldOf("queued_events")
+                    .forGetter(v -> v.queuedEvents)
     ).apply(instance, InGameStorage::constructByCodec));
 
     private static final Factory<InGameStorage> FACTORY = new Factory<>(InGameStorage::new,
@@ -34,16 +37,17 @@ public class InGameStorage extends SavedData {
 
     private CompoundTag keyValueStore = new CompoundTag();
     private List<ActiveEvent> activeEvents = new ArrayList<>();
+    private List<QueuedEvent> queuedEvents = new ArrayList<>();
 
     /**
      * Saves a value into a KV-store NBT store.
      * It's recommended to use {@link NbtOps} methods to construct values.
-     * 
+     * <p>
      * Example usage:
      * <blockquote><pre>
      * setValue("is_debug", NbtOps.INSTANCE.createBoolean(true))
      * </pre></blockquote>
-     * 
+     *
      * @param key   A string key to a key-value store.
      * @param value A Tag value for the key-value store.
      */
@@ -57,8 +61,10 @@ public class InGameStorage extends SavedData {
 
     @Override
     public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        if (EventManager.IsActive)
+        if (EventManager.IsActive) {
             this.activeEvents = E418.getEventManager().getActiveEvents();
+            this.queuedEvents = E418.getEventManager().getQueuedEvents();
+        }
 
         return (CompoundTag) CODEC.encode(this,
                 NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(compoundTag).getOrThrow();
@@ -76,14 +82,15 @@ public class InGameStorage extends SavedData {
         return CODEC.decoder().decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst();
     }
 
-    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvent) {
+    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents) {
         var store = new InGameStorage();
 
         var tag = dynamic.convert(NbtOps.INSTANCE).getValue();
         if (tag instanceof CompoundTag ct)
             store.keyValueStore = ct;
 
-        E418.getEventManager()._restoreActiveEvents(activeEvent);
+        E418.getEventManager()._restoreActiveEvents(activeEvents);
+        E418.getEventManager()._restoreQueuedEvents(queuedEvents);
 
         return store;
     }

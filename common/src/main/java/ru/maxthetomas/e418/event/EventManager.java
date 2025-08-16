@@ -258,6 +258,10 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         this.activeEvents.addAll(restoredActiveEvents);
     }
 
+    public void _restoreQueuedEvents(List<QueuedEvent> restoredQueuedEvents) {
+        this.queuedEvents.addAll(restoredQueuedEvents);
+    }
+
     /*
      * Following methods are used to reload events from
      * resources, using Minecraft's reload system.
