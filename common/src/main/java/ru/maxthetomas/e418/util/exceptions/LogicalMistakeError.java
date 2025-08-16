@@ -10,9 +10,10 @@ import java.util.List;
 /**
  * A special little class for all of your game crashing needs. :)
  */
-public class IntegerPointerException extends RuntimeException {
+public class LogicalMistakeError extends Error {
     private static final List<String> EXCEPTIONS = List.of(
             "Unknown integer referenced or found during execution.",
+            "Developer made a logical mistake while writing code.",
             "HTTP Error 404 when attempting to fetch a resource.",
             "HTTP Error 418 when attempting to fetch a resource.",
             "Attempt to index global 'integer' (a nil value).",
@@ -29,7 +30,7 @@ public class IntegerPointerException extends RuntimeException {
             "C:\\startup.lua not found!"
     );
 
-    public IntegerPointerException(String message) {
+    public LogicalMistakeError(String message) {
         super(message);
     }
 
@@ -46,7 +47,7 @@ public class IntegerPointerException extends RuntimeException {
     public static void youJustLostTheGame(String message) {
         Util.backgroundExecutor().execute(() -> {
             Minecraft.getInstance().emergencySaveAndCrash(
-                    CrashReport.forThrowable(new IntegerPointerException(message), message)
+                    CrashReport.forThrowable(new LogicalMistakeError(message), message)
             );
         });
     }
