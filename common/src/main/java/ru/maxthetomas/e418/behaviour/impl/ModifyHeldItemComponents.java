@@ -22,12 +22,16 @@ public class ModifyHeldItemComponents extends Behaviour {
     public static final MapCodec<ModifyHeldItemComponents> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ModifyHeldItemComponents::getComponents)
     ).apply(instance, ModifyHeldItemComponents::new));
+    public static final MapCodec<ModifyHeldItemComponents> STATE_CODEC = MapCodec.unit(ModifyHeldItemComponents::new);
 
 
-    private final DataComponentPatch components;
+    private DataComponentPatch components;
 
     public ModifyHeldItemComponents(DataComponentPatch components) {
         this.components = components;
+    }
+
+    private ModifyHeldItemComponents() {
     }
 
     @Override

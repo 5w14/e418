@@ -30,15 +30,19 @@ public class ShowToastBehaviour extends Behaviour {
             ComponentSerialization.CODEC.optionalFieldOf("description", Component.empty()).forGetter(ShowToastBehaviour::getDescription),
             ItemStack.CODEC.optionalFieldOf("stack", Items.AIR.getDefaultInstance()).forGetter(ShowToastBehaviour::getStack)
     ).apply(instance, ShowToastBehaviour::new));
+    public static final MapCodec<ShowToastBehaviour> STATE_CODEC = MapCodec.unit(ShowToastBehaviour::new);
 
-    private final Component title;
-    private final Component description;
-    private final ItemStack stack;
+    private Component title;
+    private Component description;
+    private ItemStack stack;
 
     public ShowToastBehaviour(Component title, Component description, ItemStack stack) {
         this.title = title;
         this.description = description;
         this.stack = stack;
+    }
+
+    private ShowToastBehaviour() {
     }
 
     public Component getTitle() {

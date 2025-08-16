@@ -38,11 +38,13 @@ public class TeleportPlayerBehaviour extends Behaviour {
             ResourceLocation.CODEC.lenientOptionalFieldOf("level").forGetter(TeleportPlayerBehaviour::getLevel),
             Codec.BOOL.optionalFieldOf("relative", true).forGetter(TeleportPlayerBehaviour::isRelative)
     ).apply(instance, TeleportPlayerBehaviour::new));
-    private final ResourceLocation level;
-    private final boolean relative;
-    private final NumberProvider x;
-    private final NumberProvider y;
-    private final NumberProvider z;
+    public static final MapCodec<TeleportPlayerBehaviour> STATE_CODEC = MapCodec.unit(TeleportPlayerBehaviour::new);
+
+    private ResourceLocation level;
+    private boolean relative;
+    private NumberProvider x;
+    private NumberProvider y;
+    private NumberProvider z;
 
     public TeleportPlayerBehaviour(NumberProvider x, NumberProvider y, NumberProvider z,
                                    Optional<ResourceLocation> level, boolean relative) {
@@ -53,6 +55,8 @@ public class TeleportPlayerBehaviour extends Behaviour {
         this.relative = relative;
     }
 
+    private TeleportPlayerBehaviour() {
+    }
 
     @Override
     public ResourceLocation getTypeId() {

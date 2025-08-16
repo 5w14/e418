@@ -15,6 +15,7 @@ import ru.maxthetomas.e418.networking.S2CCrashGame;
 public class GameCrashBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "game_crash");
     public static final MapCodec<GameCrashBehaviour> CODEC = MapCodec.unit(GameCrashBehaviour::new);
+    public static final MapCodec<GameCrashBehaviour> STATE_CODEC = MapCodec.unit(GameCrashBehaviour::new);
 
     @Override
     public ResourceLocation getTypeId() {
@@ -24,14 +25,24 @@ public class GameCrashBehaviour extends Behaviour {
     @Override
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CCrashGame());
+        if (!context.hasPlayer()) {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CCrashGame());
+        } else {
+            NetworkManager.sendToPlayer(context.getPlayer(), new S2CCrashGame());
+        }
         setDone(true);
     }
 
     @Override
     public boolean canRun(EventContext context) {
         // todo check if intrusive events are enabled
-        return super.canRun(context);
+        return super.canRun(context) && !context.shouldAwaitPlayer();
+    }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+        dispose();
     }
 }

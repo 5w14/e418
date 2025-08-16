@@ -17,6 +17,7 @@ import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
+import ru.maxthetomas.e418.util.storage.InGameStorage;
 
 import java.util.Optional;
 
@@ -41,9 +42,12 @@ public final class E418 {
 
     private static void registerListeners() {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
-            ManagedServer = srv;
+            EventManager.getActiveEvents().forEach(EventManager::disposeEvent);
+            EventManager.fullReset(null);
             E418Variables.init();
 
+            ru.maxthetomas.e418.event.EventManager.IsActive = true;
+            ManagedServer = srv;
         });
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(lvl -> {
@@ -52,14 +56,17 @@ public final class E418 {
             }
         });
 
+        LifecycleEvent.SERVER_STARTED.register(InGameStorage::load);
+
         LifecycleEvent.SERVER_STOPPING.register(srv -> {
             if (srv == ManagedServer) {
-                EventManager.getActiveEvents().forEach(EventManager::disposeEvent);
+                ru.maxthetomas.e418.event.EventManager.IsActive = false;
             }
         });
 
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
             if (srv == ManagedServer) {
+                EventManager.fullReset(srv);
                 ManagedServer = null;
             }
             E418Variables.init();

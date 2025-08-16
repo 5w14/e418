@@ -6,12 +6,10 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import java.util.List;
 
 public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourExecutor {
-    protected final List<PreActiveBehaviour> behaviours;
-    protected EventContext context;
     protected List<Behaviour> activeBehaviours = List.of();
 
     public ExecutorBehaviour(List<PreActiveBehaviour> behaviours) {
-        this.behaviours = behaviours;
+        this.activeBehaviours = behaviours.stream().map(PreActiveBehaviour::create).toList();
     }
 
     @Override
@@ -26,9 +24,6 @@ public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourE
      * @return true if start is successful.
      */
     protected boolean tryStartBehaviours() {
-        if (activeBehaviours.isEmpty())
-            activeBehaviours = behaviours.stream().map(PreActiveBehaviour::create).toList();
-
         if (activeBehaviours.stream().anyMatch(v -> !v.canRun(context)))
             return false;
 
@@ -60,12 +55,15 @@ public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourE
     }
 
     @Override
-    public List<Behaviour> getExecutedBehaviours() {
-        return activeBehaviours;
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+        activeBehaviours.forEach(v -> v.restoreState(context, this));
+        dirty();
     }
 
-    public List<PreActiveBehaviour> getPreActiveBehaviours() {
-        return behaviours;
+    @Override
+    public List<Behaviour> getExecutedBehaviours() {
+        return activeBehaviours;
     }
 
     @Override

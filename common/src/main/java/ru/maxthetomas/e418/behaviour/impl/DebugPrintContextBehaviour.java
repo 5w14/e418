@@ -1,7 +1,5 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -22,7 +20,8 @@ import java.util.stream.Stream;
  */
 public class DebugPrintContextBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "debug_print_context");
-    public static final MapCodec<DebugPrintContextBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(DebugPrintContextBehaviour::new));
+    public static final MapCodec<DebugPrintContextBehaviour> CODEC = MapCodec.unit(DebugPrintContextBehaviour::new);
+    public static final MapCodec<DebugPrintContextBehaviour> STATE_CODEC = MapCodec.unit(DebugPrintContextBehaviour::new);
 
     @Override
     public ResourceLocation getTypeId() {

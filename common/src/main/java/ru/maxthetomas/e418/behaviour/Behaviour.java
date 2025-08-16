@@ -1,5 +1,9 @@
 package ru.maxthetomas.e418.behaviour;
 
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.codecs.NumberRequester;
 import ru.maxthetomas.e418.condition.ICondition;
@@ -12,6 +16,8 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  */
 public abstract class Behaviour implements NumberRequester {
     protected IBehaviourExecutor executor;
+    protected EventContext context;
+
     private boolean isDisposed = false;
     private boolean isStopped = false;
     private boolean isExecuted = false;
@@ -27,6 +33,7 @@ public abstract class Behaviour implements NumberRequester {
     public void execute(EventContext context, IBehaviourExecutor executor) {
         isExecuted = true;
         this.executor = executor;
+        this.context = context;
     }
 
     /**
@@ -115,7 +122,10 @@ public abstract class Behaviour implements NumberRequester {
      */
     public final void setDone(boolean value) {
         isDone = value;
-        executor.dirty();
+        if (executor != null)
+            executor.dirty();
+        else
+            LogUtils.getLogger().warn("Could not update executor in {} because it's not defined!", getClass().getName());
     }
 
     /**
@@ -130,5 +140,42 @@ public abstract class Behaviour implements NumberRequester {
      */
     public final boolean isStopped() {
         return isStopped;
+    }
+
+    public final boolean isExecuted() {
+        return isExecuted;
+    }
+
+    /**
+     * Should only be used when restoring state.
+     */
+    protected void _resetExecuted() {
+        this.isExecuted = false;
+    }
+
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        this.executor = executor;
+        this.context = context;
+        this.executor.dirty();
+    }
+
+    public record BehaviourState(boolean isDone, boolean isDisposed, boolean isStopped, boolean isExecuted) {
+        public static final MapCodec<BehaviourState> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+                Codec.BOOL.lenientOptionalFieldOf("is_done", false).forGetter(v -> v.isDone),
+                Codec.BOOL.lenientOptionalFieldOf("is_disposed", false).forGetter(v -> v.isDisposed),
+                Codec.BOOL.lenientOptionalFieldOf("is_stopped", false).forGetter(v -> v.isStopped),
+                Codec.BOOL.lenientOptionalFieldOf("is_executed", false).forGetter(v -> v.isExecuted)
+        ).apply(i, BehaviourState::new));
+
+        public void apply(Behaviour behaviour) {
+            behaviour.isExecuted = isExecuted;
+            behaviour.isDone = isDone;
+            behaviour.isDisposed = isDisposed;
+            behaviour.isStopped = isStopped;
+        }
+
+        public static BehaviourState create(Behaviour behaviour) {
+            return new BehaviourState(behaviour.isDone, behaviour.isDisposed, behaviour.isStopped, behaviour.isExecuted);
+        }
     }
 }

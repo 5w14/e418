@@ -2,8 +2,10 @@ package ru.maxthetomas.e418.behaviour.impl;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
@@ -21,11 +23,28 @@ public class SetSunTextureBehaviour extends Behaviour {
     public static final MapCodec<SetSunTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetSunTextureBehaviour::getTextureResource)
     ).apply(instance, SetSunTextureBehaviour::new));
+    public static final MapCodec<SetSunTextureBehaviour> STATE_CODEC = CODEC;
 
     ResourceLocation textureResource;
 
     public SetSunTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
+        register();
+    }
+
+    void register() {
+        PlayerEvent.PLAYER_JOIN.register(this::playerJoin);
+    }
+
+    void unregister() {
+        PlayerEvent.PLAYER_JOIN.unregister(this::playerJoin);
+    }
+
+    void playerJoin(ServerPlayer player) {
+        player.getServer().execute(() -> {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetSun(textureResource));
+        });
     }
 
     @Override
@@ -47,6 +66,12 @@ public class SetSunTextureBehaviour extends Behaviour {
         NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
                 new S2CSetSun(ResourceLocation.withDefaultNamespace("empty")));
         setDone(true);
+    }
+
+    @Override
+    public void dispose() {
+        unregister();
+        super.dispose();
     }
 
     public ResourceLocation getTextureResource() {

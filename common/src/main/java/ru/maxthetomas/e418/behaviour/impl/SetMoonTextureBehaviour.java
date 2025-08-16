@@ -2,8 +2,10 @@ package ru.maxthetomas.e418.behaviour.impl;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
@@ -21,11 +23,28 @@ public class SetMoonTextureBehaviour extends Behaviour {
     public static final MapCodec<SetMoonTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetMoonTextureBehaviour::getTextureResource)
     ).apply(instance, SetMoonTextureBehaviour::new));
+    public static final MapCodec<SetMoonTextureBehaviour> STATE_CODEC = CODEC;
 
-    ResourceLocation textureResource;
+    private ResourceLocation textureResource;
 
     public SetMoonTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
+        register();
+    }
+
+    void register() {
+        PlayerEvent.PLAYER_JOIN.register(this::playerJoin);
+    }
+
+    void unregister() {
+        PlayerEvent.PLAYER_JOIN.unregister(this::playerJoin);
+    }
+
+    void playerJoin(ServerPlayer player) {
+        player.getServer().execute(() -> {
+            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+                    new S2CSetMoon(textureResource));
+        });
     }
 
     @Override
@@ -51,5 +70,11 @@ public class SetMoonTextureBehaviour extends Behaviour {
 
     public ResourceLocation getTextureResource() {
         return textureResource;
+    }
+
+    @Override
+    public void dispose() {
+        unregister();
+        super.dispose();
     }
 }

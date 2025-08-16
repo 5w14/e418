@@ -1,7 +1,5 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Decoder;
-import com.mojang.serialization.Encoder;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
@@ -16,7 +14,8 @@ import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
 
 public class CancelTimeSkipBehaviour extends Behaviour {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "cancel_time_skip");
-    public static final MapCodec<CancelTimeSkipBehaviour> CODEC = MapCodec.of(Encoder.empty(), Decoder.unit(CancelTimeSkipBehaviour::new));
+    public static final MapCodec<CancelTimeSkipBehaviour> CODEC = MapCodec.unit(CancelTimeSkipBehaviour::new);
+    public static final MapCodec<CancelTimeSkipBehaviour> STATE_CODEC = MapCodec.unit(CancelTimeSkipBehaviour::new);
 
     @Override
     public ResourceLocation getTypeId() {
@@ -31,6 +30,18 @@ public class CancelTimeSkipBehaviour extends Behaviour {
         var cause = context.getCause();
         if (cause instanceof WakeUpEventCause wakeUpCause) {
             wakeUpCause.cancelTimeSkip();
+        }
+    }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+
+        if (isDone()) {
+            var cause = context.getCause();
+            if (cause instanceof WakeUpEventCause wakeUpCause) {
+                wakeUpCause.cancelTimeSkip();
+            }
         }
     }
 }

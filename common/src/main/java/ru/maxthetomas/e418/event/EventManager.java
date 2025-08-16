@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
+import ru.maxthetomas.e418.util.storage.InGameStorage;
 
 import java.util.*;
 
@@ -28,11 +29,21 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     private final List<QueuedEvent> queuedEvents = new ArrayList<>();
     private Map<ResourceLocation, EventResource> registeredEvents;
 
+    public static boolean IsActive = false;
+
     public EventManager() {
         TickEvent.SERVER_POST.register(this::tick);
     }
 
     private void tick(MinecraftServer server) {
+        if (!IsActive) return;
+        updateQueuedEvents(server);
+        updateActiveEvents();
+        activeEvents.forEach(ActiveEvent::tick);
+        InGameStorage.INSTANCE.setDirty();
+    }
+
+    public void updateQueuedEvents(MinecraftServer server) {
         // Queued events
         queuedEvents.removeIf((QueuedEvent queuedEvent) -> {
             // Check timeout time
@@ -50,6 +61,9 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             return false;
         });
 
+    }
+
+    public void updateActiveEvents() {
         // Active events
         activeEvents.removeIf((ActiveEvent event) -> {
             // Check if dirty event is done
@@ -61,17 +75,30 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
             event.undirty();
             return false;
         });
+    }
 
-        activeEvents.forEach(ActiveEvent::tick);
+    public void fullReset(@Nullable MinecraftServer server) {
+        for (int i = 0; i < activeEvents.size(); i++) {
+            ActiveEvent activeEvent = activeEvents.get(i);
+            disposeEvent(activeEvent);
+            i--;
+        }
+
+        updateActiveEvents();
+        if (server != null)
+            updateQueuedEvents(server);
+
+        activeEvents.clear();
+        queuedEvents.clear();
     }
 
     // Getters
     public List<ActiveEvent> getActiveEvents() {
-        return activeEvents;
+        return List.copyOf(activeEvents);
     }
 
     public List<QueuedEvent> getQueuedEvents() {
-        return queuedEvents;
+        return List.copyOf(queuedEvents);
     }
 
     public @Nullable EventResource getEvent(ResourceLocation location) {
@@ -99,8 +126,12 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
      * Gets active event's resource key
      */
     public ResourceLocation getResourceLocation(ActiveEvent activeEvent) {
+        return getResourceLocation(activeEvent.resource);
+    }
+
+    public ResourceLocation getResourceLocation(EventResource resource) {
         for (Map.Entry<ResourceLocation, EventResource> entry : registeredEvents.entrySet()) {
-            if (entry.getValue().equals(activeEvent.resource))
+            if (entry.getValue().equals(resource))
                 return entry.getKey();
         }
 
@@ -216,6 +247,15 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     public boolean isDisposed(ActiveEvent event) {
         return !activeEvents.contains(event);
+    }
+
+    public void _restoreActiveEvents(List<ActiveEvent> restoredActiveEvents) {
+        restoredActiveEvents.forEach(e -> {
+            e.context.withSourceEvent(e);
+            e.updateState();
+            e._restoreState();
+        });
+        this.activeEvents.addAll(restoredActiveEvents);
     }
 
     /*
