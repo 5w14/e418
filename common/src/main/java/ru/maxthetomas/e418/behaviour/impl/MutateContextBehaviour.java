@@ -27,7 +27,7 @@ import java.util.function.Function;
  * </ul>
  */
 public class MutateContextBehaviour extends ExecutorBehaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "mutate_context");
+    public static final ResourceLocation ID = E418.resLoc("mutate_context");
     public static final MapCodec<MutateContextBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ContextMutators.DISPATCH_CODEC.listOf().fieldOf("mutators").forGetter(MutateContextBehaviour::getContextMutators),
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter((a) -> List.of()),

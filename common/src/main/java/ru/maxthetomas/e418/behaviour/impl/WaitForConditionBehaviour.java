@@ -22,7 +22,7 @@ import java.util.function.Function;
  * </ul>
  */
 public class WaitForConditionBehaviour extends ExecutorBehaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "wait_for_conditions");
+    public static final ResourceLocation ID = E418.resLoc("wait_for_conditions");
     public static final MapCodec<WaitForConditionBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Conditions.DISPATCH_CODEC.listOf().fieldOf("conditions").forGetter(WaitForConditionBehaviour::getConditions),
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter((a) -> List.of())

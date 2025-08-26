@@ -19,7 +19,7 @@ import ru.maxthetomas.e418.networking.S2CSetMoon;
  * </ul>
  */
 public class SetMoonTextureBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_moon_texture");
+    public static final ResourceLocation ID = E418.resLoc("set_moon_texture");
     public static final MapCodec<SetMoonTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetMoonTextureBehaviour::getTextureResource)
     ).apply(instance, SetMoonTextureBehaviour::new));

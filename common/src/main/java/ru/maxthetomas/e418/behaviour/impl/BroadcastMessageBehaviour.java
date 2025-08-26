@@ -24,7 +24,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  */
 
 public class BroadcastMessageBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "broadcast_message");
+    public static final ResourceLocation ID = E418.resLoc("broadcast_message");
     public static final MapCodec<? extends Behaviour> CODEC = RecordCodecBuilder.<BroadcastMessageBehaviour>mapCodec(instance ->
             instance.group(
                     ComponentSerialization.CODEC.fieldOf("message").forGetter(BroadcastMessageBehaviour::getMessage),

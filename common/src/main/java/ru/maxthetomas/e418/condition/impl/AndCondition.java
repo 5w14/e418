@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  * </ul>
  */
 public class AndCondition implements ICondition {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "and");
+    public static final ResourceLocation ID = E418.resLoc("and");
     public static final MapCodec<AndCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(AndCondition::getConditions)
     ).apply(instance, AndCondition::new));

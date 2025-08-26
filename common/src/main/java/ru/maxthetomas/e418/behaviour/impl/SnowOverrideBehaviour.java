@@ -23,7 +23,7 @@ import ru.maxthetomas.e418.util.E418Variables;
  * @see SnowAndFreezeFeatureMixin
  */
 public class SnowOverrideBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "snow_override");
+    public static final ResourceLocation ID = E418.resLoc("snow_override");
     public static final MapCodec<SnowOverrideBehaviour> CODEC = MapCodec.unit(SnowOverrideBehaviour::new);
     public static final MapCodec<SnowOverrideBehaviour> STATE_CODEC = MapCodec.unit(SnowOverrideBehaviour::new);
 

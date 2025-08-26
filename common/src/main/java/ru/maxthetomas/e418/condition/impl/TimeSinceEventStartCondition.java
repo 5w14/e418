@@ -16,7 +16,7 @@ import ru.maxthetomas.e418.event.EventContext;
  * </ul>
  */
 public class TimeSinceEventStartCondition implements ICondition {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "time_since_start");
+    public static final ResourceLocation ID = E418.resLoc("time_since_start");
     public static MapCodec<TimeSinceEventStartCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             NumberProviders.CODEC.fieldOf("ticks").forGetter(TimeSinceEventStartCondition::getTicks)
     ).apply(instance, TimeSinceEventStartCondition::new));

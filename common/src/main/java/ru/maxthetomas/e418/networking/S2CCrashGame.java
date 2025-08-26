@@ -10,7 +10,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.util.exceptions.LogicalMistakeError;
 
 public record S2CCrashGame() implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "crash_videogame");
+    public static final ResourceLocation PACKET_ID = E418.resLoc("crash_videogame");
     public static final Type<S2CCrashGame> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CCrashGame> STREAM_CODEC = StreamCodec.unit(new S2CCrashGame());
 

@@ -76,6 +76,6 @@ public class Conditions {
     }
 
     private static MapCodec<? extends ICondition> registerSimple(String type, Function<EventContext, Boolean> checkFunction) {
-        return registerSimple(ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, type), checkFunction);
+        return registerSimple(E418.resLoc(type), checkFunction);
     }
 }

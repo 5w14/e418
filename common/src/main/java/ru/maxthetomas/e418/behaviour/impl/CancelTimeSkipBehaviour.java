@@ -13,7 +13,7 @@ import ru.maxthetomas.e418.event.cause.impl.WakeUpEventCause;
  */
 
 public class CancelTimeSkipBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "cancel_time_skip");
+    public static final ResourceLocation ID = E418.resLoc("cancel_time_skip");
     public static final MapCodec<CancelTimeSkipBehaviour> CODEC = MapCodec.unit(CancelTimeSkipBehaviour::new);
     public static final MapCodec<CancelTimeSkipBehaviour> STATE_CODEC = MapCodec.unit(CancelTimeSkipBehaviour::new);
 

@@ -19,7 +19,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  * </ul>
  */
 public class ExecuteCommandBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "execute_command");
+    public static final ResourceLocation ID = E418.resLoc("execute_command");
     public static final MapCodec<ExecuteCommandBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("command").forGetter(ExecuteCommandBehaviour::getCommand),
             Codec.BOOL.optionalFieldOf("as_player", false).forGetter(ExecuteCommandBehaviour::isAsPlayer)

@@ -29,7 +29,7 @@ import java.util.Optional;
  * </ul>
  */
 public class TeleportPlayerBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "teleport_player");
+    public static final ResourceLocation ID = E418.resLoc("teleport_player");
 
     public static final MapCodec<TeleportPlayerBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             NumberProviders.CODEC.fieldOf("x").forGetter(TeleportPlayerBehaviour::getX),

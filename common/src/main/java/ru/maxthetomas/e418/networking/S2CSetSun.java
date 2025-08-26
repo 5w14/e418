@@ -10,7 +10,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 
 public record S2CSetSun(ResourceLocation sunResource) implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_sun");
+    public static final ResourceLocation PACKET_ID = E418.resLoc("set_sun");
     public static final Type<S2CSetSun> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CSetSun> STREAM_CODEC = StreamCodec.composite(
             ResourceLocation.STREAM_CODEC, S2CSetSun::sunResource,

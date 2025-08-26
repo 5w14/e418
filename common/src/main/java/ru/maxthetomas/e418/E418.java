@@ -97,6 +97,6 @@ public final class E418 {
      * For internal usage only.
      */
     public static ResourceLocation resLoc(String value) {
-        return ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, value);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, value);
     }
 }

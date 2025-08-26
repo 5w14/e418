@@ -14,7 +14,7 @@ import ru.maxthetomas.e418.event.EventContext;
  * </ul>
  */
 public class InBiomeCondition implements ICondition {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "in_biome");
+    public static ResourceLocation ID = E418.resLoc("in_biome");
     public static MapCodec<InBiomeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("biome").forGetter(InBiomeCondition::getBiome)
     ).apply(instance, InBiomeCondition::new));

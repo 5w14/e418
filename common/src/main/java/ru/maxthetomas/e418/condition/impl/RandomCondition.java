@@ -17,7 +17,7 @@ import ru.maxthetomas.e418.util.E418Random;
  * </ul>
  */
 public class RandomCondition implements ICondition {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "random");
+    public static final ResourceLocation ID = E418.resLoc("random");
     public static final MapCodec<RandomCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ExtraCodecs.floatRange(0, 1).fieldOf("chance").forGetter(RandomCondition::getChance),
             ResourceLocation.CODEC.optionalFieldOf("randomSequence", null).forGetter(RandomCondition::getRandomSequence)

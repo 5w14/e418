@@ -18,7 +18,7 @@ import ru.maxthetomas.e418.event.EventContext;
  * </ul>
  */
 public class AtHeightCondition implements ICondition {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "at_height");
+    public static ResourceLocation ID = E418.resLoc("at_height");
     public static MapCodec<AtHeightCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.optionalFieldOf("above", Float.MAX_VALUE).forGetter(AtHeightCondition::getAbove),
             Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::getBelow)

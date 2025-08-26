@@ -16,7 +16,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  * </ul>
  */
 public class ExecuteEventBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "execute_event");
+    public static final ResourceLocation ID = E418.resLoc("execute_event");
     public static final MapCodec<ExecuteEventBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("event").forGetter(ExecuteEventBehaviour::getEventId)
     ).apply(instance, ExecuteEventBehaviour::new));

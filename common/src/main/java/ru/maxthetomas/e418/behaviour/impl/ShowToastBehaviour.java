@@ -24,7 +24,7 @@ import ru.maxthetomas.e418.networking.S2CShowToast;
  */
 public class ShowToastBehaviour extends Behaviour {
     // TODO add "toast_type" argument
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "show_toast");
+    public static final ResourceLocation ID = E418.resLoc("show_toast");
     public static final MapCodec<ShowToastBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ComponentSerialization.CODEC.fieldOf("title").forGetter(ShowToastBehaviour::getTitle),
             ComponentSerialization.CODEC.optionalFieldOf("description", Component.empty()).forGetter(ShowToastBehaviour::getDescription),

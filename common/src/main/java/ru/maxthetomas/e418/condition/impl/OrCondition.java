@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  * </ul>
  */
 public class OrCondition implements ICondition {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "or");
+    public static final ResourceLocation ID = E418.resLoc("or");
     public static final MapCodec<OrCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(OrCondition::getConditions)
     ).apply(instance, OrCondition::new));

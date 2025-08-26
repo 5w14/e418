@@ -19,7 +19,7 @@ public class StartsWithCondition implements ICondition {
     public static final MapCodec<StartsWithCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("prefix").forGetter(StartsWithCondition::getPrefix)
     ).apply(instance, StartsWithCondition::new));
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "chat/starts_with");
+    public static ResourceLocation ID = E418.resLoc("chat/starts_with");
 
     private final String prefix;
 

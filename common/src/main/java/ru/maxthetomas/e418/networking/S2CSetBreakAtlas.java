@@ -11,7 +11,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 
 public record S2CSetBreakAtlas(boolean shouldBreakAtlas) implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_break_atlas");
+    public static final ResourceLocation PACKET_ID = E418.resLoc("set_break_atlas");
     public static final Type<S2CSetBreakAtlas> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CSetBreakAtlas> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL, S2CSetBreakAtlas::shouldBreakAtlas,

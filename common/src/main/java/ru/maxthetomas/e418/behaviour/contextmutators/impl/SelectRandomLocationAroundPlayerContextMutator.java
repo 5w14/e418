@@ -12,7 +12,7 @@ import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
 
 public class SelectRandomLocationAroundPlayerContextMutator implements IContextMutator {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "select_random_location_around_player");
+    public static final ResourceLocation ID = E418.resLoc("select_random_location_around_player");
     public static final MapCodec<SelectRandomLocationAroundPlayerContextMutator> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.FLOAT.optionalFieldOf("radius", 16.0f)

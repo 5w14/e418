@@ -11,7 +11,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 
 public record S2CSetSnowRender(boolean shouldRenderSnow) implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_should_render_snow");
+    public static final ResourceLocation PACKET_ID = E418.resLoc("set_should_render_snow");
     public static final Type<S2CSetSnowRender> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CSetSnowRender> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL, S2CSetSnowRender::shouldRenderSnow,

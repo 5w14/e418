@@ -15,7 +15,7 @@ import ru.maxthetomas.e418.networking.S2CSetMetaParanoia;
  * Prevents the user from being able to leave.
  */
 public class MetaParanoiaBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "meta_paranoia");
+    public static final ResourceLocation ID = E418.resLoc("meta_paranoia");
     public static final MapCodec<MetaParanoiaBehaviour> CODEC = MapCodec.unit(MetaParanoiaBehaviour::new);
     public static final MapCodec<MetaParanoiaBehaviour> STATE_CODEC = MapCodec.unit(MetaParanoiaBehaviour::new);
 

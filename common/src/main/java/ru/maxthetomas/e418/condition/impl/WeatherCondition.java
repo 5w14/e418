@@ -20,7 +20,7 @@ import ru.maxthetomas.e418.util.Location;
  * </ul>
  */
 public class WeatherCondition implements ICondition {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "weather");
+    public static final ResourceLocation ID = E418.resLoc("weather");
     public static final MapCodec<WeatherCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Weather.CODEC.fieldOf("weather").forGetter(WeatherCondition::getWeather)
     ).apply(instance, WeatherCondition::new));

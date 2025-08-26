@@ -19,7 +19,7 @@ import ru.maxthetomas.e418.networking.S2CSetSun;
  * </ul>
  */
 public class SetSunTextureBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_sun_texture");
+    public static final ResourceLocation ID = E418.resLoc("set_sun_texture");
     public static final MapCodec<SetSunTextureBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("texture").forGetter(SetSunTextureBehaviour::getTextureResource)
     ).apply(instance, SetSunTextureBehaviour::new));

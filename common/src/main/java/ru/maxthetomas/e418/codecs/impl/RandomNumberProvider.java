@@ -13,9 +13,7 @@ import ru.maxthetomas.e418.util.E418Random;
 
 public record RandomNumberProvider(float min, float max,
                                    ResourceLocation randomSequence) implements NumberProvider {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(
-            E418.MOD_ID, "random"
-    );
+    public static ResourceLocation ID = E418.resLoc("random");
     public static MapCodec<RandomNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.fieldOf("min").forGetter(RandomNumberProvider::min),
             Codec.FLOAT.fieldOf("max").forGetter(RandomNumberProvider::max),
@@ -32,7 +30,7 @@ public record RandomNumberProvider(float min, float max,
         RandomSource source;
 
         source = context.getServer().overworld().getRandomSequence(randomSequence);
-        
+
         return min + (source.nextFloat() * max - min);
     }
 }

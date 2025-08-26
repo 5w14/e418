@@ -23,7 +23,7 @@ import java.util.UUID;
  * </ul>
  */
 public class SetShaderBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_shader");
+    public static final ResourceLocation ID = E418.resLoc("set_shader");
     public static final MapCodec<SetShaderBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("shader", ResourceLocation.withDefaultNamespace("empty"))
                     .forGetter(SetShaderBehaviour::getShaderId)

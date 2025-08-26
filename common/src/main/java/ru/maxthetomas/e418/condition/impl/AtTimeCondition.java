@@ -16,7 +16,7 @@ import ru.maxthetomas.e418.event.EventContext;
  * </ul>
  */
 public class AtTimeCondition implements ICondition {
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "at_time");
+    public static ResourceLocation ID = E418.resLoc("at_time");
     public static MapCodec<AtTimeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.optionalFieldOf("from", 0).forGetter(AtTimeCondition::getFrom),
             Codec.INT.optionalFieldOf("to", 0).forGetter(AtTimeCondition::getTo)

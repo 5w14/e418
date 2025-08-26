@@ -28,7 +28,7 @@ public class NumberProviders {
     public static MapCodec<? extends NumberProvider> RANDOM = register(RandomNumberProvider.ID, RandomNumberProvider.CODEC);
 
     private static MapCodec<? extends NumberProvider> register(String id, MapCodec<? extends NumberProvider> codec) {
-        return register(ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, id), codec);
+        return register(E418.resLoc(id), codec);
     }
 
     public static MapCodec<? extends NumberProvider> register(ResourceLocation location, MapCodec<? extends NumberProvider> codec) {

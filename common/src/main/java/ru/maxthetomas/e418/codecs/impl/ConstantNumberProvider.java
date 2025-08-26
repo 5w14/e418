@@ -15,7 +15,7 @@ public class ConstantNumberProvider implements NumberProvider {
 
     @Override
     public ResourceLocation getType() {
-        return ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "constant");
+        return E418.resLoc("constant");
     }
 
     @Override

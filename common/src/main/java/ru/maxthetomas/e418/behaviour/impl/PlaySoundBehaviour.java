@@ -25,7 +25,7 @@ import java.util.Optional;
  * </ul>
  */
 public class PlaySoundBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "play_sound");
+    public static final ResourceLocation ID = E418.resLoc("play_sound");
 
     public static final MapCodec<PlaySoundBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(

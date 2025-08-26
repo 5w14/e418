@@ -14,7 +14,7 @@ import ru.maxthetomas.e418.util.Location;
  * Mutates context to have player's location.
  */
 public class SelectPlayerLocationContextMutator implements IContextMutator {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "select_player_location");
+    public static final ResourceLocation ID = E418.resLoc("select_player_location");
     public static final MapCodec<SelectPlayerLocationContextMutator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("prevent_override", false).forGetter(SelectPlayerLocationContextMutator::isPreventOverride)
     ).apply(instance, SelectPlayerLocationContextMutator::new));

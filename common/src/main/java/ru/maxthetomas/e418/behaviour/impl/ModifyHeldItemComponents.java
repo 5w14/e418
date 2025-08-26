@@ -17,7 +17,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  * </ul>
  */
 public class ModifyHeldItemComponents extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "modify_held_item_components");
+    public static final ResourceLocation ID = E418.resLoc("modify_held_item_components");
 
     public static final MapCodec<ModifyHeldItemComponents> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ModifyHeldItemComponents::getComponents)

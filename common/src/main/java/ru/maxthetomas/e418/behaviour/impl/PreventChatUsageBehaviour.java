@@ -26,7 +26,7 @@ import java.util.UUID;
  * </ul>
  */
 public class PreventChatUsageBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "prevent_chat_usage");
+    public static final ResourceLocation ID = E418.resLoc("prevent_chat_usage");
     public static final MapCodec<PreventChatUsageBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             // TODO: proposal - rename this to "global" or something, and invert behaviour
             // or have the same approach as in other behaviours, which will affect player if the context has one

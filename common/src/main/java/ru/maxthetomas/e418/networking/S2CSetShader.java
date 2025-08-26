@@ -12,7 +12,7 @@ import ru.maxthetomas.e418.mixin.accessors.GameRendererAccessor;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 
 public record S2CSetShader(ResourceLocation shader) implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "set_shader");
+    public static final ResourceLocation PACKET_ID = E418.resLoc("set_shader");
     public static final Type<S2CSetShader> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CSetShader> STREAM_CODEC = StreamCodec.composite(
             ResourceLocation.STREAM_CODEC, S2CSetShader::shader,

@@ -16,7 +16,7 @@ import ru.maxthetomas.e418.util.E418Random;
  * Mutates context to have random player.
  */
 public class SelectRandomPlayerContextMutator implements IContextMutator {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "select_random_player");
+    public static final ResourceLocation ID = E418.resLoc("select_random_player");
     public static final MapCodec<SelectRandomPlayerContextMutator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("prevent_override", false).forGetter(SelectRandomPlayerContextMutator::isPreventOverride),
             ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE).forGetter(SelectRandomPlayerContextMutator::getRandomSequence)

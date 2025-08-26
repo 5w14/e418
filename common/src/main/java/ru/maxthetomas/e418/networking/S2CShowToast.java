@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public record S2CShowToast(Component title, Component description, ItemStack stack) implements CustomPacketPayload {
-    public static final ResourceLocation PACKET_ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "show_toast");
+    public static final ResourceLocation PACKET_ID = E418.resLoc("show_toast");
     public static final Type<S2CShowToast> TYPE = new Type<>(PACKET_ID);
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CShowToast> STREAM_CODEC = StreamCodec.composite(
             ComponentSerialization.STREAM_CODEC, S2CShowToast::title,
@@ -49,7 +49,7 @@ public record S2CShowToast(Component title, Component description, ItemStack sta
             );
 
             var toast = new AdvancementToast(
-                    new AdvancementHolder(ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "temp_advancement"),
+                    new AdvancementHolder(E418.resLoc("temp_advancement"),
                             new Advancement(
                                     Optional.empty(),
                                     Optional.of(display),

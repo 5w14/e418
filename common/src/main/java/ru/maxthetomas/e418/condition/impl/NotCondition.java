@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  * </ul>
  */
 public class NotCondition implements ICondition {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "not");
+    public static final ResourceLocation ID = E418.resLoc("not");
     public static final MapCodec<NotCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(NotCondition::getConditions)
     ).apply(instance, NotCondition::new));

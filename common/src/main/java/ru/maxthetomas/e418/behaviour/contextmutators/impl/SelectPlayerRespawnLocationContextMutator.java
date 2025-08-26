@@ -14,7 +14,7 @@ import ru.maxthetomas.e418.util.Location;
  * Mutates context to have player's respawn location.
  */
 public class SelectPlayerRespawnLocationContextMutator implements IContextMutator {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "select_player_respawn_location");
+    public static final ResourceLocation ID = E418.resLoc("select_player_respawn_location");
     public static final MapCodec<SelectPlayerRespawnLocationContextMutator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.optionalFieldOf("prevent_override", false).forGetter(SelectPlayerRespawnLocationContextMutator::isPreventOverride)
     ).apply(instance, SelectPlayerRespawnLocationContextMutator::new));

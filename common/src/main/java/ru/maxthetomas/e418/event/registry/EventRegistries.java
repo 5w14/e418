@@ -77,7 +77,7 @@ public class EventRegistries {
     }
 
     private static EventRegistry create(String id) {
-        var instance = new EventRegistry(ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, id));
+        var instance = new EventRegistry(E418.resLoc(id));
         REGISTRY.put(instance.getId(), instance);
         return instance;
     }

@@ -8,7 +8,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.cause.IEventCause;
 
 public class ConsoleCommandEventCause implements IEventCause {
-    public static final ResourceLocation TYPE = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "console_command");
+    public static final ResourceLocation TYPE = E418.resLoc("console_command");
     // This is a unit codec because there are no instances of behaviours using
     // ConsoleCommand event cause, also there is no way to serialize CommandContext that I know of.
     public static final MapCodec<ConsoleCommandEventCause> CODEC = MapCodec.unit(new ConsoleCommandEventCause(null));

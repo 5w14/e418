@@ -15,7 +15,7 @@ import ru.maxthetomas.e418.networking.S2CSetBreakAtlas;
  * Breaks game's texture atlas to make textures look glitchy
  */
 public class BreakAtlasBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "break_atlas");
+    public static final ResourceLocation ID = E418.resLoc("break_atlas");
     public static final MapCodec<BreakAtlasBehaviour> CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
     public static final MapCodec<BreakAtlasBehaviour> STATE_CODEC = MapCodec.unit(BreakAtlasBehaviour::new);
 

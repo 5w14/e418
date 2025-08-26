@@ -21,7 +21,7 @@ public class MatchesCondition implements ICondition {
     public static final MapCodec<MatchesCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("regex").forGetter(MatchesCondition::getRegex)
     ).apply(instance, MatchesCondition::new));
-    public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "chat/matches");
+    public static ResourceLocation ID = E418.resLoc("chat/matches");
 
     private final String regex;
 

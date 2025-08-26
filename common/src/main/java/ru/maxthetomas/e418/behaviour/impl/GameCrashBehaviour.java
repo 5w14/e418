@@ -13,7 +13,7 @@ import ru.maxthetomas.e418.networking.S2CCrashGame;
  * Crashes the game.
  */
 public class GameCrashBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "game_crash");
+    public static final ResourceLocation ID = E418.resLoc("game_crash");
     public static final MapCodec<GameCrashBehaviour> CODEC = MapCodec.unit(GameCrashBehaviour::new);
     public static final MapCodec<GameCrashBehaviour> STATE_CODEC = MapCodec.unit(GameCrashBehaviour::new);
 

@@ -20,7 +20,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
  * </ul>
  */
 public class TimeoutBehaviour extends Behaviour {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(E418.MOD_ID, "timeout");
+    public static final ResourceLocation ID = E418.resLoc("timeout");
     public static final MapCodec<TimeoutBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             NumberProviders.CODEC.fieldOf("ticks").forGetter(TimeoutBehaviour::getTicks)
     ).apply(instance, TimeoutBehaviour::new));
