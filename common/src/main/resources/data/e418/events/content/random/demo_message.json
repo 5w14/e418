@@ -1,0 +1,15 @@
+{
+  "name": "Demo message",
+  "description": "Kinda creepy you know?",
+  "behaviours": [
+    {
+      "type": "e418:broadcast_message",
+      "message": {
+        "color": "white",
+        "text": "This is your last day!"
+      }
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
