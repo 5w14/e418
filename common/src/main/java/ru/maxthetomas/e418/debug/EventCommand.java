@@ -70,6 +70,9 @@ public class EventCommand {
                                 .suggests(EventCommand::getActiveEventSuggestions)
                                 .then(LiteralArgumentBuilder.<CommandSourceStack>literal("dispose")
                                         .executes(EventCommand::executeStopSubcommand))
+                ).then(
+                        LiteralArgumentBuilder.<CommandSourceStack>literal("all")
+                                .executes(EventCommand::executeClear)
                 );
     }
 
@@ -384,7 +387,7 @@ public class EventCommand {
     private static int executePrintRandomEventDelays(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_delays",
-                        RandomEventManager.getTimeToGlobalEvent(),
+                        RandomEventManager.getGlobalEventTick(),
                         ComponentUtils.formatList(PlayerDataManager.savedPlayers(),
                                 Component.literal("\n"),
                                 (e) -> Component.translatable("e418.commands.event.print_event_delays.line",
@@ -394,6 +397,14 @@ public class EventCommand {
         return 1;
     }
 
+    private static int executeClear(CommandContext<CommandSourceStack> context) {
+        E418.getEventManager().getQueuedEvents().forEach((event) -> E418.getEventManager().dequeueEvent(event));
+        E418.getEventManager().getActiveEvents().forEach((event) -> E418.getEventManager().stopEvent(event));
+
+        context.getSource().sendSuccess(
+                () -> Component.translatable("e418.commands.event.stop.all"), false);
+        return 1;
+    }
 
     private static int executeStopSubcommand(CommandContext<CommandSourceStack> context) {
         var isForced = context.getNodes().getLast().getNode().getName().equals("dispose");

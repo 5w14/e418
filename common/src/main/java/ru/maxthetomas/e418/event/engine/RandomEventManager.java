@@ -1,6 +1,7 @@
 package ru.maxthetomas.e418.event.engine;
 
 import com.mojang.logging.LogUtils;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,15 +18,20 @@ import ru.maxthetomas.e418.util.Location;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static int timeToGlobalEvent = 20 * 60 * 30;
+    private static long globalEventTick = 20 * 60 * 30;
 
     public RandomEventManager() {
         TickEvent.SERVER_POST.register(this::tick);
+        LifecycleEvent.SERVER_STARTED.register(this::serverStarted);
         // TODO: Load time from save data
     }
 
-    public static int getTimeToGlobalEvent() {
-        return timeToGlobalEvent;
+    public static long getGlobalEventTick() {
+        return globalEventTick;
+    }
+
+    private void serverStarted(MinecraftServer minecraftServer) {
+        globalEventTick += minecraftServer.overworld().getGameTime();
     }
 
     public void tick(MinecraftServer minecraftServer) {
@@ -33,7 +39,6 @@ public class RandomEventManager {
 
         if (minecraftServer.getPlayerCount() == 0)
             return;
-        timeToGlobalEvent--;
 
         // Process player random events
         for (ServerPlayer player : minecraftServer.getPlayerList().getPlayers()) {
@@ -113,7 +118,7 @@ public class RandomEventManager {
 
 
         // Process global random events
-        if (timeToGlobalEvent <= 0) {
+        if (globalEventTick <= currentTime) {
             var cause = new GlobalRandomEventCause();
 
             var random = E418Random.EVENT_ENGINE_PLAYER;
@@ -128,9 +133,9 @@ public class RandomEventManager {
             }
 
             if (success) {
-                timeToGlobalEvent = Config.globalRandomEventDelay.get().randomValue(random);
+                globalEventTick = currentTime + Config.globalRandomEventDelay.get().randomValue(random);
             } else {
-                timeToGlobalEvent = Config.globalRandomEventDelayFailure.get().randomValue(random);
+                globalEventTick = currentTime + Config.globalRandomEventDelayFailure.get().randomValue(random);
             }
         }
     }
