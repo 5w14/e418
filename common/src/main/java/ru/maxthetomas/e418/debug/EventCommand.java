@@ -386,7 +386,7 @@ public class EventCommand {
     private static int executePrintRandomEventDelays(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_delays",
-                        RandomEventManager.getGlobalEventTick(),
+                        E418.getEventEngine().RandomEventManager.GlobalEventTick,
                         ComponentUtils.formatList(context.getSource().getServer().getPlayerList().getPlayers(),
                                 Component.literal("\n"),
                                 (e) -> {

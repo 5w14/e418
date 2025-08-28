@@ -27,7 +27,9 @@ public class InGameStorage extends SavedData {
             ActiveEvent.CODEC.codec().listOf().fieldOf("active_events")
                     .forGetter(v -> v.activeEvents),
             QueuedEvent.CODEC.codec().listOf().fieldOf("queued_events")
-                    .forGetter(v -> v.queuedEvents)
+                    .forGetter(v -> v.queuedEvents),
+            Codec.LONG.fieldOf("global_event_tick")
+                    .forGetter(v -> v.globalEventTick)
     ).apply(instance, InGameStorage::constructByCodec));
 
     private static final Factory<InGameStorage> FACTORY = new Factory<>(InGameStorage::new,
@@ -38,6 +40,7 @@ public class InGameStorage extends SavedData {
     private CompoundTag keyValueStore = new CompoundTag();
     private List<ActiveEvent> activeEvents = new ArrayList<>();
     private List<QueuedEvent> queuedEvents = new ArrayList<>();
+    private Long globalEventTick = -1L;
 
     /**
      * Saves a value into a KV-store NBT store.
@@ -64,6 +67,7 @@ public class InGameStorage extends SavedData {
         if (EventManager.IsActive) {
             this.activeEvents = E418.getEventManager().getActiveEvents();
             this.queuedEvents = E418.getEventManager().getQueuedEvents();
+            this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
         }
 
         return (CompoundTag) CODEC.encode(this,
@@ -82,7 +86,7 @@ public class InGameStorage extends SavedData {
         return CODEC.decoder().decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst();
     }
 
-    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents) {
+    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents, Long globalEventTick) {
         var store = new InGameStorage();
 
         var tag = dynamic.convert(NbtOps.INSTANCE).getValue();
@@ -91,6 +95,7 @@ public class InGameStorage extends SavedData {
 
         E418.getEventManager()._restoreActiveEvents(activeEvents);
         E418.getEventManager()._restoreQueuedEvents(queuedEvents);
+        E418.getEventEngine().RandomEventManager.GlobalEventTick = globalEventTick;
 
         return store;
     }
