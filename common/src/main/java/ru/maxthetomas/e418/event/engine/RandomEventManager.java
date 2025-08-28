@@ -18,7 +18,7 @@ import ru.maxthetomas.e418.util.Location;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static long globalEventTick = 20 * 60 * 30;
+    public long GlobalEventTick;
 
     public RandomEventManager() {
         TickEvent.SERVER_POST.register(this::tick);
@@ -26,8 +26,8 @@ public class RandomEventManager {
         // TODO: Load time from save data
     }
 
-    public static long getGlobalEventTick() {
-        return globalEventTick;
+    public long getGlobalEventTick() {
+        return GlobalEventTick;
     }
 
     private void serverStarted(MinecraftServer minecraftServer) {
@@ -35,7 +35,7 @@ public class RandomEventManager {
     }
 
     public void reset(MinecraftServer srv) {
-        globalEventTick = 20 * 60 * 30 + srv.overworld().getGameTime();
+        GlobalEventTick = Config.globalRandomEventGracePeriod.get().randomValue(E418Random.EVENT_ENGINE_GLOBAL) + srv.overworld().getGameTime();
     }
 
     public void tick(MinecraftServer minecraftServer) {
@@ -122,7 +122,7 @@ public class RandomEventManager {
 
 
         // Process global random events
-        if (globalEventTick <= currentTime) {
+        if (GlobalEventTick <= currentTime) {
             var cause = new GlobalRandomEventCause();
 
             var random = E418Random.EVENT_ENGINE_PLAYER;
@@ -137,9 +137,9 @@ public class RandomEventManager {
             }
 
             if (success) {
-                globalEventTick = currentTime + Config.globalRandomEventDelay.get().randomValue(random);
+                GlobalEventTick = currentTime + Config.globalRandomEventDelay.get().randomValue(random);
             } else {
-                globalEventTick = currentTime + Config.globalRandomEventDelayFailure.get().randomValue(random);
+                GlobalEventTick = currentTime + Config.globalRandomEventDelayFailure.get().randomValue(random);
             }
         }
     }

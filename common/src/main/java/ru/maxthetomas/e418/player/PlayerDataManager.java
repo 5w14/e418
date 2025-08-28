@@ -1,8 +1,8 @@
 package ru.maxthetomas.e418.player;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RandomSource;
 import ru.maxthetomas.e418.config.Config;
+import ru.maxthetomas.e418.util.E418Random;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class PlayerDataManager {
     public static PlayerData createNewData(MinecraftServer srv) {
         var data = new PlayerData();
 
-        data.eventTimestamp = srv.overworld().getGameTime() + Config.playerGracePeriod.get().randomValue(RandomSource.create());
+        data.eventTimestamp = srv.overworld().getGameTime() + Config.playerRandomEventGracePeriod.get().randomValue(E418Random.EVENT_ENGINE_PLAYER);
 
         return data;
     }
