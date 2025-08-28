@@ -21,7 +21,7 @@ public class NeoForgePlayerDataManager implements IPlayerDataManager {
 
     @Override
     public PlayerData getData(ServerPlayer player) {
-        if (player.hasData(AttachmentTypes.PLAYER_DATA))
+        if (!player.hasData(AttachmentTypes.PLAYER_DATA))
             return null;
 
         return player.getData(AttachmentTypes.PLAYER_DATA).duplicate();
