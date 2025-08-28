@@ -22,7 +22,6 @@ import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
-import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.player.PlayerDataManager;
 
@@ -387,7 +386,7 @@ public class EventCommand {
     private static int executePrintRandomEventDelays(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_delays",
-                        RandomEventManager.getGlobalEventTick(),
+                        E418.getEventEngine().RandomEventManager.GlobalEventTick,
                         ComponentUtils.formatList(PlayerDataManager.savedPlayers(),
                                 Component.literal("\n"),
                                 (e) -> Component.translatable("e418.commands.event.print_event_delays.line",
