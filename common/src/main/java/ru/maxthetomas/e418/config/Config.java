@@ -41,6 +41,7 @@ public class Config {
     public static Value<Range> playerRandomEventDelayFailure = field("player_random_event_delay", Range.CODEC.codec(), new Range(600, 1200));
     public static Value<Range> playerRandomEventOffset = field("player_random_event_offset", Range.CODEC.codec(), new Range(1200, 2400));
     public static Value<Range> playerRandomEventLock = field("player_random_event_lock", Range.CODEC.codec(), new Range(1200, 2400));
+    public static Value<Range> playerGracePeriod = field("player_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
 
 
     public static boolean isDebug() {
