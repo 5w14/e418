@@ -40,7 +40,7 @@ public class InGameStorage extends SavedData {
     private CompoundTag keyValueStore = new CompoundTag();
     private List<ActiveEvent> activeEvents = new ArrayList<>();
     private List<QueuedEvent> queuedEvents = new ArrayList<>();
-    private Long globalEventTick;
+    private Long globalEventTick = -1L;
 
     /**
      * Saves a value into a KV-store NBT store.
@@ -67,6 +67,7 @@ public class InGameStorage extends SavedData {
         if (EventManager.IsActive) {
             this.activeEvents = E418.getEventManager().getActiveEvents();
             this.queuedEvents = E418.getEventManager().getQueuedEvents();
+            this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
         }
 
         return (CompoundTag) CODEC.encode(this,

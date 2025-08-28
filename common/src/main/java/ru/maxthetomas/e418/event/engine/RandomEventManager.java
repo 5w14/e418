@@ -18,7 +18,7 @@ import ru.maxthetomas.e418.util.Location;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
-    public long GlobalEventTick;
+    public long GlobalEventTick = -1L;
 
     public RandomEventManager() {
         TickEvent.SERVER_POST.register(this::tick);
