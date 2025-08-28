@@ -31,7 +31,11 @@ public class RandomEventManager {
     }
 
     private void serverStarted(MinecraftServer minecraftServer) {
-        globalEventTick += minecraftServer.overworld().getGameTime();
+        reset(minecraftServer);
+    }
+
+    public void reset(MinecraftServer srv) {
+        globalEventTick = 20 * 60 * 30 + srv.overworld().getGameTime();
     }
 
     public void tick(MinecraftServer minecraftServer) {

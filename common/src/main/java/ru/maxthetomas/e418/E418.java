@@ -11,8 +11,7 @@ import net.minecraft.server.packs.PackType;
 import ru.maxthetomas.e418.config.ConfigLoader;
 import ru.maxthetomas.e418.debug.EventCommand;
 import ru.maxthetomas.e418.event.EventManager;
-import ru.maxthetomas.e418.event.engine.ChatMessageEventManager;
-import ru.maxthetomas.e418.event.engine.RandomEventManager;
+import ru.maxthetomas.e418.event.engine.EventEngine;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Random;
@@ -24,8 +23,7 @@ import java.util.Optional;
 public final class E418 {
     public static final String MOD_ID = "e418";
     private static final EventManager EventManager = new EventManager();
-    private static final RandomEventManager RandomEventManager = new RandomEventManager();
-    private static final ChatMessageEventManager ChatMessageEventManager = new ChatMessageEventManager();
+    private static final EventEngine EventEngine = new EventEngine();
 
     private static MinecraftServer ManagedServer = null;
 
@@ -81,16 +79,12 @@ public final class E418 {
         return EventManager;
     }
 
+    public static EventEngine getEventEngine() {
+        return EventEngine;
+    }
+
     public static Optional<MinecraftServer> getCurrentServer() {
         return Optional.ofNullable(GameInstance.getServer());
-    }
-
-    public static RandomEventManager getRandomEventManager() {
-        return RandomEventManager;
-    }
-
-    public static ChatMessageEventManager getChatMessageEventManager() {
-        return ChatMessageEventManager;
     }
 
     /**

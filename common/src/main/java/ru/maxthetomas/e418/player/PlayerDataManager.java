@@ -59,5 +59,7 @@ public class PlayerDataManager {
         return data;
     }
 
-
+    public static void reset() {
+        players.clear();
+    }
 }

@@ -33,4 +33,7 @@ public class ChatMessageEventManager {
         return EventResult.pass();
     }
 
+    public void reset() {
+        // nothing to reset for now
+    }
 }

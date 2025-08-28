@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
+import ru.maxthetomas.e418.player.PlayerDataManager;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
 
 import java.util.*;
@@ -85,11 +86,14 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         }
 
         updateActiveEvents();
-        if (server != null)
+        if (server != null) {
             updateQueuedEvents(server);
+            E418.getEventEngine().reset(server);
+        }
 
         activeEvents.clear();
         queuedEvents.clear();
+        PlayerDataManager.reset();
     }
 
     // Getters
@@ -103,19 +107,6 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     public @Nullable EventResource getEvent(ResourceLocation location) {
         return this.registeredEvents.getOrDefault(location, null);
-    }
-
-    /**
-     * TODO: Implement event list with weights.
-     * Returns random registered event.
-     *
-     * @return random registered event
-     */
-    public EventResource getRandomEvent() {
-        Random random = new Random();
-        var resourceArray = this.registeredEvents.keySet().toArray();
-
-        return this.registeredEvents.get((ResourceLocation) resourceArray[random.nextInt(resourceArray.length)]);
     }
 
     public Set<ResourceLocation> getRegisteredEvents() {
