@@ -11,7 +11,7 @@ public class FabricPlayerDataManager implements IPlayerDataManager {
         var attachment = player.getAttachedOrCreate(AttachmentTypes.PLAYER_DATA_ATTACHMENT,
                 () -> new PlayerDataAttachment(createNewData(player.server))
         );
-        return attachment.playerData();
+        return attachment.playerData().duplicate();
     }
 
     @Override
@@ -20,7 +20,7 @@ public class FabricPlayerDataManager implements IPlayerDataManager {
         if (attachment == null)
             return null;
         else
-            return attachment.playerData();
+            return attachment.playerData().duplicate();
     }
 
     @Override

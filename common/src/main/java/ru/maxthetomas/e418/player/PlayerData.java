@@ -2,9 +2,7 @@ package ru.maxthetomas.e418.player;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.jcip.annotations.Immutable;
 
-@Immutable
 public class PlayerData {
     public static Codec<PlayerData> CODEC = RecordCodecBuilder.<PlayerData>create(instance -> instance.group(
             Codec.LONG.optionalFieldOf("event_timestamp", -1L).forGetter(v -> v.eventTimestamp),

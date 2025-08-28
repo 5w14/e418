@@ -46,7 +46,7 @@ public class RandomEventManager {
         // Process player random events
         for (ServerPlayer player : minecraftServer.getPlayerList().getPlayers()) {
             var uuid = player.getUUID();
-            var data = E418.PlayerDataManager.ensureData(player).duplicate();
+            var data = E418.PlayerDataManager.ensureData(player);
 
             if (data.eventTimestamp < currentTime) {
                 var random = E418Random.EVENT_ENGINE_GLOBAL;
@@ -102,7 +102,7 @@ public class RandomEventManager {
                         var playerPos = player.position();
 
                         for (ServerPlayer otherPlayer : playersInRange) {
-                            var otherData = E418.PlayerDataManager.ensureData(otherPlayer).duplicate();
+                            var otherData = E418.PlayerDataManager.ensureData(otherPlayer);
 
                             var otherPlayerPos = otherPlayer.position();
                             var distance = playerPos.distanceTo(otherPlayerPos);
