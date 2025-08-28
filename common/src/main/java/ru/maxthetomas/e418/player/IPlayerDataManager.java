@@ -42,7 +42,7 @@ public interface IPlayerDataManager {
     default PlayerData createNewData(MinecraftServer srv) {
 
         var data = new PlayerData();
-        data.eventTimestamp = srv.overworld().getGameTime() + Config.playerGracePeriod.get().randomValue(RandomSource.create());
+        data.eventTimestamp = srv.overworld().getGameTime() + Config.playerRandomEventGracePeriod.get().randomValue(RandomSource.create());
         return data;
 
     }
