@@ -2,6 +2,7 @@ package ru.maxthetomas.e418.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.fabric.player.FabricPlayerDataManager;
 
 public final class E418Fabric implements ModInitializer {
     @Override
@@ -12,5 +13,6 @@ public final class E418Fabric implements ModInitializer {
 
         // Run our common setup.
         E418.init();
+        E418.PlayerDataManager = new FabricPlayerDataManager();
     }
 }

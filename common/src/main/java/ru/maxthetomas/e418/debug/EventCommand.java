@@ -24,7 +24,6 @@ import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
 import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
-import ru.maxthetomas.e418.player.PlayerDataManager;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -388,11 +387,13 @@ public class EventCommand {
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_delays",
                         RandomEventManager.getGlobalEventTick(),
-                        ComponentUtils.formatList(PlayerDataManager.savedPlayers(),
+                        ComponentUtils.formatList(context.getSource().getServer().getPlayerList().getPlayers(),
                                 Component.literal("\n"),
-                                (e) -> Component.translatable("e418.commands.event.print_event_delays.line",
-                                        e.toString(), PlayerDataManager.getData(e).eventTimestamp, PlayerDataManager.getData(e).eventUnlockTimestamp
-                                ))
+                                (e) -> {
+                                    var data = E418.PlayerDataManager.ensureData(e);
+                                    return Component.translatable("e418.commands.event.print_event_delays.line",
+                                            e.getFeedbackDisplayName(), data.eventTimestamp, data.eventUnlockTimestamp);
+                                })
                 ), false);
         return 1;
     }
