@@ -27,9 +27,4 @@ public class FabricPlayerDataManager implements IPlayerDataManager {
     public void setData(ServerPlayer player, PlayerData data) {
         player.setAttached(AttachmentTypes.PLAYER_DATA_ATTACHMENT, new PlayerDataAttachment(data));
     }
-
-    @Override
-    public void reset() {
-
-    }
 }

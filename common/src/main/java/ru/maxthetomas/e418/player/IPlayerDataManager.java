@@ -30,7 +30,8 @@ public interface IPlayerDataManager {
      */
     void setData(ServerPlayer player, PlayerData data);
 
-    void reset();
+    default void reset() {
+    }
 
     /**
      * Returns new player data.

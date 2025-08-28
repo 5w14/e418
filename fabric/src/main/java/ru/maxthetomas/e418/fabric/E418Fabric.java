@@ -13,6 +13,8 @@ public final class E418Fabric implements ModInitializer {
 
         // Run our common setup.
         E418.init();
+        
+        // Mod loader specific actions
         E418.PlayerDataManager = new FabricPlayerDataManager();
     }
 }
