@@ -17,6 +17,7 @@ import ru.maxthetomas.e418.behaviour.Behaviour;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -35,7 +36,7 @@ public class PreventChatUsageBehaviour extends Behaviour {
     ).apply(instance, PreventChatUsageBehaviour::new));
 
     public static final MapCodec<PreventChatUsageBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            UUIDUtil.CODEC.lenientOptionalFieldOf("player_target", null).forGetter(v -> v.playerTarget)
+            UUIDUtil.CODEC.lenientOptionalFieldOf("player_target").forGetter(v -> Optional.ofNullable(v.playerTarget))
     ).apply(instance, PreventChatUsageBehaviour::new));
 
     private final ChatEvent.Received onChatMessage = this::onChatMessage;
@@ -48,6 +49,11 @@ public class PreventChatUsageBehaviour extends Behaviour {
         this.usingContext = usingContext;
         ChatEvent.RECEIVED.register(onChatMessage);
         CommandEvent.MSG_RECEIVED.register(onMsg);
+    }
+
+    private PreventChatUsageBehaviour(Optional<UUID> playerTarget) {
+        this.playerTarget = playerTarget.orElse(null);
+        this.usingContext = this.playerTarget != null;
     }
 
     private PreventChatUsageBehaviour(@Nullable UUID playerTarget) {
