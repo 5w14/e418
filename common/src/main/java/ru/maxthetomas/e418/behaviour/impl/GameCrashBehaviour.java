@@ -26,8 +26,7 @@ public class GameCrashBehaviour extends Behaviour {
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
         if (!context.hasPlayer()) {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CCrashGame());
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CCrashGame());
         } else {
             NetworkManager.sendToPlayer(context.getPlayer(), new S2CCrashGame());
         }

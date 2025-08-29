@@ -81,21 +81,18 @@ public class SetShaderBehaviour extends Behaviour {
             NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
             this.playerUUID = player.getUUID();
         } else {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CSetShader(shaderId));
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetShader(shaderId));
         }
     }
 
     @Override
     public void dispose() {
         if (this.playerUUID != null) {
-            var player = E418.getCurrentServer().get().getPlayerList().getPlayer(this.playerUUID);
+            var player = E418.player(this.playerUUID);
             if (player == null) return;
-            NetworkManager.sendToPlayer(player,
-                    new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+            NetworkManager.sendToPlayer(player, new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         } else {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         }
 
         super.dispose();

@@ -7,7 +7,9 @@ import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.utils.GameInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
+import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.config.ConfigLoader;
 import ru.maxthetomas.e418.debug.EventCommand;
 import ru.maxthetomas.e418.event.EventManager;
@@ -18,7 +20,9 @@ import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public final class E418 {
     public static final String MOD_ID = "e418";
@@ -85,6 +89,16 @@ public final class E418 {
 
     public static Optional<MinecraftServer> getCurrentServer() {
         return Optional.ofNullable(GameInstance.getServer());
+    }
+
+    public static List<ServerPlayer> allPlayers() {
+        if (getCurrentServer().isEmpty()) return List.of();
+        return getCurrentServer().get().getPlayerList().getPlayers();
+    }
+
+    public static @Nullable ServerPlayer player(UUID uuid) {
+        if (getCurrentServer().isEmpty()) return null;
+        return getCurrentServer().get().getPlayerList().getPlayer(uuid);
     }
 
     /**

@@ -54,7 +54,7 @@ public class SnowOverrideBehaviour extends Behaviour {
 
         // Todo: if player rejoins server - this won't work.
         // needs a better sync solution.
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
+        NetworkManager.sendToPlayers(E418.allPlayers(),
                 new S2CSetSnowRender(value));
     }
 

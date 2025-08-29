@@ -46,8 +46,7 @@ public class MetaParanoiaBehaviour extends Behaviour {
 
     private void setMetaParanoia(boolean value) {
         // Send to all players
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CSetMetaParanoia(value));
+        NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetMetaParanoia(value));
     }
 
     @Override

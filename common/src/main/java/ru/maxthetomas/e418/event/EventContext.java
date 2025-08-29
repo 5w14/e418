@@ -58,7 +58,7 @@ public class EventContext {
 
     @Nullable
     public ServerPlayer getPlayer() {
-        return server.getPlayerList().getPlayer(player);
+        return E418.player(player);
     }
 
     @Nullable

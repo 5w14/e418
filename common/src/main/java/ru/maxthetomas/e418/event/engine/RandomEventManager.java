@@ -45,7 +45,7 @@ public class RandomEventManager {
             return;
 
         // Process player random events
-        for (ServerPlayer player : minecraftServer.getPlayerList().getPlayers()) {
+        for (ServerPlayer player : E418.allPlayers()) {
             var uuid = player.getUUID();
             var data = PlayerDataManager.ensureData(uuid, minecraftServer);
 
@@ -56,7 +56,7 @@ public class RandomEventManager {
                 var range = Config.playerRandomEventGroupDistance.get();
 
                 // Get nearby players
-                var playersInRange = minecraftServer.getPlayerList().getPlayers().stream().filter((p) -> {
+                var playersInRange = E418.allPlayers().stream().filter((p) -> {
                     return (p != player &&
                             p.level() == player.level() &&
                             player.position().closerThan(p.position(), range));

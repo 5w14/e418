@@ -42,8 +42,7 @@ public class SetMoonTextureBehaviour extends Behaviour {
 
     void playerJoin(ServerPlayer player) {
         player.getServer().execute(() -> {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CSetMoon(textureResource));
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetMoon(textureResource));
         });
     }
 
@@ -57,14 +56,12 @@ public class SetMoonTextureBehaviour extends Behaviour {
         super.execute(context, executor);
         setDone(true);
 
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CSetMoon(textureResource));
+        NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetMoon(textureResource));
     }
 
     @Override
     public void stop() {
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CSetMoon(ResourceLocation.withDefaultNamespace("empty")));
+        NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetMoon(ResourceLocation.withDefaultNamespace("empty")));
         setDone(true);
     }
 
