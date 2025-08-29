@@ -52,6 +52,8 @@ public class Behaviours {
             register(SetSunTextureBehaviour.ID, SetSunTextureBehaviour.CODEC, SetSunTextureBehaviour.STATE_CODEC);
     public static final MapCodec<? extends Behaviour> SET_MOON_TEXTURE =
             register(SetMoonTextureBehaviour.ID, SetMoonTextureBehaviour.CODEC, SetMoonTextureBehaviour.STATE_CODEC);
+    public static final MapCodec<? extends Behaviour> TEMPORAL_SHIFT =
+            register(TemporalShiftBehaviour.ID, TemporalShiftBehaviour.CODEC, TemporalShiftBehaviour.STATE_CODEC);
 
     // Utilities
     public static final MapCodec<? extends Behaviour> MUTATE_CONTEXT =

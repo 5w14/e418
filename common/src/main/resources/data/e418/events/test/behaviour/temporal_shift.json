@@ -1,0 +1,20 @@
+{
+  "name": "Temporal shift",
+  "description": "Teleportation that returns you after some time",
+  "behaviours": [
+    {
+      "type": "e418:temporal_shift",
+      "ticks": 100
+    },
+    {
+      "type": "e418:teleport_player",
+      "relative": true,
+      "level": "e418:minimalism",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
