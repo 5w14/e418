@@ -35,7 +35,7 @@ public class SetShaderBehaviour extends Behaviour {
             UUIDUtil.CODEC.lenientOptionalFieldOf("player_uuid", null).forGetter(v -> v.playerUUID)
     ).apply(instance, SetShaderBehaviour::new));
 
-    private ResourceLocation shaderId;
+    private final ResourceLocation shaderId;
     private UUID playerUUID = null;
 
     public SetShaderBehaviour(ResourceLocation shaderId) {
@@ -58,9 +58,7 @@ public class SetShaderBehaviour extends Behaviour {
     void playerJoined(ServerPlayer player) {
         if (isExecuted() && !isDone() && (this.playerUUID == null
                 || player.getUUID().equals(this.playerUUID)))
-            player.getServer().execute(() -> {
-                NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
-            });
+            player.getServer().execute(() -> NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId)));
     }
 
     public ResourceLocation getShaderId() {

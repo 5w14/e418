@@ -27,6 +27,7 @@ import ru.maxthetomas.e418.player.PlayerDataManager;
 
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("SameReturnValue")
 public class EventCommand {
     public static void register(
             CommandDispatcher<CommandSourceStack> dispatcher,
@@ -453,7 +454,7 @@ public class EventCommand {
     }
 
     /**
-     * Suggests event registry names for every events that starts with the input
+     * Suggests event registry names for every event that starts with the input
      */
     private static CompletableFuture<Suggestions> getEventRegistriesSuggestions(CommandContext<CommandSourceStack> ctx,
                                                                                 SuggestionsBuilder builder) {

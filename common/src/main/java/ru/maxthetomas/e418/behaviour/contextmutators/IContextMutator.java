@@ -15,7 +15,7 @@ public interface IContextMutator {
      * @param context Context to mutate
      * @return Whether the mutation succeeded.
      */
-    public boolean mutate(EventContext context);
+    boolean mutate(EventContext context);
 
     ResourceLocation getType();
 }

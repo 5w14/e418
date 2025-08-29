@@ -23,7 +23,7 @@ import java.util.List;
 public class InGameStorage extends SavedData {
     public static final MapCodec<InGameStorage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.PASSTHROUGH.fieldOf("kv_store")
-                    .forGetter(a -> new Dynamic<Tag>(NbtOps.INSTANCE, a.keyValueStore)),
+                    .forGetter(a -> new Dynamic<>(NbtOps.INSTANCE, a.keyValueStore)),
             ActiveEvent.CODEC.codec().listOf().fieldOf("active_events")
                     .forGetter(v -> v.activeEvents),
             QueuedEvent.CODEC.codec().listOf().fieldOf("queued_events")
@@ -59,7 +59,7 @@ public class InGameStorage extends SavedData {
     }
 
     public Dynamic<Tag> getValue(String key) {
-        return new Dynamic<Tag>(NbtOps.INSTANCE, keyValueStore.get(key));
+        return new Dynamic<>(NbtOps.INSTANCE, keyValueStore.get(key));
     }
 
     @Override

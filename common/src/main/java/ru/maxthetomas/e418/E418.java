@@ -74,9 +74,7 @@ public final class E418 {
             E418Variables.init();
         });
 
-        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> {
-            E418ClientVariables.init();
-        });
+        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> E418ClientVariables.init());
     }
 
     public static EventManager getEventManager() {

@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
  *
  * @see Behaviour
  */
-public class PreActiveBehaviour {
-    public static Codec<PreActiveBehaviour> CODEC = new Codec<PreActiveBehaviour>() {
+public record PreActiveBehaviour(ResourceLocation type, Dynamic<?> data) {
+    public static final Codec<PreActiveBehaviour> CODEC = new Codec<>() {
         // The encoding of the type and the rest of the data
         @Override
         public <T> DataResult<T> encode(PreActiveBehaviour input, DynamicOps<T> ops, T prefix) {
@@ -51,13 +51,10 @@ public class PreActiveBehaviour {
             }
 
             // Create a new PreCreatedClassInlined with the type and the rest of the data
-            var c = new PreActiveBehaviour(typeString.getOrThrow().getFirst(), new Dynamic<T>(dynamicOps, t));
+            var c = new PreActiveBehaviour(typeString.getOrThrow().getFirst(), new Dynamic<>(dynamicOps, t));
             return DataResult.success(Pair.of(c, t));
         }
     };
-
-    private final ResourceLocation type;
-    private final Dynamic<?> data;
 
     public PreActiveBehaviour(ResourceLocation type, Dynamic<?> data) {
         this.type = type;
@@ -65,14 +62,6 @@ public class PreActiveBehaviour {
 
         // Ensure that the type is registered
         Behaviours.get(type).getOrThrow();
-    }
-
-    public ResourceLocation getType() {
-        return type;
-    }
-
-    public Dynamic<?> getData() {
-        return data;
     }
 
     /**

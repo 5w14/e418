@@ -25,7 +25,7 @@ public class SetSunTextureBehaviour extends Behaviour {
     ).apply(instance, SetSunTextureBehaviour::new));
     public static final MapCodec<SetSunTextureBehaviour> STATE_CODEC = CODEC;
 
-    ResourceLocation textureResource;
+    final ResourceLocation textureResource;
 
     public SetSunTextureBehaviour(ResourceLocation textureResource) {
         this.textureResource = textureResource;
@@ -41,9 +41,7 @@ public class SetSunTextureBehaviour extends Behaviour {
     }
 
     void playerJoin(ServerPlayer player) {
-        player.getServer().execute(() -> {
-            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetSun(textureResource));
-        });
+        player.getServer().execute(() -> NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetSun(textureResource)));
     }
 
     @Override

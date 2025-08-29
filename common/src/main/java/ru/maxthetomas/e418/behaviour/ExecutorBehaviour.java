@@ -6,7 +6,7 @@ import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import java.util.List;
 
 public abstract class ExecutorBehaviour extends Behaviour implements IBehaviourExecutor {
-    protected List<Behaviour> activeBehaviours = List.of();
+    protected List<Behaviour> activeBehaviours;
 
     public ExecutorBehaviour(List<PreActiveBehaviour> behaviours) {
         this.activeBehaviours = behaviours.stream().map(PreActiveBehaviour::create).toList();

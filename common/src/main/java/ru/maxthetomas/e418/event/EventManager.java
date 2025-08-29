@@ -285,9 +285,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         object.registryUpdate().forEach((key, value) -> {
             var registry = EventRegistries.addRegistry(key);
 
-            value.storedWeightedEvents().forEach(stored -> {
-                registry.addEvent(E418.getEventManager().getEvent(stored.id));
-            });
+            value.storedWeightedEvents().forEach(stored -> registry.addEvent(E418.getEventManager().getEvent(stored.id)));
 
             value.storedTags().forEach(registry::addTag);
         });

@@ -41,7 +41,7 @@ public class PreventChatUsageBehaviour extends Behaviour {
     private final ChatEvent.Received onChatMessage = this::onChatMessage;
     private final CommandEvent.MsgReceived onMsg = this::onMsg;
 
-    private boolean usingContext = false;
+    private final boolean usingContext;
     private UUID playerTarget;
 
     public PreventChatUsageBehaviour(boolean usingContext) {

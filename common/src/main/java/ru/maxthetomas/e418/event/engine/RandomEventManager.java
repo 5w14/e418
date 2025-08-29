@@ -56,11 +56,9 @@ public class RandomEventManager {
                 var range = Config.playerRandomEventGroupDistance.get();
 
                 // Get nearby players
-                var playersInRange = E418.allPlayers().stream().filter((p) -> {
-                    return (p != player &&
-                            p.level() == player.level() &&
-                            player.position().closerThan(p.position(), range));
-                }).toList();
+                var playersInRange = E418.allPlayers().stream().filter((p) -> (p != player &&
+                        p.level() == player.level() &&
+                        player.position().closerThan(p.position(), range))).toList();
 
                 var hasLocks = playersInRange.stream().anyMatch((p) -> {
                     var pdata = PlayerDataManager.ensureData(p.getUUID(), minecraftServer);
@@ -98,7 +96,7 @@ public class RandomEventManager {
                     data.eventUnlockTimestamp = currentTime + randomLock;
 
                     // Delay event time for players nearby
-                    if (success && !cause.isGroupEffectCancelled() && range > 0) {
+                    if (!cause.isGroupEffectCancelled() && range > 0) {
                         var playerPos = player.position();
 
                         for (ServerPlayer otherPlayer : playersInRange) {

@@ -15,21 +15,11 @@ import ru.maxthetomas.e418.event.EventContext;
  *   <li><code>ticks</code> - Ticks to trigger.</li>
  * </ul>
  */
-public class TimeSinceEventStartCondition implements ICondition {
+public record TimeSinceEventStartCondition(NumberProvider ticks) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("time_since_start");
-    public static MapCodec<TimeSinceEventStartCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            NumberProviders.CODEC.fieldOf("ticks").forGetter(TimeSinceEventStartCondition::getTicks)
+    public static final MapCodec<TimeSinceEventStartCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            NumberProviders.CODEC.fieldOf("ticks").forGetter(TimeSinceEventStartCondition::ticks)
     ).apply(instance, TimeSinceEventStartCondition::new));
-
-    private final NumberProvider ticks;
-
-    public TimeSinceEventStartCondition(NumberProvider ticks) {
-        this.ticks = ticks;
-    }
-
-    public NumberProvider getTicks() {
-        return ticks;
-    }
 
     @Override
     public boolean check(EventContext context) {

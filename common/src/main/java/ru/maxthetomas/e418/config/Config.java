@@ -21,9 +21,9 @@ public class Config {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final List<Value<?>> CONFIG_VALUES = new ArrayList<>();
 
-    public static Value<Boolean> forceDebug = field("force_debug", Codec.BOOL, false);
-    public static Value<Boolean> shouldSkipDebugScreen = field("skip_debug_screen", Codec.BOOL, true);
-    public static Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds",
+    public static final Value<Boolean> forceDebug = field("force_debug", Codec.BOOL, false);
+    public static final Value<Boolean> shouldSkipDebugScreen = field("skip_debug_screen", Codec.BOOL, true);
+    public static final Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds",
             ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of(
                     E418.resLoc("lines"),
                     E418.resLoc("featureless_overworld"),
@@ -31,18 +31,18 @@ public class Config {
                     E418.resLoc("unlabirynth")
             ));
 
-    public static Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
+    public static final Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
 
-    public static Value<Range> globalRandomEventDelay = field("global_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
-    public static Value<Range> globalRandomEventDelayFailure = field("global_random_event_delay_failure", Range.CODEC.codec(), new Range(600, 1200));
-    public static Value<Range> globalRandomEventGracePeriod = field("player_random_event_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<Range> globalRandomEventDelay = field("global_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<Range> globalRandomEventDelayFailure = field("global_random_event_delay_failure", Range.CODEC.codec(), new Range(600, 1200));
+    public static final Value<Range> globalRandomEventGracePeriod = field("player_random_event_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
 
-    public static Value<Float> playerRandomEventGroupDistance = field("player_random_event_group_distance", Codec.floatRange(0f, 50f), 50f);
-    public static Value<Range> playerRandomEventDelay = field("player_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
-    public static Value<Range> playerRandomEventDelayFailure = field("player_random_event_delay", Range.CODEC.codec(), new Range(600, 1200));
-    public static Value<Range> playerRandomEventOffset = field("player_random_event_offset", Range.CODEC.codec(), new Range(1200, 2400));
-    public static Value<Range> playerRandomEventLock = field("player_random_event_lock", Range.CODEC.codec(), new Range(1200, 2400));
-    public static Value<Range> playerRandomEventGracePeriod = field("player_random_event_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<Float> playerRandomEventGroupDistance = field("player_random_event_group_distance", Codec.floatRange(0f, 50f), 50f);
+    public static final Value<Range> playerRandomEventDelay = field("player_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<Range> playerRandomEventDelayFailure = field("player_random_event_delay", Range.CODEC.codec(), new Range(600, 1200));
+    public static final Value<Range> playerRandomEventOffset = field("player_random_event_offset", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<Range> playerRandomEventLock = field("player_random_event_lock", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<Range> playerRandomEventGracePeriod = field("player_random_event_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
 
 
     public static boolean isDebug() {
@@ -59,7 +59,7 @@ public class Config {
 
 
     private static <T> Value<T> field(String name, Codec<T> codec, T defaultValue) {
-        var value = new Value<T>(name, defaultValue, codec);
+        var value = new Value<>(name, defaultValue, codec);
         CONFIG_VALUES.add(value);
         return value;
     }
@@ -77,8 +77,12 @@ public class Config {
      */
     public static JsonObject serializeConfig() {
         var object = new JsonObject();
-        CONFIG_VALUES.forEach(v ->
-                v.serializeAndAddToObject(object));
+
+        var failed = CONFIG_VALUES.stream().filter(v -> !v.serializeAndAddToObject(object)).toList();
+        if (!failed.isEmpty()) {
+            LOGGER.warn("Could not serialize {} value(s) during config serialization.", failed.size());
+        }
+
         return object;
     }
 
@@ -114,13 +118,9 @@ public class Config {
          */
         public boolean deserializeAndUpdate(JsonElement element) {
             var result = this.getSerializer().decode(JsonOps.INSTANCE, element);
-            result.ifSuccess(v -> {
-                this.set(v.getFirst());
-            });
+            result.ifSuccess(v -> this.set(v.getFirst()));
 
-            result.ifError((err) -> {
-                LOGGER.error("Error while loading value {} from configuration file: {}", this.serializedName, err.toString());
-            });
+            result.ifError((err) -> LOGGER.error("Error while loading value {} from configuration file: {}", this.serializedName, err.toString()));
 
 
             return result.isSuccess();
@@ -147,9 +147,7 @@ public class Config {
 
         public boolean serializeAndAddToObject(JsonObject object) {
             var serialized = this.serialize();
-            serialized.ifSuccess(result -> {
-                object.add(this.serializedName, result);
-            });
+            serialized.ifSuccess(result -> object.add(this.serializedName, result));
 
             return serialized.isSuccess();
         }

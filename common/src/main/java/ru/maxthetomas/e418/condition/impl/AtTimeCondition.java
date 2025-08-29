@@ -16,14 +16,14 @@ import ru.maxthetomas.e418.event.EventContext;
  * </ul>
  */
 public class AtTimeCondition implements ICondition {
-    public static ResourceLocation ID = E418.resLoc("at_time");
-    public static MapCodec<AtTimeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final ResourceLocation ID = E418.resLoc("at_time");
+    public static final MapCodec<AtTimeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.optionalFieldOf("from", 0).forGetter(AtTimeCondition::getFrom),
             Codec.INT.optionalFieldOf("to", 0).forGetter(AtTimeCondition::getTo)
     ).apply(instance, AtTimeCondition::new));
 
-    private int from;
-    private int to;
+    private final int from;
+    private final int to;
 
     public AtTimeCondition(int from, int to) {
         this.from = from;

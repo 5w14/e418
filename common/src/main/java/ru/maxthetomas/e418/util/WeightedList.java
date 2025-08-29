@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeightedList<T> {
-    public List<Entry<T>> values = new ArrayList<>();
+    public final List<Entry<T>> values = new ArrayList<>();
 
     public void add(int weight, T value) {
         values.add(new Entry<>(weight, value));
