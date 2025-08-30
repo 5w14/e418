@@ -63,7 +63,7 @@ public class PreventChatUsageBehaviour extends Behaviour {
 
     @Override
     public ResourceLocation getTypeId() {
-        return null;
+        return ID;
     }
 
     @Override
