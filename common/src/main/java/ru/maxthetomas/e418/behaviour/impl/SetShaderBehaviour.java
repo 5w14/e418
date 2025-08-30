@@ -14,6 +14,7 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetShader;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,13 +33,19 @@ public class SetShaderBehaviour extends Behaviour {
     public static final MapCodec<SetShaderBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("shader", ResourceLocation.withDefaultNamespace("empty"))
                     .forGetter(SetShaderBehaviour::getShaderId),
-            UUIDUtil.CODEC.lenientOptionalFieldOf("player_uuid", null).forGetter(v -> v.playerUUID)
+            UUIDUtil.CODEC.lenientOptionalFieldOf("player_uuid").forGetter(v -> Optional.ofNullable(v.playerUUID))
     ).apply(instance, SetShaderBehaviour::new));
 
     private final ResourceLocation shaderId;
     private UUID playerUUID = null;
 
     public SetShaderBehaviour(ResourceLocation shaderId) {
+        this.shaderId = shaderId;
+        PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
+    }
+
+    private SetShaderBehaviour(ResourceLocation shaderId, Optional<UUID> playerUUID) {
+        this.playerUUID = playerUUID.orElse(null);
         this.shaderId = shaderId;
         PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
     }

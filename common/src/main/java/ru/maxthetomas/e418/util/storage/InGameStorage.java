@@ -67,9 +67,8 @@ public class InGameStorage extends SavedData {
         if (EventManager.IsActive) {
             this.activeEvents = E418.getEventManager().getActiveEvents();
             this.queuedEvents = E418.getEventManager().getQueuedEvents();
-            this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
         }
-
+        this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
         return (CompoundTag) CODEC.encode(this,
                 NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(compoundTag).getOrThrow();
     }
