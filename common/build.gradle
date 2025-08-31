@@ -10,3 +10,31 @@ dependencies {
 
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 }
+
+tasks.register('libJar', Jar) {
+    group = 'build'
+    description = 'Creates lightweight library jar with only classes and language files.'
+    
+    from sourceSets.main.output.classesDirs
+    
+    from(sourceSets.main.resources.srcDirs) {
+        include 'assets/*/lang/**'
+        include 'e418.mixins.json'
+        include 'META-INF/**'
+    }
+    
+    archiveClassifier.set('lib')
+    
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+artifacts {
+    archives tasks.named('libJar')
+}
+
+tasks.named('assemble') {
+    dependsOn tasks.named('libJar')
+}

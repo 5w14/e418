@@ -56,3 +56,42 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
 }
+
+tasks.register('libShadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    group = 'build'
+    description = 'Creates lightweight library shadow jar with only classes and language files.'
+    
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow-lib'
+    
+    from sourceSets.main.output
+    
+    // Use closure-based filtering for more precise control
+    exclude { details ->
+        def path = details.relativePath.pathString
+        return path.startsWith('data/') || 
+               (path.startsWith('assets/') && !path.matches('assets/.*/lang/.*'))
+    }
+    
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.register('libRemapJar', net.fabricmc.loom.task.RemapJarTask) {
+    group = 'build'
+    description = 'Creates lightweight library jar remapped for NeoForge.'
+    
+    dependsOn tasks.named('libShadowJar')
+    input.set tasks.named('libShadowJar').flatMap { it.archiveFile }
+    archiveClassifier = 'lib'
+    
+    addNestedDependencies = false
+}
+
+artifacts {
+    archives tasks.named('libRemapJar')
+}
+
+tasks.named('assemble') {
+    dependsOn tasks.named('libRemapJar')
+}
