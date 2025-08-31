@@ -22,12 +22,6 @@ configurations {
         canBeResolved = true
         canBeConsumed = false
     }
-
-    // Configuration for no-data version
-    shadowBundleNoData {
-        canBeResolved = true
-        canBeConsumed = false
-    }
 }
 
 repositories {
@@ -39,13 +33,11 @@ repositories {
 
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
+
     modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
-
-    // Use the common-nodata jar for the shadow bundle
-    shadowBundleNoData project(path: ':common', configuration: 'transformProductionNeoForgeNoData')
 }
 
 processResources {
@@ -54,51 +46,6 @@ processResources {
     filesMatching('META-INF/neoforge.mods.toml') {
         expand version: project.version
     }
-}
-
-// Task that processes resources with expanded placeholders
-tasks.register('processNoDataResources', Copy) {
-    from sourceSets.main.resources.srcDirs
-    into "${buildDir}/resources-nodata/main"
-
-    inputs.property 'version', project.version
-    filesMatching('META-INF/neoforge.mods.toml') {
-        expand version: project.version
-    }
-}
-
-// Create a JAR with platform-specific resources but without data
-// This is an internal task, not meant for distribution
-tasks.register('jarNoData', Jar) {
-    dependsOn processNoDataResources
-    dependsOn classes
-
-    // Don't add to archives - this is an intermediate file
-    archiveClassifier = 'nodata-dev'
-    destinationDirectory = file("${buildDir}/tmp/jarNoData")
-
-    from sourceSets.main.output.classesDirs
-    from "${buildDir}/resources-nodata/main"
-}
-
-// Shadow jar task for no-data version
-tasks.register('shadowJarNoData', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
-    dependsOn jarNoData
-    configurations = [project.configurations.shadowBundleNoData]
-
-    // Don't add to archives - this is an intermediate file
-    archiveClassifier = 'lib-dev'
-    destinationDirectory = file("${buildDir}/tmp/shadowJarNoData")
-
-    from jarNoData.outputs
-}
-
-// Configure nodata jar to be remapped after creation
-tasks.register('remapNoDataJar', net.fabricmc.loom.task.RemapJarTask) {
-    dependsOn(shadowJarNoData)
-    input = shadowJarNoData.archiveFile
-    // Keep the final lib classifier
-    archiveClassifier = 'lib'
 }
 
 shadowJar {
