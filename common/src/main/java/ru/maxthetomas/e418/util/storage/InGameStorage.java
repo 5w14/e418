@@ -78,7 +78,6 @@ public class InGameStorage extends SavedData {
 
         this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
         this.inShift = TemporalShiftSystem.getPlayersInShift();
-        System.out.println("saved");
 
         return (CompoundTag) CODEC.encode(this,
                 NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(compoundTag).getOrThrow();
