@@ -57,23 +57,30 @@ public class TemporalShiftBehaviour extends Behaviour {
             return;
         }
 
-        if (TemporalShiftSystem.isPaused(context.getPlayerUUID())) {
-            endTick++;
-        }
-
         System.out.println(endTick - context.getServer().overworld().getGameTime());
 
         if (context.getServer().overworld().getGameTime() >= endTick) {
-            context.getPlayer().teleport(new TeleportTransition(
-                    location.level(),
-                    location.position(),
-                    Vec3.ZERO,
-                    0,
-                    0,
-                    TeleportTransition.DO_NOTHING));
-
             setDone(true);
         }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        if (context.getPlayer() == null) {
+            return;
+        }
+
+        context.getPlayer().teleport(new TeleportTransition(
+                location.level(),
+                location.position(),
+                Vec3.ZERO,
+                0,
+                0,
+                TeleportTransition.DO_NOTHING));
+
+        TemporalShiftSystem.removeShift(context.getPlayerUUID().toString());
     }
 
     @Override
@@ -93,6 +100,6 @@ public class TemporalShiftBehaviour extends Behaviour {
         this.endTick = (int) (context.getSourceEvent().startTime + ticks.get(context, this).longValue());
         this.location = Location.fromPlayer(context.getPlayer());
 
-        TemporalShiftSystem.addShift(context.getPlayerUUID(), false);
+        TemporalShiftSystem.addShift(context.getPlayerUUID().toString(), location);
     }
 }

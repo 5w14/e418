@@ -17,6 +17,7 @@ import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.QueuedEvent;
 import ru.maxthetomas.e418.system.TemporalShiftSystem;
+import ru.maxthetomas.e418.util.Location;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class InGameStorage extends SavedData {
                     .forGetter(v -> v.queuedEvents),
             Codec.LONG.fieldOf("global_event_tick")
                     .forGetter(v -> v.globalEventTick),
-            Codec.unboundedMap(Codec.STRING, Codec.BOOL).fieldOf("in_shift")
+            Codec.unboundedMap(Codec.STRING, Location.CODEC.codec()).fieldOf("in_shift")
                     .forGetter(v -> v.inShift)
     ).apply(instance, InGameStorage::constructByCodec));
 
@@ -46,7 +47,7 @@ public class InGameStorage extends SavedData {
     private List<ActiveEvent> activeEvents = new ArrayList<>();
     private List<QueuedEvent> queuedEvents = new ArrayList<>();
     private Long globalEventTick = -1L;
-    private Map<String, Boolean> inShift = new HashMap<>();
+    private Map<String, Location> inShift = new HashMap<>();
 
     /**
      * Saves a value into a KV-store NBT store.
@@ -75,7 +76,6 @@ public class InGameStorage extends SavedData {
             this.queuedEvents = E418.getEventManager().getQueuedEvents();
             this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
             this.inShift = TemporalShiftSystem.getPlayersInShift();
-            System.out.println("saved");
         }
 
         return (CompoundTag) CODEC.encode(this,
@@ -94,7 +94,7 @@ public class InGameStorage extends SavedData {
         return CODEC.decoder().decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst();
     }
 
-    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents, Long globalEventTick, Map<String, Boolean> inShift) {
+    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents, Long globalEventTick, Map<String, Location> inShift) {
         var store = new InGameStorage();
 
         var tag = dynamic.convert(NbtOps.INSTANCE).getValue();
@@ -105,8 +105,6 @@ public class InGameStorage extends SavedData {
         E418.getEventManager()._restoreQueuedEvents(queuedEvents);
         E418.getEventEngine().RandomEventManager.GlobalEventTick = globalEventTick;
         TemporalShiftSystem.setPlayersInShift(new HashMap<>(inShift));
-        System.out.println("loaded");
-        System.out.println(new HashMap<>(inShift));
 
         return store;
     }
