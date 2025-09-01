@@ -13,17 +13,11 @@ import ru.maxthetomas.e418.event.EventContext;
  *   <li><code>biome</code> - Biome to trigger.</li>
  * </ul>
  */
-public class InBiomeCondition implements ICondition {
-    public static ResourceLocation ID = E418.resLoc("in_biome");
-    public static MapCodec<InBiomeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("biome").forGetter(InBiomeCondition::getBiome)
+public record InBiomeCondition(ResourceLocation biome) implements ICondition {
+    public static final ResourceLocation ID = E418.resLoc("in_biome");
+    public static final MapCodec<InBiomeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceLocation.CODEC.fieldOf("biome").forGetter(InBiomeCondition::biome)
     ).apply(instance, InBiomeCondition::new));
-
-    private final ResourceLocation biome;
-
-    public InBiomeCondition(ResourceLocation biome) {
-        this.biome = biome;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -36,9 +30,5 @@ public class InBiomeCondition implements ICondition {
     @Override
     public ResourceLocation getType() {
         return ID;
-    }
-
-    public ResourceLocation getBiome() {
-        return biome;
     }
 }

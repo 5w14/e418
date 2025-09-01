@@ -7,24 +7,30 @@ import dev.architectury.registry.ReloadListenerRegistry;
 import dev.architectury.utils.GameInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
+import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.config.ConfigLoader;
 import ru.maxthetomas.e418.debug.EventCommand;
 import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.engine.EventEngine;
 import ru.maxthetomas.e418.networking.E418Networking;
+import ru.maxthetomas.e418.player.IPlayerDataManager;
 import ru.maxthetomas.e418.system.TemporalShiftSystem;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public final class E418 {
     public static final String MOD_ID = "e418";
     private static final EventManager EventManager = new EventManager();
     private static final EventEngine EventEngine = new EventEngine();
+    public static IPlayerDataManager PlayerDataManager;
 
     private static MinecraftServer ManagedServer = null;
 
@@ -73,9 +79,7 @@ public final class E418 {
             E418Variables.init();
         });
 
-        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> {
-            E418ClientVariables.init();
-        });
+        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> E418ClientVariables.init());
     }
 
     public static EventManager getEventManager() {
@@ -88,6 +92,16 @@ public final class E418 {
 
     public static Optional<MinecraftServer> getCurrentServer() {
         return Optional.ofNullable(GameInstance.getServer());
+    }
+
+    public static List<ServerPlayer> allPlayers() {
+        if (getCurrentServer().isEmpty()) return List.of();
+        return getCurrentServer().get().getPlayerList().getPlayers();
+    }
+
+    public static @Nullable ServerPlayer player(UUID uuid) {
+        if (getCurrentServer().isEmpty()) return null;
+        return getCurrentServer().get().getPlayerList().getPlayer(uuid);
     }
 
     /**

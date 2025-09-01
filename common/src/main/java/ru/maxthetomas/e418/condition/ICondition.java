@@ -18,5 +18,5 @@ public interface ICondition extends NumberRequester {
      */
     boolean check(EventContext context);
 
-    public ResourceLocation getType();
+    ResourceLocation getType();
 }

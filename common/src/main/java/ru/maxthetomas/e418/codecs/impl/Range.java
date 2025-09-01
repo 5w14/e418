@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
 
 public record Range(int min, int max) {
-    public static MapCodec<Range> CODEC = RecordCodecBuilder.<Range>mapCodec(instance -> instance.group(
+    public static final MapCodec<Range> CODEC = RecordCodecBuilder.<Range>mapCodec(instance -> instance.group(
             Codec.INT.fieldOf("min").forGetter(Range::min),
             Codec.INT.fieldOf("max").forGetter(Range::max)
     ).apply(instance, Range::new)).validate(Range::validate);

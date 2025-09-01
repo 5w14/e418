@@ -19,17 +19,12 @@ import ru.maxthetomas.e418.util.Location;
  *   <li><code>weather</code> - Weather that will trigger.</li>
  * </ul>
  */
-public class WeatherCondition implements ICondition {
+public record WeatherCondition(
+        ru.maxthetomas.e418.condition.impl.WeatherCondition.Weather weather) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("weather");
     public static final MapCodec<WeatherCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Weather.CODEC.fieldOf("weather").forGetter(WeatherCondition::getWeather)
+            Weather.CODEC.fieldOf("weather").forGetter(WeatherCondition::weather)
     ).apply(instance, WeatherCondition::new));
-
-    private final Weather weather;
-
-    public WeatherCondition(Weather weather) {
-        this.weather = weather;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -66,17 +61,13 @@ public class WeatherCondition implements ICondition {
         return null;
     }
 
-    public Weather getWeather() {
-        return weather;
-    }
-
     public enum Weather implements StringRepresentable {
         CLEAR("clear"),
         RAIN("rain"),
         ANY_NON_CLEAR("any_non_clear"),
         THUNDER("thunder");
 
-        public static Codec<Weather> CODEC = StringRepresentable.fromEnum(Weather::values);
+        public static final Codec<Weather> CODEC = StringRepresentable.fromEnum(Weather::values);
 
         final String name;
 

@@ -58,7 +58,7 @@ public class EventContext {
 
     @Nullable
     public ServerPlayer getPlayer() {
-        return server.getPlayerList().getPlayer(player);
+        return E418.player(player);
     }
 
     @Nullable
@@ -108,6 +108,7 @@ public class EventContext {
         return this;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public EventContext clone() {
         var newContext = new EventContext(server);
@@ -127,6 +128,10 @@ public class EventContext {
     }
 
     private static EventContext constructByCodec(boolean forced, Optional<Location> location, Optional<UUID> player, IEventCause cause) {
+        if (E418.getCurrentServer().isEmpty()) {
+            throw new IllegalStateException("The current server is empty");
+        }
+
         var context = new EventContext(E418.getCurrentServer().get());
         context.cause = cause;
         context.forced = forced;

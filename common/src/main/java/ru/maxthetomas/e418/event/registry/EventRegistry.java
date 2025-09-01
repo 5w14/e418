@@ -20,9 +20,9 @@ import java.util.Set;
  */
 public class EventRegistry {
     protected static final Logger LOGGER = LogUtils.getLogger();
-    protected WeightedList<EventResource> events = new WeightedList<>();
-    protected Set<String> tags = new HashSet<>();
-    protected ResourceLocation id;
+    protected final WeightedList<EventResource> events = new WeightedList<>();
+    protected final Set<String> tags = new HashSet<>();
+    protected final ResourceLocation id;
 
     public EventRegistry(ResourceLocation id) {
         this.id = id;

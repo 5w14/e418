@@ -65,6 +65,7 @@ public abstract class ServerLevelMixin {
     @Shadow
     public abstract RandomSource getRandomSequence(ResourceLocation arg);
 
+    @SuppressWarnings("SameReturnValue")
     @ModifyVariable(at = @At("STORE"), method = "tick", ordinal = 0)
     public int modifySleepingPercentage(int input) {
         return 101; // Disable sleep through night logic.
@@ -116,6 +117,7 @@ public abstract class ServerLevelMixin {
         }
     }
 
+    @SuppressWarnings("CancellableInjectionUsage")
     @Inject(at = @At("HEAD"), method = "addEntity", cancellable = true)
     public void spawnEntity(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (!(entity instanceof LivingEntity)) return;

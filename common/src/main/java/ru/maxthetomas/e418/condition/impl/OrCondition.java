@@ -20,17 +20,11 @@ import java.util.stream.Stream;
  *   <li><code>conditions</code> - Conditions to check.</li>
  * </ul>
  */
-public class OrCondition implements ICondition {
+public record OrCondition(List<Dynamic<?>> conditions) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("or");
     public static final MapCodec<OrCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(OrCondition::getConditions)
+            Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(OrCondition::conditions)
     ).apply(instance, OrCondition::new));
-
-    private final List<Dynamic<?>> conditions;
-
-    public OrCondition(List<Dynamic<?>> conditions) {
-        this.conditions = conditions;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -42,12 +36,8 @@ public class OrCondition implements ICondition {
         return ID;
     }
 
-    public List<Dynamic<?>> getConditions() {
-        return conditions;
-    }
-
     public Stream<ICondition> buildConditions() {
-        return conditions.stream().map((d) -> Conditions.DISPATCH_CODEC.parse(d))
+        return conditions.stream().map(Conditions.DISPATCH_CODEC::parse)
                 .filter(DataResult::isSuccess).map(DataResult::getOrThrow);
     }
 }

@@ -20,21 +20,15 @@ import java.util.stream.Stream;
  *   <li><code>conditions</code> - Conditions to inverse.</li>
  * </ul>
  */
-public class NotCondition implements ICondition {
+public record NotCondition(List<Dynamic<?>> conditions) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("not");
     public static final MapCodec<NotCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(NotCondition::getConditions)
+            Codec.PASSTHROUGH.listOf().fieldOf("conditions").forGetter(NotCondition::conditions)
     ).apply(instance, NotCondition::new));
-
-    private final List<Dynamic<?>> conditions;
-
-    public NotCondition(List<Dynamic<?>> conditions) {
-        this.conditions = conditions;
-    }
 
     @Override
     public boolean check(EventContext context) {
-        return buildConditions().allMatch(v -> !v.check(context));
+        return buildConditions().noneMatch(v -> v.check(context));
     }
 
     @Override
@@ -42,12 +36,8 @@ public class NotCondition implements ICondition {
         return ID;
     }
 
-    public List<Dynamic<?>> getConditions() {
-        return conditions;
-    }
-
     public Stream<ICondition> buildConditions() {
-        return conditions.stream().map((d) -> Conditions.DISPATCH_CODEC.parse(d))
+        return conditions.stream().map(Conditions.DISPATCH_CODEC::parse)
                 .filter(DataResult::isSuccess).map(DataResult::getOrThrow);
     }
 }

@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
-import ru.maxthetomas.e418.player.PlayerDataManager;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
 
 import java.util.*;
@@ -93,7 +92,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
         activeEvents.clear();
         queuedEvents.clear();
-        PlayerDataManager.reset();
+        E418.PlayerDataManager.reset();
     }
 
     // Getters
@@ -285,9 +284,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         object.registryUpdate().forEach((key, value) -> {
             var registry = EventRegistries.addRegistry(key);
 
-            value.storedWeightedEvents().forEach(stored -> {
-                registry.addEvent(E418.getEventManager().getEvent(stored.id));
-            });
+            value.storedWeightedEvents().forEach(stored -> registry.addEvent(E418.getEventManager().getEvent(stored.id)));
 
             value.storedTags().forEach(registry::addTag);
         });
