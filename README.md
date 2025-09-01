@@ -3,6 +3,36 @@
 is a horror mod designed to be less intrusive, inspired by mrdrnose's [Voices
 of The Void](https://mrdrnose.itch.io/votv).
 
+## Using this mod
+
+### For Players
+Download from [GitHub Releases](https://github.com/5w14/e418/releases) or add as a dependency:
+
+#### Gradle
+```gradle
+repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/5w14/e418")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
+}
+
+dependencies {
+    // For Fabric
+    modImplementation "ru.maxthetomas:e418-fabric:${project.e418_version}"
+    
+    // For NeoForge  
+    implementation "ru.maxthetomas:e418-neoforge:${project.e418_version}"
+    
+    // For common (if developing cross-platform)
+    modApi "ru.maxthetomas:e418-common:${project.e418_version}"
+}
+```
+
 ## Design philosophies
 
 1. The mod will not affect any buildings or other creations made by a player,
