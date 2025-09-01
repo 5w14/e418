@@ -11,7 +11,7 @@ import ru.maxthetomas.e418.event.EventContext;
  */
 public class IsNightCondition implements ICondition {
     public static final MapCodec<IsNightCondition> CODEC = MapCodec.unit(IsNightCondition::new);
-    public static ResourceLocation ID = E418.resLoc("is_night");
+    public static final ResourceLocation ID = E418.resLoc("is_night");
 
     @Override
     public boolean check(EventContext context) {

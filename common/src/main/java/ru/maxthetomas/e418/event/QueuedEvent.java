@@ -10,7 +10,7 @@ import ru.maxthetomas.e418.E418;
 import java.util.Optional;
 
 public record QueuedEvent(EventResource resource, EventContext context, @Nullable Long timeoutTick) {
-    public static MapCodec<QueuedEvent> CODEC = RecordCodecBuilder.<QueuedEvent>mapCodec(i -> i.group(
+    public static final MapCodec<QueuedEvent> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             ResourceLocation.CODEC.xmap(v -> E418.getEventManager().getEvent(v),
                             res -> E418.getEventManager().getResourceLocation(res)).fieldOf("id")
                     .forGetter(v -> v.resource),

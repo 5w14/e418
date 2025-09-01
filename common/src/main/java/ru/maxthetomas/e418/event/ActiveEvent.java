@@ -15,7 +15,7 @@ import java.util.List;
  * Event that is currently active.
  */
 public class ActiveEvent implements IBehaviourExecutor {
-    public static final MapCodec<ActiveEvent> CODEC = RecordCodecBuilder.<ActiveEvent>mapCodec(i -> i.group(
+    public static final MapCodec<ActiveEvent> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             ResourceLocation.CODEC.xmap(v -> E418.getEventManager().getEvent(v),
                             res -> E418.getEventManager().getResourceLocation(res)).fieldOf("id")
                     .forGetter(v -> v.resource),

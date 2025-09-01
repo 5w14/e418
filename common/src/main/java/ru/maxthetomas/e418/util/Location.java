@@ -19,7 +19,7 @@ public record Location(ServerLevel level, Vec3 position) {
     ).apply(instance, Location::fromDimensionIdAndVec3));
 
     /**
-     * Creates an Location from ServerPlayer's position.
+     * Creates a Location from ServerPlayer's position.
      */
     public static Location fromPlayer(ServerPlayer player) {
         var position = player.position();

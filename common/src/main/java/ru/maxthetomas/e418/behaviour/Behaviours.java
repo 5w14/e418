@@ -12,6 +12,7 @@ import java.util.Map;
  * This class is the {@linkplain Behaviour} registry.
  * Every behaviour registers a {@linkplain com.mojang.serialization.MapCodec}, which is used for their deserialization.
  */
+@SuppressWarnings("unused")
 public class Behaviours {
     private static final Map<ResourceLocation, MapCodec<? extends Behaviour>> REGISTRY = new HashMap<>();
     static final Map<ResourceLocation, MapCodec<? extends Behaviour>> STATE_CODEC_REGISTRY = new HashMap<>();

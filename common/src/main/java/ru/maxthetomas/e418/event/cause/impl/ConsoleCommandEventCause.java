@@ -7,17 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.cause.IEventCause;
 
-public class ConsoleCommandEventCause implements IEventCause {
+public record ConsoleCommandEventCause(CommandContext<CommandSourceStack> context) implements IEventCause {
     public static final ResourceLocation TYPE = E418.resLoc("console_command");
     // This is a unit codec because there are no instances of behaviours using
     // ConsoleCommand event cause, also there is no way to serialize CommandContext that I know of.
     public static final MapCodec<ConsoleCommandEventCause> CODEC = MapCodec.unit(new ConsoleCommandEventCause(null));
-
-    public final CommandContext<CommandSourceStack> context;
-
-    public ConsoleCommandEventCause(CommandContext<CommandSourceStack> context) {
-        this.context = context;
-    }
 
     @Override
     public ResourceLocation getType() {

@@ -18,8 +18,8 @@ import ru.maxthetomas.e418.event.EventContext;
  * </ul>
  */
 public class PlayersNearbyCondition implements ICondition {
-    public static ResourceLocation ID = E418.resLoc("players_nearby");
-    public static MapCodec<PlayersNearbyCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final ResourceLocation ID = E418.resLoc("players_nearby");
+    public static final MapCodec<PlayersNearbyCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.DOUBLE.optionalFieldOf("radius", 1d).forGetter(PlayersNearbyCondition::getRadius),
             Codec.INT.optionalFieldOf("min_players_nearby", 0).forGetter(PlayersNearbyCondition::getMinPlayerNearby),
             Codec.INT.optionalFieldOf("max_players_nearby", 0).forGetter(PlayersNearbyCondition::getMaxPlayerNearby)

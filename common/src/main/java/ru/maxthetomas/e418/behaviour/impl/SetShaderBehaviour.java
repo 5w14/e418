@@ -14,6 +14,7 @@ import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CSetShader;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,13 +33,19 @@ public class SetShaderBehaviour extends Behaviour {
     public static final MapCodec<SetShaderBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("shader", ResourceLocation.withDefaultNamespace("empty"))
                     .forGetter(SetShaderBehaviour::getShaderId),
-            UUIDUtil.CODEC.lenientOptionalFieldOf("player_uuid", null).forGetter(v -> v.playerUUID)
+            UUIDUtil.CODEC.lenientOptionalFieldOf("player_uuid").forGetter(v -> Optional.ofNullable(v.playerUUID))
     ).apply(instance, SetShaderBehaviour::new));
 
-    private ResourceLocation shaderId;
+    private final ResourceLocation shaderId;
     private UUID playerUUID = null;
 
     public SetShaderBehaviour(ResourceLocation shaderId) {
+        this.shaderId = shaderId;
+        PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
+    }
+
+    private SetShaderBehaviour(ResourceLocation shaderId, Optional<UUID> playerUUID) {
+        this.playerUUID = playerUUID.orElse(null);
         this.shaderId = shaderId;
         PlayerEvent.PLAYER_JOIN.register(this::playerJoined);
     }
@@ -58,9 +65,7 @@ public class SetShaderBehaviour extends Behaviour {
     void playerJoined(ServerPlayer player) {
         if (isExecuted() && !isDone() && (this.playerUUID == null
                 || player.getUUID().equals(this.playerUUID)))
-            player.getServer().execute(() -> {
-                NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
-            });
+            player.getServer().execute(() -> NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId)));
     }
 
     public ResourceLocation getShaderId() {
@@ -81,21 +86,18 @@ public class SetShaderBehaviour extends Behaviour {
             NetworkManager.sendToPlayer(player, new S2CSetShader(shaderId));
             this.playerUUID = player.getUUID();
         } else {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CSetShader(shaderId));
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetShader(shaderId));
         }
     }
 
     @Override
     public void dispose() {
         if (this.playerUUID != null) {
-            var player = E418.getCurrentServer().get().getPlayerList().getPlayer(this.playerUUID);
+            var player = E418.player(this.playerUUID);
             if (player == null) return;
-            NetworkManager.sendToPlayer(player,
-                    new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+            NetworkManager.sendToPlayer(player, new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         } else {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CSetShader(S2CSetShader.EMPTY_SHADER));
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetShader(S2CSetShader.EMPTY_SHADER));
         }
 
         super.dispose();

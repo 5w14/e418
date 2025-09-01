@@ -25,9 +25,7 @@ public class MetaParanoiaBehaviour extends Behaviour {
 
     void playerJoin(ServerPlayer player) {
         if (isExecuted() && !isDone() && context.hasPlayer() && context.getPlayer() != null)
-            player.server.execute(() -> {
-                NetworkManager.sendToPlayer(context.getPlayer(), new S2CSetMetaParanoia(true));
-            });
+            player.server.execute(() -> NetworkManager.sendToPlayer(context.getPlayer(), new S2CSetMetaParanoia(true)));
     }
 
     @Override
@@ -46,8 +44,7 @@ public class MetaParanoiaBehaviour extends Behaviour {
 
     private void setMetaParanoia(boolean value) {
         // Send to all players
-        NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                new S2CSetMetaParanoia(value));
+        NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetMetaParanoia(value));
     }
 
     @Override

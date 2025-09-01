@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 
 public class ActiveBehaviourDispatch<T extends Behaviour> {
-    public static Codec<Behaviour> DISPATCH_CODEC = Codec.lazyInitialized(() ->
+    public static final Codec<Behaviour> DISPATCH_CODEC = Codec.lazyInitialized(() ->
             ResourceLocation.CODEC.dispatch(Behaviour::getTypeId, Behaviours.STATE_CODEC_REGISTRY::get));
 
     Behaviour.BehaviourState state;
@@ -28,7 +28,7 @@ public class ActiveBehaviourDispatch<T extends Behaviour> {
         return create(state, behaviour);
     }
 
-    public static MapCodec<ActiveBehaviourDispatch<Behaviour>> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<ActiveBehaviourDispatch<Behaviour>> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Behaviour.BehaviourState.CODEC.fieldOf("state")
                     .forGetter(v -> v.state),
             DISPATCH_CODEC.fieldOf("data").forGetter(v -> v.activeBehaviour)

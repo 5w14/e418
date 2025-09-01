@@ -55,8 +55,7 @@ public class BreakAtlasBehaviour extends Behaviour {
         // needs a better sync solution.
 
         if (player == null) {
-            NetworkManager.sendToPlayers(E418.getCurrentServer().get().getPlayerList().getPlayers(),
-                    new S2CSetBreakAtlas(value));
+            NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetBreakAtlas(value));
         } else {
             NetworkManager.sendToPlayer(player, new S2CSetBreakAtlas(value));
         }

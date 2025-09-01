@@ -20,7 +20,7 @@ public class ContextMutators {
     public static final MapCodec<? extends IContextMutator> SELECT_PLAYER_RESPAWN_LOCATION = register(SelectPlayerRespawnLocationContextMutator.ID, SelectPlayerRespawnLocationContextMutator.CODEC);
     public static final MapCodec<? extends IContextMutator> SELECT_RANDOM_LOCATION_AROUND_PLAYER = register(SelectRandomLocationAroundPlayerContextMutator.ID, SelectRandomLocationAroundPlayerContextMutator.CODEC);
 
-    public static Codec<IContextMutator> DISPATCH_CODEC = ResourceLocation.CODEC
+    public static final Codec<IContextMutator> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(IContextMutator::getType, REGISTRY::get);
 
     public static DataResult<MapCodec<? extends IContextMutator>> get(ResourceLocation id) {

@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class EventCauses {
     private static final Map<ResourceLocation, MapCodec<? extends IEventCause>> CAUSES = new HashMap<>();
-    public static Codec<IEventCause> DISPATCH_CODEC = ResourceLocation.CODEC
+    public static final Codec<IEventCause> DISPATCH_CODEC = ResourceLocation.CODEC
             .dispatch(IEventCause::getType, CAUSES::get);
 
     public static final MapCodec<? extends IEventCause> CHAT_MESSAGE = register(ChatMessageCause.TYPE, ChatMessageCause.CODEC);

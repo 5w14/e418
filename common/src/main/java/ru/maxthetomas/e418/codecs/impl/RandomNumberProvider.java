@@ -13,8 +13,8 @@ import ru.maxthetomas.e418.util.E418Random;
 
 public record RandomNumberProvider(float min, float max,
                                    ResourceLocation randomSequence) implements NumberProvider {
-    public static ResourceLocation ID = E418.resLoc("random");
-    public static MapCodec<RandomNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final ResourceLocation ID = E418.resLoc("random");
+    public static final MapCodec<RandomNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.FLOAT.fieldOf("min").forGetter(RandomNumberProvider::min),
             Codec.FLOAT.fieldOf("max").forGetter(RandomNumberProvider::max),
             ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE).forGetter(RandomNumberProvider::randomSequence)

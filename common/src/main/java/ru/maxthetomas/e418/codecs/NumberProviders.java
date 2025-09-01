@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class NumberProviders {
     public static final Codec<NumberProvider> VALUE_CODEC =
-            Codec.FLOAT.<NumberProvider>xmap(NumberProviders::staticProvider, a -> a.get(null, null).floatValue());
+            Codec.FLOAT.xmap(NumberProviders::staticProvider, a -> a.get(null, null).floatValue());
 
     private static final Map<ResourceLocation, MapCodec<? extends NumberProvider>> REGISTRY = new HashMap<>();
 

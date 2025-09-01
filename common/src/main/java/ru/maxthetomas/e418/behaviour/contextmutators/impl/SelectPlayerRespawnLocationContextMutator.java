@@ -13,24 +13,19 @@ import ru.maxthetomas.e418.util.Location;
 /**
  * Mutates context to have player's respawn location.
  */
-public class SelectPlayerRespawnLocationContextMutator implements IContextMutator {
+public record SelectPlayerRespawnLocationContextMutator(boolean preventOverride) implements IContextMutator {
     public static final ResourceLocation ID = E418.resLoc("select_player_respawn_location");
     public static final MapCodec<SelectPlayerRespawnLocationContextMutator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.BOOL.optionalFieldOf("prevent_override", false).forGetter(SelectPlayerRespawnLocationContextMutator::isPreventOverride)
+            Codec.BOOL.optionalFieldOf("prevent_override", false).forGetter(SelectPlayerRespawnLocationContextMutator::preventOverride)
     ).apply(instance, SelectPlayerRespawnLocationContextMutator::new));
-
-    private final boolean preventOverride;
-
-    public SelectPlayerRespawnLocationContextMutator(boolean preventOverride) {
-        this.preventOverride = preventOverride;
-    }
 
     /**
      * Is this mutator prevents override of already defined fields.
      *
      * @return Is mutation doesn't override non-null fields
      */
-    public boolean isPreventOverride() {
+    @Override
+    public boolean preventOverride() {
         return preventOverride;
     }
 

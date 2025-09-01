@@ -17,15 +17,12 @@ import ru.maxthetomas.e418.event.EventContext;
  *     <li>If both <code>above</code> and <code>below</code> is parsed - in range between <code>above</code> and <code>below</code>.</li>
  * </ul>
  */
-public class AtHeightCondition implements ICondition {
-    public static ResourceLocation ID = E418.resLoc("at_height");
-    public static MapCodec<AtHeightCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.FLOAT.optionalFieldOf("above", Float.MAX_VALUE).forGetter(AtHeightCondition::getAbove),
-            Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::getBelow)
+public record AtHeightCondition(float above, float below) implements ICondition {
+    public static final ResourceLocation ID = E418.resLoc("at_height");
+    public static final MapCodec<AtHeightCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Codec.FLOAT.optionalFieldOf("above", Float.MAX_VALUE).forGetter(AtHeightCondition::above),
+            Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::below)
     ).apply(instance, AtHeightCondition::new));
-
-    private final float above;
-    private final float below;
 
     /**
      * Creates a new instance of AtHeightCondition.
@@ -33,9 +30,7 @@ public class AtHeightCondition implements ICondition {
      * @param above Check that the player is above this height. Use <code>Float.MAX_VALUE</code> to disable.
      * @param below Check that the player is below this height. Use <code>-Float.MAX_VALUE</code> to disable.
      */
-    public AtHeightCondition(float above, float below) {
-        this.above = above;
-        this.below = below;
+    public AtHeightCondition {
     }
 
 
@@ -57,13 +52,5 @@ public class AtHeightCondition implements ICondition {
     @Override
     public ResourceLocation getType() {
         return ID;
-    }
-
-    public float getAbove() {
-        return above;
-    }
-
-    public float getBelow() {
-        return below;
     }
 }

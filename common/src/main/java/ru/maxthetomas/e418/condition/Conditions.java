@@ -15,8 +15,9 @@ import java.util.function.Function;
 /**
  * A static {@linkplain ICondition} registry. Use <code>DISPATCH_CODEC</code> to create an instance of {@linkplain ICondition}.
  */
+@SuppressWarnings("unused")
 public class Conditions {
-    public static Map<ResourceLocation, MapCodec<? extends ICondition>> REGISTRY = new HashMap<>();
+    public static final Map<ResourceLocation, MapCodec<? extends ICondition>> REGISTRY = new HashMap<>();
 
     public static MapCodec<? extends ICondition> AT_HEIGHT = register(AtHeightCondition.ID, AtHeightCondition.CODEC);
     public static MapCodec<? extends ICondition> IS_NIGHT = register(IsNightCondition.ID, IsNightCondition.CODEC);
@@ -39,8 +40,8 @@ public class Conditions {
     public static MapCodec<? extends ICondition> MATCHES = register(MatchesCondition.ID, MatchesCondition.CODEC);
     public static MapCodec<? extends ICondition> STARTS_WITH = register(StartsWithCondition.ID, StartsWithCondition.CODEC);
 
-    public static Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
-            .dispatch(ICondition::getType, (s) -> REGISTRY.get(s));
+    public static final Codec<ICondition> DISPATCH_CODEC = ResourceLocation.CODEC
+            .dispatch(ICondition::getType, REGISTRY::get);
 
 
     /**

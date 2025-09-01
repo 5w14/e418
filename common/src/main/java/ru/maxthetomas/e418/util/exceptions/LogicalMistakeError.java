@@ -45,10 +45,8 @@ public class LogicalMistakeError extends Error {
      * Intentional videogame crash.
      */
     public static void youJustLostTheGame(String message) {
-        Util.backgroundExecutor().execute(() -> {
-            Minecraft.getInstance().emergencySaveAndCrash(
-                    CrashReport.forThrowable(new LogicalMistakeError(message), message)
-            );
-        });
+        Util.backgroundExecutor().execute(() -> Minecraft.getInstance().emergencySaveAndCrash(
+                CrashReport.forThrowable(new LogicalMistakeError(message), message)
+        ));
     }
 }

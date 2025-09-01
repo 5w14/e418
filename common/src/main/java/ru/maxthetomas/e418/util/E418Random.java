@@ -12,7 +12,7 @@ public class E418Random {
     public static RandomSource EVENT_ENGINE_CHAT;
     public static RandomSource EVENT_GENERIC;
 
-    public static ResourceLocation EVENT_GENERIC_RESOURCE = E418.resLoc("event/generic");
+    public static final ResourceLocation EVENT_GENERIC_RESOURCE = E418.resLoc("event/generic");
 
     public static void init(ServerLevel level) {
         EVENT_ENGINE_GLOBAL = level.getRandomSequence(E418.resLoc("event_engine/random_global"));

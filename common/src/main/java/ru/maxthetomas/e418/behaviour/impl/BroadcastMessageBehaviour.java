@@ -66,13 +66,9 @@ public class BroadcastMessageBehaviour extends Behaviour {
         var source = getSource();
 
         switch (source) {
-            case CHAT -> {
-                context.getServer().getPlayerList().broadcastSystemMessage(message, false);
-            }
+            case CHAT -> context.getServer().getPlayerList().broadcastSystemMessage(message, false);
 
-            case ACTIONBAR -> {
-                context.getServer().getPlayerList().broadcastSystemMessage(message, true);
-            }
+            case ACTIONBAR -> context.getServer().getPlayerList().broadcastSystemMessage(message, true);
 
             case TITLE -> {
                 var s2cPacket = new ClientboundSetTitleTextPacket(message);
@@ -86,7 +82,7 @@ public class BroadcastMessageBehaviour extends Behaviour {
         ACTIONBAR("actionbar"),
         TITLE("title");
 
-        public static Codec<MessageSource> CODEC =
+        public static final Codec<MessageSource> CODEC =
                 StringRepresentable.fromEnum(MessageSource::values);
 
         private final String id;
