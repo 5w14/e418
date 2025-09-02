@@ -14,9 +14,9 @@
     "client.TextureAtlasSpriteMixin",
     "client.WeatherEffectRendererMixin",
     "client.WorldOpenFlowsMixin"
+    "client.TextureManagerMixin",
   ],
   "mixins": [
-    "client.TextureManagerMixin",
     "common.BiomeMixin",
     "common.EntityMixin",
     "common.MsgCommandMixin",
