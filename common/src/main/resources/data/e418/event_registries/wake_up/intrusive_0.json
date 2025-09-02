@@ -1,9 +1,0 @@
-{
-  "tags": [
-    "action.minecraft.wake_up",
-    "intrusive.0"
-  ],
-  "events": [
-    "e418:content/wake_up/cancel_time_skip"
-  ]
-}

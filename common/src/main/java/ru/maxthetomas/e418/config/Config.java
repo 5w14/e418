@@ -9,7 +9,6 @@ import com.mojang.serialization.JsonOps;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
-import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.codecs.impl.Range;
 
 import java.util.ArrayList;
@@ -23,13 +22,7 @@ public class Config {
 
     public static final Value<Boolean> forceDebug = field("force_debug", Codec.BOOL, false);
     public static final Value<Boolean> shouldSkipDebugScreen = field("skip_debug_screen", Codec.BOOL, true);
-    public static final Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds",
-            ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of(
-                    E418.resLoc("lines"),
-                    E418.resLoc("featureless_overworld"),
-                    E418.resLoc("minimalism"),
-                    E418.resLoc("unlabirynth")
-            ));
+    public static final Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds", ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of());
 
     public static final Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
 
