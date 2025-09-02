@@ -1,0 +1,6 @@
+jdk:
+  - openjdk21
+before_install:
+  - ./gradlew --version
+install:
+  - ./gradlew publishToMavenLocal -x test

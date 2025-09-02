@@ -50,22 +50,30 @@ subprojects {
         it.options.release = 21
     }
 
-    // Configure Maven publishing.
+    // Configure Maven publishing for JitPack.
     publishing {
         publications {
             mavenJava(MavenPublication) {
                 artifactId = base.archivesName.get()
                 from components.java
-            }
-        }
-
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/5w14/e418")
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                
+                pom {
+                    name = 'E418'
+                    description = 'E418 Minecraft mod'
+                    url = 'https://github.com/5w14/e418'
+                    
+                    licenses {
+                        license {
+                            name = 'MIT'
+                            url = 'https://github.com/5w14/e418/blob/main/LICENSE.txt'
+                        }
+                    }
+                    
+                    scm {
+                        connection = 'scm:git:git://github.com/5w14/e418.git'
+                        developerConnection = 'scm:git:ssh://github.com:5w14/e418.git'
+                        url = 'https://github.com/5w14/e418/tree/main'
+                    }
                 }
             }
         }
