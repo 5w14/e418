@@ -51,19 +51,11 @@ processResources {
     }
 }
 
-// Task for creating jar with common code included (for distribution)
 shadowJar {
     configurations = [project.configurations.shadowBundle]
-    archiveClassifier = 'with-common-dev'
+    archiveClassifier = 'dev-shadow'
 }
 
-// Task for creating remapped jar with common code included
-task remapShadowJar(type: net.fabricmc.loom.task.RemapJarTask) {
-    dependsOn shadowJar
+remapJar {
     input.set shadowJar.archiveFile
-    archiveClassifier = 'with-common'
-    addNestedDependencies = false
 }
-
-// Default remapJar task uses jar without common code bundled
-// This creates a thin jar for development
