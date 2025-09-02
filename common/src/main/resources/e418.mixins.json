@@ -9,11 +9,11 @@
     "client.DebugScreenOverlayMixin",
     "client.GameRendererMixin",
     "client.LevelRendererMixin",
+    "client.PauseScreenMixin",
+    "client.SkyRendererMixin",
     "client.TextureAtlasSpriteMixin",
     "client.WeatherEffectRendererMixin",
-    "client.WorldOpenFlowsMixin",
-    "client.SkyRendererMixin",
-    "client.PauseScreenMixin"
+    "client.WorldOpenFlowsMixin"
   ],
   "mixins": [
     "client.TextureManagerMixin",
@@ -21,6 +21,7 @@
     "common.EntityMixin",
     "common.MsgCommandMixin",
     "common.ServerLevelMixin",
+    "common.SharedSuggestionProviderMixin",
     "common.SnowAndFreezeFeatureMixin",
     "common.StructureManagerMixin"
   ],
