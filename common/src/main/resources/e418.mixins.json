@@ -12,9 +12,9 @@
     "client.PauseScreenMixin",
     "client.SkyRendererMixin",
     "client.TextureAtlasSpriteMixin",
+    "client.TextureManagerMixin",
     "client.WeatherEffectRendererMixin",
     "client.WorldOpenFlowsMixin"
-    "client.TextureManagerMixin",
   ],
   "mixins": [
     "common.BiomeMixin",
