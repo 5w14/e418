@@ -18,6 +18,10 @@ public class ConfigLoader {
 
     public static void loadConfig() {
         try {
+            if (!Files.exists(CONFIG_PATH)) {
+                return;
+            }
+
             var jsonString = Files.readString(CONFIG_PATH);
             var configJson = JsonParser.parseString(jsonString);
             if (!configJson.isJsonObject()) {

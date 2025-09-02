@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import org.slf4j.Logger;
-import ru.maxthetomas.e418.config.SourceConfig;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.util.WeightedList;
 
@@ -14,7 +13,7 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Registry that contains events. Can be configured through from config through {@linkplain SourceConfig} and it's variations.
+ * Registry that contains events.
  * <br>
  * See {@linkplain EventRegistries} for the list of registries.
  */
