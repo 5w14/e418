@@ -16,7 +16,7 @@ public final class E418NeoForge {
         // Mod loader specific actions
         AttachmentTypes.ATTACHMENT_TYPES.register(modBus);
 
-        PlatformDataManager.PLAYER_DATA = new NeoForgePlatformData<>(AttachmentTypes.PLAYER_DATA.get());
-        PlatformDataManager.CHUNK_DATA = new NeoForgePlatformData<>(AttachmentTypes.CHUNK_DATA.get());
+        PlatformDataManager.PLAYER_DATA = new NeoForgePlatformData<>(AttachmentTypes.PLAYER_DATA);
+        PlatformDataManager.CHUNK_DATA = new NeoForgePlatformData<>(AttachmentTypes.CHUNK_DATA);
     }
 }

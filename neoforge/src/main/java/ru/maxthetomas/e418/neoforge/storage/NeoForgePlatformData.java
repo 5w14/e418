@@ -8,9 +8,9 @@ import ru.maxthetomas.e418.util.storage.data.IData;
 import java.util.function.Supplier;
 
 public class NeoForgePlatformData<H extends IAttachmentHolder, D extends IData<D>> extends PlatformDataType<H, D> {
-    private final AttachmentType<D> attachmentType;
+    private final Supplier<AttachmentType<D>> attachmentType;
 
-    public NeoForgePlatformData(AttachmentType<D> attachment) {
+    public NeoForgePlatformData(Supplier<AttachmentType<D>> attachment) {
         this.attachmentType = attachment;
     }
 
