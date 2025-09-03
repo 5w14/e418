@@ -14,19 +14,19 @@ Here's an example of a data-driven event.
       "type": "e418:mutate_context",
       "mutators": [
         {
-          "type": "e418:select_random_player",
+          "type": "e418:select_random_player"
         },
         {
-          "type": "e418:select_random_location_around_player",
-        },
+          "type": "e418:select_random_location_around_player"
+        }
       ],
 
       // Run only if the player is below 30 on Y-axis
       "run_conditions": [
         {
           "type": "e418:at_height",
-          "below": 30,
-        },
+          "below": 30
+        }
       ],
 
       // Play a cave sound
@@ -35,13 +35,13 @@ Here's an example of a data-driven event.
           "type": "e418:play_sound",
           "sound": "minecraft:ambient.cave",
           "volume": 1.0,
-          "pitch": 0.8,
-        },
-      ],
-    },
+          "pitch": 0.8
+        }
+      ]
+    }
   ],
   "run_conditions": [],
-  "queue_conditions": [],
+  "queue_conditions": []
 }
 ```
 
