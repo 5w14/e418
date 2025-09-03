@@ -22,8 +22,9 @@ import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
-import ru.maxthetomas.e418.event.engine.RandomEventManager;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
+import ru.maxthetomas.e418.util.storage.PlatformDataManager;
+import ru.maxthetomas.e418.util.storage.data.PlayerData;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -391,7 +392,8 @@ public class EventCommand {
                         ComponentUtils.formatList(context.getSource().getServer().getPlayerList().getPlayers(),
                                 Component.literal("\n"),
                                 (e) -> {
-                                    var data = E418.PlayerDataManager.ensureData(e);
+                                    var data = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA,
+                                            e, () -> PlayerData.createPlayerData(context.getSource().getServer()));
                                     return Component.translatable("e418.commands.event.print_event_delays.line",
                                             e.getFeedbackDisplayName(), data.eventTimestamp, data.eventUnlockTimestamp);
                                 })

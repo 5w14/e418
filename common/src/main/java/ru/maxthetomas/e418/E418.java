@@ -15,7 +15,6 @@ import ru.maxthetomas.e418.debug.EventCommand;
 import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.engine.EventEngine;
 import ru.maxthetomas.e418.networking.E418Networking;
-import ru.maxthetomas.e418.player.IPlayerDataManager;
 import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
@@ -29,7 +28,6 @@ public final class E418 {
     public static final String MOD_ID = "e418";
     private static final EventManager EventManager = new EventManager();
     private static final EventEngine EventEngine = new EventEngine();
-    public static IPlayerDataManager PlayerDataManager;
 
     private static MinecraftServer ManagedServer = null;
 

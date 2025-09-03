@@ -14,6 +14,8 @@ import ru.maxthetomas.e418.event.cause.impl.PlayerRandomEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
+import ru.maxthetomas.e418.util.storage.PlatformDataManager;
+import ru.maxthetomas.e418.util.storage.data.PlayerData;
 
 public class RandomEventManager {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -46,7 +48,8 @@ public class RandomEventManager {
         // Process player random events
         for (ServerPlayer player : E418.allPlayers()) {
             var uuid = player.getUUID();
-            var data = E418.PlayerDataManager.ensureData(player);
+            var data = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA,
+                    player, () -> PlayerData.createPlayerData(E418.getCurrentServer().get()));
 
             if (data.eventTimestamp < currentTime) {
                 var random = E418Random.EVENT_ENGINE_GLOBAL;
@@ -60,7 +63,7 @@ public class RandomEventManager {
                         player.position().closerThan(p.position(), range))).toList();
 
                 var hasLocks = playersInRange.stream().anyMatch((p) -> {
-                    var playerData = E418.PlayerDataManager.ensureData(p);
+                    var playerData = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA, p, () -> PlayerData.createPlayerData(p.getServer()));
 
                     return playerData.eventUnlockTimestamp > currentTime;
                 });
@@ -100,7 +103,8 @@ public class RandomEventManager {
                         var playerPos = player.position();
 
                         for (ServerPlayer otherPlayer : playersInRange) {
-                            var otherData = E418.PlayerDataManager.ensureData(otherPlayer);
+                            var otherData = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA,
+                                    otherPlayer, () -> PlayerData.createPlayerData(otherPlayer.getServer()));
 
                             var otherPlayerPos = otherPlayer.position();
                             var distance = playerPos.distanceTo(otherPlayerPos);
@@ -109,7 +113,8 @@ public class RandomEventManager {
                             otherData.eventTimestamp += (long) (((double) randomOffset / range) * (range - distance));
                             otherData.eventUnlockTimestamp = currentTime + randomLock;
 
-                            E418.PlayerDataManager.setData(otherPlayer, otherData);
+                            PlatformDataManager.storeData(PlatformDataManager.PLAYER_DATA,
+                                    otherPlayer, otherData);
                         }
                     }
                 } else {
@@ -117,7 +122,7 @@ public class RandomEventManager {
                     data.eventTimestamp = currentTime + randomDelay;
                 }
 
-                E418.PlayerDataManager.setData(player, data);
+                PlatformDataManager.storeData(PlatformDataManager.PLAYER_DATA, player, data);
             }
         }
 

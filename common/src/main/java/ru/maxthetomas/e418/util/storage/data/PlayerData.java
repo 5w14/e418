@@ -1,9 +1,12 @@
-package ru.maxthetomas.e418.player;
+package ru.maxthetomas.e418.util.storage.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RandomSource;
+import ru.maxthetomas.e418.config.Config;
 
-public class PlayerData {
+public class PlayerData implements IData<PlayerData> {
     public static Codec<PlayerData> CODEC = RecordCodecBuilder.<PlayerData>create(instance -> instance.group(
             Codec.LONG.optionalFieldOf("event_timestamp", -1L).forGetter(v -> v.eventTimestamp),
             Codec.LONG.optionalFieldOf("event_unlock_timestamp", 0L).forGetter(v -> v.eventUnlockTimestamp)
@@ -36,6 +39,13 @@ public class PlayerData {
         data.eventTimestamp = this.eventTimestamp;
         data.eventUnlockTimestamp = this.eventUnlockTimestamp;
 
+        return data;
+    }
+
+    public static PlayerData createPlayerData(MinecraftServer server) {
+        var data = new PlayerData();
+        data.eventTimestamp = server.overworld().getGameTime() +
+                Config.playerRandomEventGracePeriod.get().randomValue(RandomSource.create());
         return data;
     }
 }

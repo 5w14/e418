@@ -20,6 +20,7 @@ import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
+import ru.maxthetomas.e418.util.storage.PlatformDataManager;
 
 import java.util.*;
 
@@ -92,7 +93,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
         activeEvents.clear();
         queuedEvents.clear();
-        E418.PlayerDataManager.reset();
+        PlatformDataManager.reset();
     }
 
     // Getters
