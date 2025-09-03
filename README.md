@@ -47,7 +47,7 @@ Here's an example of a data-driven event.
 
 ### Use as a dependency
 
-While this library could work as a driver for a datapack-driven addon, you can add your content.
+While this library could work as a driver for a datapack-driven addon, you can add your content using mods.
 
 We recommend to develop multi-platforms addons using Architectury.
 
