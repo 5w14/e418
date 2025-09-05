@@ -23,6 +23,7 @@ public class Config {
     public static final Value<Boolean> forceDebug = field("force_debug", Codec.BOOL, false);
     public static final Value<Boolean> shouldSkipDebugScreen = field("skip_debug_screen", Codec.BOOL, true);
     public static final Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds", ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of());
+    public static final Value<Set<String>> hiddenNamespaces = field("command_hidden_namespaces", Codec.STRING.listOf().xmap(Set::copyOf, List::copyOf), Set.of("e418"));
 
     public static final Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
 

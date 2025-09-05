@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,10 +34,8 @@ public interface SharedSuggestionProviderMixin {
         for (T object : iterable) {
             ResourceLocation resourceLocation = function.apply(object);
 
-            // Skip if starts with "e418"
-            if (resourceLocation.toString().startsWith("e418")) {
+            if (e418$shouldSkip(resourceLocation.toString()))
                 continue;
-            }
 
             if (bl) {
                 String string2 = resourceLocation.toString();
@@ -71,9 +70,11 @@ public interface SharedSuggestionProviderMixin {
         if (string.isEmpty()) {
             iterable.forEach(object -> {
                 ResourceLocation rl = function.apply(object);
-                if (!rl.toString().startsWith("e418")) {
-                    consumer.accept(object);
-                }
+
+                if (e418$shouldSkip(rl.toString()))
+                    return;
+
+                consumer.accept(object);
             });
         } else {
             String string3 = Strings.commonPrefix(string, string2);
@@ -84,5 +85,11 @@ public interface SharedSuggestionProviderMixin {
         }
 
         ci.cancel();
+    }
+
+
+    @Unique
+    private static boolean e418$shouldSkip(String rl) {
+        return Config.hiddenNamespaces.get().stream().anyMatch(rl::startsWith);
     }
 }
