@@ -51,6 +51,11 @@ public class Config {
         return emptyWorlds.get().contains(location);
     }
 
+    public static boolean shouldBeHiddenInSuggestions(ResourceLocation location) {
+        var ns = location.getNamespace();
+        return hiddenNamespaces.get().contains(ns);
+    }
+
 
     private static <T> Value<T> field(String name, Codec<T> codec, T defaultValue) {
         var value = new Value<>(name, defaultValue, codec);

@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -34,7 +33,7 @@ public interface SharedSuggestionProviderMixin {
         for (T object : iterable) {
             ResourceLocation resourceLocation = function.apply(object);
 
-            if (e418$shouldSkip(resourceLocation.toString()))
+            if (Config.shouldBeHiddenInSuggestions(resourceLocation))
                 continue;
 
             if (bl) {
@@ -71,7 +70,7 @@ public interface SharedSuggestionProviderMixin {
             iterable.forEach(object -> {
                 ResourceLocation rl = function.apply(object);
 
-                if (e418$shouldSkip(rl.toString()))
+                if (Config.shouldBeHiddenInSuggestions(rl))
                     return;
 
                 consumer.accept(object);
@@ -85,11 +84,5 @@ public interface SharedSuggestionProviderMixin {
         }
 
         ci.cancel();
-    }
-
-
-    @Unique
-    private static boolean e418$shouldSkip(String rl) {
-        return Config.hiddenNamespaces.get().stream().anyMatch(rl::startsWith);
     }
 }
