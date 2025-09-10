@@ -78,6 +78,8 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     }
 
     public void fullReset(@Nullable MinecraftServer server) {
+        IsActive = false;
+
         for (int i = 0; i < activeEvents.size(); i++) {
             ActiveEvent activeEvent = activeEvents.get(i);
             disposeEvent(activeEvent);
@@ -93,6 +95,10 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
         activeEvents.clear();
         queuedEvents.clear();
         E418.PlayerDataManager.reset();
+    }
+
+    public void init() {
+        IsActive = true;
     }
 
     // Getters

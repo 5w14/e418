@@ -1,6 +1,5 @@
 package ru.maxthetomas.e418;
 
-import dev.architectury.event.events.client.ClientPlayerEvent;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.ReloadListenerRegistry;
@@ -16,7 +15,6 @@ import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.engine.EventEngine;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.player.IPlayerDataManager;
-import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
@@ -46,37 +44,38 @@ public final class E418 {
 
     private static void registerListeners() {
         LifecycleEvent.SERVER_BEFORE_START.register(srv -> {
+            EventManager.init();
             EventManager.getActiveEvents().forEach(EventManager::disposeEvent);
-            EventManager.fullReset(null);
             E418Variables.init();
-
-            ru.maxthetomas.e418.event.EventManager.IsActive = true;
             ManagedServer = srv;
         });
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(lvl -> {
-            if (lvl == ManagedServer.overworld()) {
+            if (lvl.equals(ManagedServer.overworld())) {
                 E418Random.init(lvl);
+                InGameStorage.load(lvl.getServer());
             }
         });
 
-        LifecycleEvent.SERVER_STARTED.register(InGameStorage::load);
+        LifecycleEvent.SERVER_LEVEL_SAVE.register(savedWorld -> {
+            if (!savedWorld.equals(savedWorld.getServer().overworld()))
+                return;
+            InGameStorage.INSTANCE.dumpEventManager(getEventManager());
+        });
 
         LifecycleEvent.SERVER_STOPPING.register(srv -> {
-            if (srv == ManagedServer) {
-                ru.maxthetomas.e418.event.EventManager.IsActive = false;
-            }
+            InGameStorage.INSTANCE.dumpEventManager(getEventManager());
+            getEventManager().fullReset(srv);
         });
 
         LifecycleEvent.SERVER_STOPPED.register(srv -> {
-            if (srv == ManagedServer) {
-                EventManager.fullReset(srv);
+            if (srv.equals(ManagedServer)) {
                 ManagedServer = null;
             }
+
             E418Variables.init();
         });
 
-        ClientPlayerEvent.CLIENT_PLAYER_QUIT.register(evt -> E418ClientVariables.init());
     }
 
     public static EventManager getEventManager() {
