@@ -69,18 +69,25 @@ public class InGameStorage extends SavedData {
         return new Dynamic<>(NbtOps.INSTANCE, keyValueStore.get(key));
     }
 
-    @Override
-    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        if (EventManager.IsActive) {
-            this.activeEvents = E418.getEventManager().getActiveEvents();
-            this.queuedEvents = E418.getEventManager().getQueuedEvents();
-        }
+    private CompoundTag fullSaveTag;
 
+    public void dumpEventManager(EventManager eventManager) {
+        if (!EventManager.IsActive)
+            return;
+
+        CompoundTag tag = new CompoundTag();
+        this.activeEvents = E418.getEventManager().getActiveEvents();
+        this.queuedEvents = E418.getEventManager().getQueuedEvents();
         this.globalEventTick = E418.getEventEngine().RandomEventManager.GlobalEventTick;
         this.inShift = TemporalShiftSystem.getPlayersInShift();
+        fullSaveTag = (CompoundTag) CODEC.encode(this,
+                NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(tag).getOrThrow();
+    }
 
-        return (CompoundTag) CODEC.encode(this,
-                NbtOps.INSTANCE, NbtOps.INSTANCE.mapBuilder()).build(compoundTag).getOrThrow();
+    @Override
+    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        dumpEventManager(E418.getEventManager());
+        return compoundTag.merge(fullSaveTag);
     }
 
     public static void load(MinecraftServer server) {

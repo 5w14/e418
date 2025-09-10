@@ -50,21 +50,32 @@ subprojects {
         it.options.release = 21
     }
 
-    // Configure Maven publishing.
+    // Configure Maven publishing for JitPack.
     publishing {
         publications {
             mavenJava(MavenPublication) {
                 artifactId = base.archivesName.get()
                 from components.java
+                
+                pom {
+                    name = 'E418'
+                    description = 'E418 Minecraft mod'
+                    url = 'https://github.com/5w14/e418'
+                    
+                    licenses {
+                        license {
+                            name = 'MIT'
+                            url = 'https://github.com/5w14/e418/blob/main/LICENSE.txt'
+                        }
+                    }
+                    
+                    scm {
+                        connection = 'scm:git:git://github.com/5w14/e418.git'
+                        developerConnection = 'scm:git:ssh://github.com:5w14/e418.git'
+                        url = 'https://github.com/5w14/e418/tree/main'
+                    }
+                }
             }
-        }
-
-        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-        repositories {
-            // Add repositories to publish to here.
-            // Notice: This block does NOT have the same function as the block in the top level.
-            // The repositories here will be used for publishing your artifact, not for
-            // retrieving dependencies.
         }
     }
 }

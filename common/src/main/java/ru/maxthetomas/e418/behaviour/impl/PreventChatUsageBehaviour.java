@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.architecturyevents.CommandEvent;
 import ru.maxthetomas.e418.behaviour.Behaviour;
@@ -47,18 +46,18 @@ public class PreventChatUsageBehaviour extends Behaviour {
 
     public PreventChatUsageBehaviour(boolean usingContext) {
         this.usingContext = usingContext;
-        ChatEvent.RECEIVED.register(onChatMessage);
-        CommandEvent.MSG_RECEIVED.register(onMsg);
+        registerEvents();
     }
 
     private PreventChatUsageBehaviour(Optional<UUID> playerTarget) {
         this.playerTarget = playerTarget.orElse(null);
         this.usingContext = this.playerTarget != null;
+        registerEvents();
     }
 
-    private PreventChatUsageBehaviour(@Nullable UUID playerTarget) {
-        this.playerTarget = playerTarget;
-        this.usingContext = this.playerTarget != null;
+    void registerEvents() {
+        ChatEvent.RECEIVED.register(onChatMessage);
+        CommandEvent.MSG_RECEIVED.register(onMsg);
     }
 
     @Override

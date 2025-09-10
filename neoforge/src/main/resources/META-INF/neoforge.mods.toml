@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
-#issueTrackerURL = ""
+issueTrackerURL = "https://github.com/5w14/e418/issues"
 license = "MIT"
 
 [[mods]]
 modId = "e418"
 version = "${version}"
-displayName = "Myths of Entity 418"
+displayName = "e418"
 authors = "maxthetomas, CSQRB, iller_saver"
 description = '''
-A less intrusive horror mod inspired by Voices of the Void.
+A library mod providing support for data driven events.
 '''
 #logoFile = ""
 

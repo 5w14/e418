@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "id": "e418",
   "version": "${version}",
-  "name": "Myths of Entity 418",
-  "description": "A less intrusive horror mod inspired by Voices of the Void.",
+  "name": "e418",
+  "description": "A library mod providing support for data driven events",
   "authors": [
     "maxthetomas",
     "CSQRB",
     "iller_saver"
   ],
   "contact": {
-    "homepage": "https://github.com/maxthetomas/myths-of-entity-418",
-    "issues": "https://github.com/maxthetomas/myths-of-entity-418/issues",
-    "sources": "https://github.com/maxthetomas/myths-of-entity-418"
+    "homepage": "https://github.com/5w14/e418",
+    "issues": "https://github.com/5w14/e418/issues",
+    "sources": "https://github.com/5w14/e418"
   },
   "license": "MIT",
   "icon": "assets/e418/icon.png",
