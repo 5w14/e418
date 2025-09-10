@@ -53,9 +53,10 @@ public final class E418 {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(lvl -> {
             if (lvl.equals(ManagedServer.overworld())) {
                 E418Random.init(lvl);
-                InGameStorage.load(lvl.getServer());
             }
         });
+
+        LifecycleEvent.SERVER_STARTED.register(InGameStorage::load);
 
         LifecycleEvent.SERVER_LEVEL_SAVE.register(savedWorld -> {
             if (!savedWorld.equals(savedWorld.getServer().overworld()))

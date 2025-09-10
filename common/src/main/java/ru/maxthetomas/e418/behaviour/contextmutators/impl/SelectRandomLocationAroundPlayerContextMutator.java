@@ -73,7 +73,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
         }
 
         var newLocation = new Location(
-                location.level(),
+                location.levelId(),
                 position
         );
 
