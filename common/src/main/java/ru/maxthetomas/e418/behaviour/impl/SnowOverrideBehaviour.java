@@ -62,4 +62,11 @@ public class SnowOverrideBehaviour extends Behaviour {
     public ResourceLocation getTypeId() {
         return ID;
     }
+
+    @Override
+    public void restoreState(EventContext context, IBehaviourExecutor executor) {
+        super.restoreState(context, executor);
+        if (this.isExecuted() && !isDone())
+            setSnow(true);
+    }
 }
