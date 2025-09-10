@@ -18,7 +18,7 @@ import ru.maxthetomas.e418.util.Location;
 
 /**
  * Saves player's position and then teleports them back to it.
- * If player disconnects while behaviour is running, he is immediately teleported
+ * If player disconnects while behaviour is running, they are immediately teleported
  * <ul>
  *   <li><code>ticks</code> – Ticks until teleportation</li>
  * </ul>
