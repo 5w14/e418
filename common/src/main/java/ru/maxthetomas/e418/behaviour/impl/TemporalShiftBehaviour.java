@@ -17,10 +17,10 @@ import ru.maxthetomas.e418.system.TemporalShiftSystem;
 import ru.maxthetomas.e418.util.Location;
 
 /**
- * Executes a Minecraft command.
+ * Saves player's position and then teleports them back to it.
+ * If player disconnects while behaviour is running, he is immediately teleported
  * <ul>
- *   <li><code>command</code> – The command itself.</li>
- *   <li><code>as_player</code> – Executes the command as a player in the context.</li>
+ *   <li><code>ticks</code> – Ticks until teleportation</li>
  * </ul>
  */
 public class TemporalShiftBehaviour extends Behaviour {
