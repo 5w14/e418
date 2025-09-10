@@ -75,7 +75,6 @@ public final class E418 {
 
             E418Variables.init();
         });
-
     }
 
     public static EventManager getEventManager() {
