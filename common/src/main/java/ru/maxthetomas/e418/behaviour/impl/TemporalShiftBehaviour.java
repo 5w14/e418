@@ -57,8 +57,6 @@ public class TemporalShiftBehaviour extends Behaviour {
             return;
         }
 
-        System.out.println(endTick - context.getServer().overworld().getGameTime());
-
         if (context.getServer().overworld().getGameTime() >= endTick) {
             setDone(true);
         }
@@ -68,7 +66,8 @@ public class TemporalShiftBehaviour extends Behaviour {
     public void dispose() {
         super.dispose();
 
-        if (context.getPlayer() == null) {
+        if (context.getPlayer() == null ||
+                TemporalShiftSystem.getPlayersInShift().get(context.getPlayer().getUUID().toString()) == null) {
             return;
         }
 
