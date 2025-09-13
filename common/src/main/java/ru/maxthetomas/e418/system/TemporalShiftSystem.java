@@ -6,14 +6,15 @@ import net.minecraft.world.phys.Vec3;
 import ru.maxthetomas.e418.util.Location;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class TemporalShiftSystem {
-    private static HashMap<String, Location> inShift = new HashMap<>();
+    private static HashMap<UUID, Location> inShift = new HashMap<>();
 
     public static void init() {
         PlayerEvent.PLAYER_JOIN.register((player) -> {
-            if (inShift.containsKey(player.getUUID().toString())) {
-                var location = inShift.get(player.getUUID().toString());
+            if (inShift.containsKey(player.getUUID())) {
+                var location = inShift.get(player.getUUID());
 
                 player.teleport(new TeleportTransition(
                         location.level(),
@@ -23,24 +24,24 @@ public class TemporalShiftSystem {
                         player.getXRot(),
                         TeleportTransition.DO_NOTHING));
 
-                TemporalShiftSystem.removeShift(player.getUUID().toString());
+                TemporalShiftSystem.removeShift(player.getUUID());
             }
         });
     }
 
-    public static void setPlayersInShift(HashMap<String, Location> inShift) {
+    public static void setPlayersInShift(HashMap<UUID, Location> inShift) {
         TemporalShiftSystem.inShift = inShift;
     }
 
-    public static HashMap<String, Location> getPlayersInShift() {
+    public static HashMap<UUID, Location> getPlayersInShift() {
         return inShift;
     }
 
-    public static void addShift(String id, Location location) {
+    public static void addShift(UUID id, Location location) {
         inShift.put(id, location);
     }
 
-    public static void removeShift(String id) {
+    public static void removeShift(UUID id) {
         inShift.remove(id);
     }
 }

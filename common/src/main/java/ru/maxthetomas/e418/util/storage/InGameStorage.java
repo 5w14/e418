@@ -5,6 +5,7 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -19,10 +20,7 @@ import ru.maxthetomas.e418.event.QueuedEvent;
 import ru.maxthetomas.e418.system.TemporalShiftSystem;
 import ru.maxthetomas.e418.util.Location;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InGameStorage extends SavedData {
     public static final MapCodec<InGameStorage> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -34,7 +32,7 @@ public class InGameStorage extends SavedData {
                     .forGetter(v -> v.queuedEvents),
             Codec.LONG.fieldOf("global_event_tick")
                     .forGetter(v -> v.globalEventTick),
-            Codec.unboundedMap(Codec.STRING, Location.CODEC.codec()).fieldOf("in_shift")
+            Codec.unboundedMap(UUIDUtil.CODEC, Location.CODEC.codec()).fieldOf("in_shift")
                     .forGetter(v -> v.inShift)
     ).apply(instance, InGameStorage::constructByCodec));
 
@@ -47,7 +45,7 @@ public class InGameStorage extends SavedData {
     private List<ActiveEvent> activeEvents = new ArrayList<>();
     private List<QueuedEvent> queuedEvents = new ArrayList<>();
     private Long globalEventTick = -1L;
-    private Map<String, Location> inShift = new HashMap<>();
+    private Map<UUID, Location> inShift = new HashMap<>();
 
     /**
      * Saves a value into a KV-store NBT store.
@@ -102,7 +100,7 @@ public class InGameStorage extends SavedData {
         return CODEC.decoder().decode(NbtOps.INSTANCE, tag).getOrThrow().getFirst();
     }
 
-    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents, Long globalEventTick, Map<String, Location> inShift) {
+    private static InGameStorage constructByCodec(Dynamic<?> dynamic, List<ActiveEvent> activeEvents, List<QueuedEvent> queuedEvents, Long globalEventTick, Map<UUID, Location> inShift) {
         var store = new InGameStorage();
 
         var tag = dynamic.convert(NbtOps.INSTANCE).getValue();

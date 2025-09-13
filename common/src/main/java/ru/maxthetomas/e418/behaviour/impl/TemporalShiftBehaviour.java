@@ -79,7 +79,7 @@ public class TemporalShiftBehaviour extends Behaviour {
                 context.getPlayer().getXRot(),
                 TeleportTransition.DO_NOTHING));
 
-        TemporalShiftSystem.removeShift(context.getPlayerUUID().toString());
+        TemporalShiftSystem.removeShift(context.getPlayerUUID());
     }
 
     @Override
@@ -99,6 +99,6 @@ public class TemporalShiftBehaviour extends Behaviour {
         this.endTick = (int) (context.getSourceEvent().startTime + ticks.get(context, this).longValue());
         this.location = Location.fromPlayer(context.getPlayer());
 
-        TemporalShiftSystem.addShift(context.getPlayerUUID().toString(), location);
+        TemporalShiftSystem.addShift(context.getPlayerUUID(), location);
     }
 }
