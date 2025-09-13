@@ -15,6 +15,8 @@ import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.engine.EventEngine;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.player.IPlayerDataManager;
+import ru.maxthetomas.e418.system.TemporalShiftSystem;
+import ru.maxthetomas.e418.util.E418ClientVariables;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
@@ -38,6 +40,8 @@ public final class E418 {
         CommandRegistrationEvent.EVENT.register(EventCommand::register);
         ReloadListenerRegistry.register(PackType.SERVER_DATA, EventManager, ResourceLocation.tryBuild(MOD_ID, "event_reload_listener"));
         registerListeners();
+
+        TemporalShiftSystem.init();
 
         ConfigLoader.saveConfig();
     }
