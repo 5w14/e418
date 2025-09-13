@@ -75,8 +75,8 @@ public class TemporalShiftBehaviour extends Behaviour {
                 location.level(),
                 location.position(),
                 Vec3.ZERO,
-                0,
-                0,
+                context.getPlayer().getYRot(),
+                context.getPlayer().getXRot(),
                 TeleportTransition.DO_NOTHING));
 
         TemporalShiftSystem.removeShift(context.getPlayerUUID().toString());

@@ -19,8 +19,8 @@ public class TemporalShiftSystem {
                         location.level(),
                         location.position(),
                         Vec3.ZERO,
-                        0,
-                        0,
+                        player.getYRot(),
+                        player.getXRot(),
                         TeleportTransition.DO_NOTHING));
 
                 TemporalShiftSystem.removeShift(player.getUUID().toString());

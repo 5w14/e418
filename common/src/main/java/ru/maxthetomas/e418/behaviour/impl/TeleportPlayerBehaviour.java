@@ -111,8 +111,8 @@ public class TeleportPlayerBehaviour extends Behaviour {
                     ),
                     new Vec3(x, y, z),
                     Vec3.ZERO,
-                    0,
-                    0,
+                    player.getYRot(),
+                    player.getXRot(),
                     TeleportTransition.DO_NOTHING));
             return;
         }
