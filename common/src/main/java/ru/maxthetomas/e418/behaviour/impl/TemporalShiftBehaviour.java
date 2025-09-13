@@ -67,7 +67,7 @@ public class TemporalShiftBehaviour extends Behaviour {
         super.dispose();
 
         if (context.getPlayer() == null ||
-                TemporalShiftSystem.getPlayersInShift().get(context.getPlayer().getUUID().toString()) == null) {
+                TemporalShiftSystem.getPlayersInShift().get(context.getPlayer().getUUID()) == null) {
             return;
         }
 

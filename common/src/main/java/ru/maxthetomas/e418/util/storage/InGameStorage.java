@@ -32,7 +32,7 @@ public class InGameStorage extends SavedData {
                     .forGetter(v -> v.queuedEvents),
             Codec.LONG.fieldOf("global_event_tick")
                     .forGetter(v -> v.globalEventTick),
-            Codec.unboundedMap(UUIDUtil.CODEC, Location.CODEC.codec()).fieldOf("in_shift")
+            Codec.unboundedMap(UUIDUtil.STRING_CODEC, Location.CODEC.codec()).fieldOf("in_shift")
                     .forGetter(v -> v.inShift)
     ).apply(instance, InGameStorage::constructByCodec));
 
