@@ -1,6 +1,7 @@
 {
   "name": "Game crash test",
   "description": "Bye bye!",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:game_crash"

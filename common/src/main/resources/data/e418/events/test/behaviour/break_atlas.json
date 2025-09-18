@@ -1,6 +1,7 @@
 {
   "name": "Test break atlas",
   "description": "Test that breaks the atlas",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:break_atlas"

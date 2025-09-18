@@ -133,7 +133,7 @@ public class RandomEventManager {
                     .withCause(cause);
             var e = EventRegistries.getQueueableEventsWithTag("random.global", ctx).getRandomElement(random);
 
-            if (e != null) {
+            if (e != null && Config.baseIntrusiveness.get() > e.intrusiveness()) {
                 success = E418.getEventManager().queueEvent(e, ctx);
             }
 

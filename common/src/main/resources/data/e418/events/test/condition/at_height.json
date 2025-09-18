@@ -1,6 +1,7 @@
 {
   "name": "At Height",
   "description": "Debug event that works only in defined range of height",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

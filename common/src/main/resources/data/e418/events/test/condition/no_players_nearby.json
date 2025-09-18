@@ -1,6 +1,7 @@
 {
   "name": "Players Nearby",
   "description": "Debug event that works only when thereš enough players nearby",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

@@ -1,6 +1,7 @@
 {
   "name": "Example fake player join message event",
   "description": "An example event",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:broadcast_message",

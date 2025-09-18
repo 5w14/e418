@@ -25,6 +25,8 @@ public class Config {
     public static final Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds", ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of());
     public static final Value<Set<String>> hiddenNamespaces = field("command_hidden_namespaces", Codec.STRING.listOf().xmap(Set::copyOf, List::copyOf), Set.of("e418"));
 
+    public static final Value<Float> baseIntrusiveness = field("base_intrusiveness", Codec.floatRange(0f, 4f), 0f);
+
     public static final Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
 
     public static final Value<Range> globalRandomEventDelay = field("global_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));

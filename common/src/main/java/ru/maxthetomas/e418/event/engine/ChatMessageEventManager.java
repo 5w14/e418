@@ -5,6 +5,7 @@ import dev.architectury.event.events.common.ChatEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
@@ -26,7 +27,8 @@ public class ChatMessageEventManager {
                 .withCause(new ChatMessageCause(component));
 
         var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx).getRandomElement(E418Random.EVENT_ENGINE_WAKE_UP);
-        if (e != null) {
+
+        if (e != null && Config.baseIntrusiveness.get() > e.intrusiveness()) {
             E418.getEventManager().queueEvent(e, ctx);
         }
 

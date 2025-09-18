@@ -1,6 +1,7 @@
 {
   "name": "Make Consumable Test",
   "description": "Test making current item in hand consumable",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:mutate_context",

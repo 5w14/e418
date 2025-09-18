@@ -1,6 +1,7 @@
 {
   "name": "Teleport Player Test",
   "description": "Player teleportation test",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:mutate_context",

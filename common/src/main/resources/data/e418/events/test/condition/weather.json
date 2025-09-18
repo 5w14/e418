@@ -1,6 +1,7 @@
 {
   "name": "Weather Condition Test",
   "description": "Test that checks if it is thundering",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

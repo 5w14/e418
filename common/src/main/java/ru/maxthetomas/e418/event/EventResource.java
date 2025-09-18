@@ -12,12 +12,13 @@ import java.util.List;
 /**
  * Event resource.
  */
-public record EventResource(String name, String description, List<PreActiveBehaviour> behaviourList,
+public record EventResource(String name, String description, int intrusiveness, List<PreActiveBehaviour> behaviourList,
                             List<ICondition> runConditions, List<ICondition> queueConditions) {
 
     public static final MapCodec<EventResource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(EventResource::name),
             Codec.STRING.optionalFieldOf("description", "").forGetter(EventResource::description),
+            Codec.INT.optionalFieldOf("intrusiveness", 0).forGetter(EventResource::intrusiveness),
             PreActiveBehaviour.CODEC.listOf().fieldOf("behaviours").forGetter(EventResource::behaviourList),
             Conditions.DISPATCH_CODEC.listOf().fieldOf("run_conditions").forGetter(EventResource::runConditions),
             Conditions.DISPATCH_CODEC.listOf().fieldOf("queue_conditions").forGetter(EventResource::queueConditions)

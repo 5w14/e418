@@ -1,6 +1,7 @@
 {
   "name": "Test show toast behaviour",
   "description": "Taking inventory achievement",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:show_toast",

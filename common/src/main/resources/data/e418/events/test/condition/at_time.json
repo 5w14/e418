@@ -1,6 +1,7 @@
 {
   "name": "At Time",
   "description": "Debug event that works only at exact time",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

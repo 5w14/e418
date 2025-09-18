@@ -1,6 +1,7 @@
 {
   "name": "Test set moon texture",
   "description": "Test set moon texture behaviour that changes moon's texture",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:set_moon_texture",
