@@ -1,9 +1,9 @@
-package ru.maxthetomas.e418.codecs.impl;
+package ru.maxthetomas.e418.codecs.numberprovider.impl;
 
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.codecs.NumberProvider;
-import ru.maxthetomas.e418.codecs.NumberRequester;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberRequester;
 import ru.maxthetomas.e418.event.EventContext;
 
 public class ConstantNumberProvider implements NumberProvider {

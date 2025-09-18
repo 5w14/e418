@@ -1,4 +1,4 @@
-package ru.maxthetomas.e418.codecs.impl;
+package ru.maxthetomas.e418.codecs.numberprovider.impl;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.codecs.NumberProvider;
-import ru.maxthetomas.e418.codecs.NumberRequester;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberRequester;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.util.E418Random;
 
