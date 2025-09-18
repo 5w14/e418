@@ -48,8 +48,7 @@ public class RandomEventManager {
         // Process player random events
         for (ServerPlayer player : E418.allPlayers()) {
             var uuid = player.getUUID();
-            var data = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA,
-                    player, () -> PlayerData.createPlayerData(E418.getCurrentServer().get()));
+            var data = PlayerData.ensureData(player);
 
             if (data.eventTimestamp < currentTime) {
                 var random = E418Random.EVENT_ENGINE_GLOBAL;
@@ -63,8 +62,7 @@ public class RandomEventManager {
                         player.position().closerThan(p.position(), range))).toList();
 
                 var hasLocks = playersInRange.stream().anyMatch((p) -> {
-                    var playerData = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA, p, () -> PlayerData.createPlayerData(p.getServer()));
-
+                    var playerData = PlayerData.ensureData(p);
                     return playerData.eventUnlockTimestamp > currentTime;
                 });
 
@@ -103,8 +101,7 @@ public class RandomEventManager {
                         var playerPos = player.position();
 
                         for (ServerPlayer otherPlayer : playersInRange) {
-                            var otherData = PlatformDataManager.ensureData(PlatformDataManager.PLAYER_DATA,
-                                    otherPlayer, () -> PlayerData.createPlayerData(otherPlayer.getServer()));
+                            var otherData = PlayerData.ensureData(otherPlayer);
 
                             var otherPlayerPos = otherPlayer.position();
                             var distance = playerPos.distanceTo(otherPlayerPos);
