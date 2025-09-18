@@ -5,6 +5,8 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.impl.*;
+import ru.maxthetomas.e418.condition.impl.chat.MatchesCondition;
+import ru.maxthetomas.e418.condition.impl.chat.StartsWithCondition;
 import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 

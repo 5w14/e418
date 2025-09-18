@@ -1,4 +1,4 @@
-package ru.maxthetomas.e418.condition.impl;
+package ru.maxthetomas.e418.condition.impl.chat;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
