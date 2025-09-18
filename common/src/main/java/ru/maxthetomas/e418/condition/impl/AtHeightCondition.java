@@ -1,34 +1,26 @@
 package ru.maxthetomas.e418.condition.impl;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.codecs.FloatRange;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
 /**
- * The condition that succeeds only if the player is either:
- *
- * <ul>
- *     <li>If only <code>above</code> is parsed - above the height.</li>
- *     <li>If only <code>below</code> is parsed - below the height.</li>
- *     <li>If both <code>above</code> and <code>below</code> is parsed - in range between <code>above</code> and <code>below</code>.</li>
- * </ul>
+ * The condition that succeeds only if the player is in the range
+ * <li><code>min</code> - Minimum height.</li>
+ * <li><code>max</code> - Maximum height.</li>
  */
-public record AtHeightCondition(float above, float below) implements ICondition {
+public record AtHeightCondition(FloatRange range) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("at_height");
     public static final MapCodec<AtHeightCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.FLOAT.optionalFieldOf("above", Float.MAX_VALUE).forGetter(AtHeightCondition::above),
-            Codec.FLOAT.optionalFieldOf("below", -Float.MAX_VALUE).forGetter(AtHeightCondition::below)
+            FloatRange.CODEC.codec().optionalFieldOf("range", new FloatRange(-64, 320)).forGetter(AtHeightCondition::range)
     ).apply(instance, AtHeightCondition::new));
 
     /**
      * Creates a new instance of AtHeightCondition.
-     *
-     * @param above Check that the player is above this height. Use <code>Float.MAX_VALUE</code> to disable.
-     * @param below Check that the player is below this height. Use <code>-Float.MAX_VALUE</code> to disable.
      */
     public AtHeightCondition {
     }
@@ -38,15 +30,10 @@ public record AtHeightCondition(float above, float below) implements ICondition 
     public boolean check(EventContext context) {
         var positionY = context.getPlayer().position().y;
 
-        // Check if it's a range
-        var has_above = above != Float.MAX_VALUE;
-        var has_below = below != -Float.MAX_VALUE;
-
-        if (has_above && has_below) {
-            return positionY > above && positionY < below;
-        } else {
-            return positionY > above || positionY < below;
+        if (range.max() < range.min()) {
+            return !range.isIn((float) positionY);
         }
+        return range.isIn((float) positionY);
     }
 
     @Override

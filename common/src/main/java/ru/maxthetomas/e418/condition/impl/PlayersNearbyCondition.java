@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.codecs.FloatRange;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
@@ -13,27 +14,16 @@ import ru.maxthetomas.e418.event.EventContext;
  * Returns true only when there are enough players within the radius.
  * <ul>
  *   <li><code>radius</code> - Range where it counts players in blocks/meters.</li>
- *   <li><code>min_players_nearby</code> - Minimum number of players required to trigger.</li>
- *   <li><code>max_players_nearby</code> - Maximum number of players allowed to trigger.</li>
+ *   <li><code>player_range_min</code> - Minimum number of players required to trigger.</li>
+ *   <li><code>player_range_max</code> - Maximum number of players allowed to trigger.</li>
  * </ul>
  */
-public class PlayersNearbyCondition implements ICondition {
+public record PlayersNearbyCondition(double radius, FloatRange playerRange) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("players_nearby");
     public static final MapCodec<PlayersNearbyCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.DOUBLE.optionalFieldOf("radius", 1d).forGetter(PlayersNearbyCondition::getRadius),
-            Codec.INT.optionalFieldOf("min_players_nearby", 0).forGetter(PlayersNearbyCondition::getMinPlayerNearby),
-            Codec.INT.optionalFieldOf("max_players_nearby", 0).forGetter(PlayersNearbyCondition::getMaxPlayerNearby)
+            FloatRange.CODEC.codec().optionalFieldOf("player_range", new FloatRange(0, 5)).forGetter(PlayersNearbyCondition::playerRange)
     ).apply(instance, PlayersNearbyCondition::new));
-
-    private final double radius;
-    private final int minPlayersNearby;
-    private final int maxPlayersNearby;
-
-    public PlayersNearbyCondition(double radius, int minPlayersNearby, int maxPlayersNearby) {
-        this.radius = radius;
-        this.minPlayersNearby = minPlayersNearby;
-        this.maxPlayersNearby = maxPlayersNearby;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -52,7 +42,7 @@ public class PlayersNearbyCondition implements ICondition {
             }
         }
 
-        return playersNearby >= minPlayersNearby && playersNearby <= maxPlayersNearby;
+        return playersNearby >= playerRange.min() && playersNearby <= playerRange.max();
     }
 
     @Override
@@ -62,13 +52,5 @@ public class PlayersNearbyCondition implements ICondition {
 
     public Double getRadius() {
         return radius;
-    }
-
-    public int getMinPlayerNearby() {
-        return minPlayersNearby;
-    }
-
-    public int getMaxPlayerNearby() {
-        return minPlayersNearby;
     }
 }

@@ -6,15 +6,19 @@
   "run_conditions": [
     {
       "type": "e418:at_time",
-      "from": 10000,
-      "to": 20000
+      "range": {
+        "min": 10000,
+        "max": 20000
+      }
     }
   ],
   "queue_conditions": [
     {
       "type": "e418:at_time",
-      "from": 10000,
-      "to": 20000
+      "range": {
+        "min": 10000,
+        "max": 20000
+      }
     }
   ]
 }

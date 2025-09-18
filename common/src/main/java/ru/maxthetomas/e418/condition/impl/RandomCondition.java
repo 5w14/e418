@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
@@ -16,27 +15,17 @@ import ru.maxthetomas.e418.util.E418Random;
  *   <li><code>chance</code> - Chance in range (0-1) to trigger.</li>
  * </ul>
  */
-public class RandomCondition implements ICondition {
+public record RandomCondition(float chance, ResourceLocation randomSequence) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("random");
     public static final MapCodec<RandomCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ExtraCodecs.floatRange(0, 1).fieldOf("chance").forGetter(RandomCondition::getChance),
-            ResourceLocation.CODEC.optionalFieldOf("randomSequence", null).forGetter(RandomCondition::getRandomSequence)
+            ExtraCodecs.floatRange(0, 1).fieldOf("chance").forGetter(RandomCondition::chance),
+            ResourceLocation.CODEC.optionalFieldOf("randomSequence", null).forGetter(RandomCondition::randomSequence)
     ).apply(instance, RandomCondition::new));
-
-    private final float chance;
-
-    @Nullable
-    private final ResourceLocation random_sequence;
-
-    public RandomCondition(float chance, @Nullable ResourceLocation randomSequence) {
-        this.chance = chance;
-        random_sequence = randomSequence;
-    }
 
     @Override
     public boolean check(EventContext context) {
-        if (random_sequence != null) {
-            var random = context.getServer().overworld().getRandomSequence(random_sequence);
+        if (randomSequence != null) {
+            var random = context.getServer().overworld().getRandomSequence(randomSequence);
             return random.nextFloat() < chance;
         }
 
@@ -46,14 +35,5 @@ public class RandomCondition implements ICondition {
     @Override
     public ResourceLocation getType() {
         return null;
-    }
-
-    public float getChance() {
-        return chance;
-    }
-
-    @Nullable
-    public ResourceLocation getRandomSequence() {
-        return random_sequence;
     }
 }

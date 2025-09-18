@@ -15,17 +15,11 @@ import ru.maxthetomas.e418.event.cause.impl.ChatMessageCause;
  *   <li><code>prefix</code> - Word to match.</li>
  * </ul>
  */
-public class StartsWithCondition implements ICondition {
+public record StartsWithCondition(String prefix) implements ICondition {
     public static final MapCodec<StartsWithCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("prefix").forGetter(StartsWithCondition::getPrefix)
+            Codec.STRING.fieldOf("prefix").forGetter(StartsWithCondition::prefix)
     ).apply(instance, StartsWithCondition::new));
     public static final ResourceLocation ID = E418.resLoc("chat/starts_with");
-
-    private final String prefix;
-
-    StartsWithCondition(String prefix) {
-        this.prefix = prefix;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -42,9 +36,5 @@ public class StartsWithCondition implements ICondition {
     @Override
     public ResourceLocation getType() {
         return ID;
-    }
-
-    public String getPrefix() {
-        return prefix;
     }
 }

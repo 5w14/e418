@@ -6,13 +6,19 @@
   "run_conditions": [
     {
       "type": "e418:health",
-      "above": 10.0
+      "range": {
+        "min": 10,
+        "max": 20
+      }
     }
   ],
   "queue_conditions": [
     {
       "type": "e418:health",
-      "above": 10.0
+      "range": {
+        "min": 10,
+        "max": 20
+      }
     }
   ]
 }

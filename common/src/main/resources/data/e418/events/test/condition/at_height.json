@@ -6,15 +6,19 @@
   "run_conditions": [
     {
       "type": "e418:at_height",
-      "above": -50,
-      "below": 50
+      "range": {
+        "min": -50,
+        "max": 50
+      }
     }
   ],
   "queue_conditions": [
     {
       "type": "e418:at_height",
-      "above": -50,
-      "below": 50
+      "range": {
+        "min": -50,
+        "max": 50
+      }
     }
   ]
 }

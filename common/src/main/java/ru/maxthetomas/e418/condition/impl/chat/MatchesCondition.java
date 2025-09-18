@@ -17,17 +17,11 @@ import java.util.regex.Pattern;
  *   <li><code>regex</code> - Regex to check.</li>
  * </ul>
  */
-public class MatchesCondition implements ICondition {
+public record MatchesCondition(String regex) implements ICondition {
     public static final MapCodec<MatchesCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.fieldOf("regex").forGetter(MatchesCondition::getRegex)
+            Codec.STRING.fieldOf("regex").forGetter(MatchesCondition::regex)
     ).apply(instance, MatchesCondition::new));
     public static final ResourceLocation ID = E418.resLoc("chat/matches");
-
-    private final String regex;
-
-    MatchesCondition(String regex) {
-        this.regex = regex;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -47,9 +41,5 @@ public class MatchesCondition implements ICondition {
     @Override
     public ResourceLocation getType() {
         return ID;
-    }
-
-    public String getRegex() {
-        return regex;
     }
 }

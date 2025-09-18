@@ -10,17 +10,11 @@ import ru.maxthetomas.e418.event.EventContext;
 /**
  * Returns true only when player is in specific dimension
  */
-public class InDimensionCondition implements ICondition {
+public record InDimensionCondition(ResourceLocation dimension) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("in_dimension");
     public static final MapCodec<InDimensionCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("dimension").forGetter(InDimensionCondition::getDimension)
+            ResourceLocation.CODEC.fieldOf("dimension").forGetter(InDimensionCondition::dimension)
     ).apply(instance, InDimensionCondition::new));
-
-    private final ResourceLocation dimension;
-
-    public InDimensionCondition(ResourceLocation dimension) {
-        this.dimension = dimension;
-    }
 
     @Override
     public boolean check(EventContext context) {
@@ -30,9 +24,5 @@ public class InDimensionCondition implements ICondition {
     @Override
     public ResourceLocation getType() {
         return ID;
-    }
-
-    public ResourceLocation getDimension() {
-        return dimension;
     }
 }
