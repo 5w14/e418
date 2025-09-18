@@ -28,6 +28,8 @@ public class Conditions {
     public static MapCodec<? extends ICondition> TIME_SINCE_START = register(TimeSinceEventStartCondition.ID, TimeSinceEventStartCondition.CODEC);
     public static MapCodec<? extends ICondition> AT_TIME = register(AtTimeCondition.ID, AtTimeCondition.CODEC);
     public static MapCodec<? extends ICondition> IN_BIOME = register(InBiomeCondition.ID, InBiomeCondition.CODEC);
+    public static MapCodec<? extends ICondition> HEALTH = register(HealthCondition.ID, HealthCondition.CODEC);
+    public static MapCodec<? extends ICondition> IN_DIMENSION = register(InDimensionCondition.ID, InDimensionCondition.CODEC);
 
     // Utility conditions
     public static MapCodec<? extends ICondition> ALWAYS = registerSimple("always", (ctx) -> true);
