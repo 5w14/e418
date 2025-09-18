@@ -26,7 +26,7 @@ public class ChatMessageEventManager {
                 .withLocation(Location.fromPlayer(serverPlayer))
                 .withCause(new ChatMessageCause(component));
 
-        var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx).getRandomElement(E418Random.EVENT_ENGINE_WAKE_UP);
+        var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx, Config.baseIntrusiveness.get()).getRandomElement(E418Random.EVENT_ENGINE_WAKE_UP);
 
         if (e != null && Config.baseIntrusiveness.get() > e.intrusiveness()) {
             E418.getEventManager().queueEvent(e, ctx);

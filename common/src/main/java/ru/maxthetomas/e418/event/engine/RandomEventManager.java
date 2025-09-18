@@ -81,7 +81,7 @@ public class RandomEventManager {
                         .withPlayer(player)
                         .withLocation(Location.fromPlayer(player))
                         .withCause(cause);
-                var e = EventRegistries.getQueueableEventsWithTag("random.player", ctx).getRandomElement(random);
+                var e = EventRegistries.getQueueableEventsWithTag("random.player", ctx, Config.baseIntrusiveness.get()).getRandomElement(random);
 
                 if (e != null) {
                     success = E418.getEventManager().queueEvent(e, ctx);
@@ -131,9 +131,9 @@ public class RandomEventManager {
             var success = false;
             var ctx = new EventContext(minecraftServer)
                     .withCause(cause);
-            var e = EventRegistries.getQueueableEventsWithTag("random.global", ctx).getRandomElement(random);
+            var e = EventRegistries.getQueueableEventsWithTag("random.global", ctx, Config.baseIntrusiveness.get()).getRandomElement(random);
 
-            if (e != null && Config.baseIntrusiveness.get() > e.intrusiveness()) {
+            if (e != null) {
                 success = E418.getEventManager().queueEvent(e, ctx);
             }
 

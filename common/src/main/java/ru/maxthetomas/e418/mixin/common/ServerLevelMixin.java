@@ -95,7 +95,7 @@ public abstract class ServerLevelMixin {
                 var cause = new WakeUpEventCause();
                 var ctx = new EventContext(this.getServer())
                         .withCause(cause);
-                var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.wake_up", ctx).getRandomElement(random);
+                var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.wake_up", ctx, Config.baseIntrusiveness.get()).getRandomElement(random);
 
                 if (e != null) {
                     E418.getEventManager().queueEvent(e, ctx);
