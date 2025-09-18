@@ -1,4 +1,4 @@
-package ru.maxthetomas.e418.codecs;
+package ru.maxthetomas.e418.codecs.numberprovider;
 
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.event.EventContext;

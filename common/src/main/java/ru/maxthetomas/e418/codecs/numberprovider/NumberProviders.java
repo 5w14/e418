@@ -1,11 +1,11 @@
-package ru.maxthetomas.e418.codecs;
+package ru.maxthetomas.e418.codecs.numberprovider;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.codecs.impl.ConstantNumberProvider;
-import ru.maxthetomas.e418.codecs.impl.RandomNumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.impl.ConstantNumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.impl.RandomNumberProvider;
 
 import java.util.HashMap;
 import java.util.Map;

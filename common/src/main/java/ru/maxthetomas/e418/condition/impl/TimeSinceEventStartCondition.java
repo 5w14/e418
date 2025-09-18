@@ -4,8 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
-import ru.maxthetomas.e418.codecs.NumberProvider;
-import ru.maxthetomas.e418.codecs.NumberProviders;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProviders;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 

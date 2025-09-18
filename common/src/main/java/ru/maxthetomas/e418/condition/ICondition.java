@@ -1,7 +1,7 @@
 package ru.maxthetomas.e418.condition;
 
 import net.minecraft.resources.ResourceLocation;
-import ru.maxthetomas.e418.codecs.NumberRequester;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberRequester;
 import ru.maxthetomas.e418.event.EventContext;
 
 /**

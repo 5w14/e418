@@ -9,7 +9,7 @@ import com.mojang.serialization.JsonOps;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
-import ru.maxthetomas.e418.codecs.impl.Range;
+import ru.maxthetomas.e418.codecs.RandomRange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,16 @@ public class Config {
 
     public static final Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
 
-    public static final Value<Range> globalRandomEventDelay = field("global_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
-    public static final Value<Range> globalRandomEventDelayFailure = field("global_random_event_delay_failure", Range.CODEC.codec(), new Range(600, 1200));
-    public static final Value<Range> globalRandomEventGracePeriod = field("player_random_event_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<RandomRange> globalRandomEventDelay = field("global_random_event_delay", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
+    public static final Value<RandomRange> globalRandomEventDelayFailure = field("global_random_event_delay_failure", RandomRange.CODEC.codec(), new RandomRange(600, 1200));
+    public static final Value<RandomRange> globalRandomEventGracePeriod = field("player_random_event_grace_period", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
 
     public static final Value<Float> playerRandomEventGroupDistance = field("player_random_event_group_distance", Codec.floatRange(0f, 50f), 50f);
-    public static final Value<Range> playerRandomEventDelay = field("player_random_event_delay", Range.CODEC.codec(), new Range(1200, 2400));
-    public static final Value<Range> playerRandomEventDelayFailure = field("player_random_event_delay", Range.CODEC.codec(), new Range(600, 1200));
-    public static final Value<Range> playerRandomEventOffset = field("player_random_event_offset", Range.CODEC.codec(), new Range(1200, 2400));
-    public static final Value<Range> playerRandomEventLock = field("player_random_event_lock", Range.CODEC.codec(), new Range(1200, 2400));
-    public static final Value<Range> playerRandomEventGracePeriod = field("player_random_event_grace_period", Range.CODEC.codec(), new Range(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventDelay = field("player_random_event_delay", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventDelayFailure = field("player_random_event_delay", RandomRange.CODEC.codec(), new RandomRange(600, 1200));
+    public static final Value<RandomRange> playerRandomEventOffset = field("player_random_event_offset", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventLock = field("player_random_event_lock", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventGracePeriod = field("player_random_event_grace_period", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
 
 
     public static boolean isDebug() {
