@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.util.exceptions.LogicalMistakeError;
 
 public record S2CCrashGame() implements CustomPacketPayload {
@@ -15,6 +16,7 @@ public record S2CCrashGame() implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CCrashGame> STREAM_CODEC = StreamCodec.unit(new S2CCrashGame());
 
     public static void receive(S2CCrashGame packet, NetworkManager.PacketContext context) {
+        if (!Config.allowGameCrashes.get()) return;
         LogicalMistakeError.youJustLostTheGame();
     }
 

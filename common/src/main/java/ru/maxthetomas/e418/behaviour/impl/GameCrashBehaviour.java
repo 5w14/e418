@@ -5,6 +5,7 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 import ru.maxthetomas.e418.networking.S2CCrashGame;
@@ -36,7 +37,8 @@ public class GameCrashBehaviour extends Behaviour {
     @Override
     public boolean canRun(EventContext context) {
         // todo check if intrusive events are enabled
-        return super.canRun(context) && !context.shouldAwaitPlayer();
+        return Config.allowGameCrashes.get() && super.canRun(context)
+                && !context.shouldAwaitPlayer();
     }
 
     @Override
