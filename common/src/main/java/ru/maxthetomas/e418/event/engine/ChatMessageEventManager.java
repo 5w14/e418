@@ -28,7 +28,7 @@ public class ChatMessageEventManager {
 
         var e = EventRegistries.getQueueableEventsWithTag("action.minecraft.chat_message", ctx, Config.baseIntrusiveness.get()).getRandomElement(E418Random.EVENT_ENGINE_WAKE_UP);
 
-        if (e != null && Config.baseIntrusiveness.get() > e.intrusiveness()) {
+        if (e != null) {
             E418.getEventManager().queueEvent(e, ctx);
         }
 
