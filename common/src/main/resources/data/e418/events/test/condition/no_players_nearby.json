@@ -7,16 +7,20 @@
     {
       "type": "e418:players_nearby",
       "radius": 10,
-      "min_players_nearby": 0,
-      "max_players_nearby": 0
+      "player_range": {
+        "min": 0,
+        "max": 0
+      }
     }
   ],
   "queue_conditions": [
     {
       "type": "e418:players_nearby",
       "radius": 10,
-      "min_players_nearby": 0,
-      "max_players_nearby": 0
+      "player_range": {
+        "min": 0,
+        "max": 0
+      }
     }
   ]
 }

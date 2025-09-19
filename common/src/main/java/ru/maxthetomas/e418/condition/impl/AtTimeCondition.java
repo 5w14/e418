@@ -1,51 +1,34 @@
 package ru.maxthetomas.e418.condition.impl;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.codecs.FloatRange;
 import ru.maxthetomas.e418.condition.ICondition;
 import ru.maxthetomas.e418.event.EventContext;
 
 /**
  * Returns true only when in range of time of the day.
  * <ul>
- *   <li><code>from</code> - Minimum time.</li>
- *   <li><code>to</code> - Maximum time.</li>
+ *   <li><code>min</code> - Minimum time.</li>
+ *   <li><code>max</code> - Maximum time.</li>
  * </ul>
  */
-public class AtTimeCondition implements ICondition {
+public record AtTimeCondition(FloatRange range) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("at_time");
     public static final MapCodec<AtTimeCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.INT.optionalFieldOf("from", 0).forGetter(AtTimeCondition::getFrom),
-            Codec.INT.optionalFieldOf("to", 0).forGetter(AtTimeCondition::getTo)
+            FloatRange.CODEC.codec().optionalFieldOf("range", new FloatRange(0.0f, 24000.0f)).forGetter(AtTimeCondition::range)
     ).apply(instance, AtTimeCondition::new));
-
-    private final int from;
-    private final int to;
-
-    public AtTimeCondition(int from, int to) {
-        this.from = from;
-        this.to = to;
-    }
 
     @Override
     public boolean check(EventContext context) {
         var currentTime = context.getServer().overworld().getDayTime() % 24000;
-        return currentTime >= from && currentTime <= to;
+        return range.isIn(currentTime);
     }
 
     @Override
     public ResourceLocation getType() {
         return ID;
-    }
-
-    public int getFrom() {
-        return from;
-    }
-
-    public int getTo() {
-        return to;
     }
 }
