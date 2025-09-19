@@ -7,8 +7,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public record FloatRange(float min, float max) {
     public static final MapCodec<FloatRange> CODEC = RecordCodecBuilder.<FloatRange>mapCodec(instance -> instance.group(
-            Codec.FLOAT.fieldOf("min").forGetter(FloatRange::min),
-            Codec.FLOAT.fieldOf("max").forGetter(FloatRange::max)
+            Codec.FLOAT.optionalFieldOf("min", -Float.MAX_VALUE).forGetter(FloatRange::min),
+            Codec.FLOAT.optionalFieldOf("max", Float.MAX_VALUE).forGetter(FloatRange::max)
     ).apply(instance, FloatRange::new)).validate(FloatRange::validate);
 
     public boolean isIn(float value) {
