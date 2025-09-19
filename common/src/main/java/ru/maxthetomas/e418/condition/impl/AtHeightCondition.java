@@ -30,9 +30,6 @@ public record AtHeightCondition(FloatRange range) implements ICondition {
     public boolean check(EventContext context) {
         var positionY = context.getPlayer().position().y;
 
-        if (range.max() < range.min()) {
-            return !range.isIn((float) positionY);
-        }
         return range.isIn((float) positionY);
     }
 
