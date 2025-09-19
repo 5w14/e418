@@ -2,7 +2,7 @@ package ru.maxthetomas.e418.event.engine;
 
 import net.minecraft.server.MinecraftServer;
 
-public class EventEngine {
+public class EventEngines {
     public final RandomEventManager RandomEventManager = new RandomEventManager();
     public final ChatMessageEventManager ChatMessageEventManager = new ChatMessageEventManager();
 

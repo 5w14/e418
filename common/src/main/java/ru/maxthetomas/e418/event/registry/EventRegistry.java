@@ -9,7 +9,6 @@ import ru.maxthetomas.e418.util.WeightedList;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -52,15 +51,6 @@ public class EventRegistry {
      */
     public EventResource getRandomEvent(RandomSource random) {
         return events.getRandomElement(random);
-    }
-
-    /**
-     * Executes {@code getRandomEvent} with a new {@linkplain Random}
-     */
-    public EventResource getRandomEvent() {
-        // Todo: avoid using new Random()'s
-//        LOGGER.warn("New random created when getting random event in registry {}", id);
-        return getRandomEvent(RandomSource.create());
     }
 
     public List<WeightedList.Entry<EventResource>> getEvents() {

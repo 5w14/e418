@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.maxthetomas.e418.config.ConfigLoader;
 import ru.maxthetomas.e418.debug.EventCommand;
 import ru.maxthetomas.e418.event.EventManager;
-import ru.maxthetomas.e418.event.engine.EventEngine;
+import ru.maxthetomas.e418.event.engine.EventEngines;
 import ru.maxthetomas.e418.networking.E418Networking;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.E418Variables;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public final class E418 {
     public static final String MOD_ID = "e418";
     private static final EventManager EventManager = new EventManager();
-    private static final EventEngine EventEngine = new EventEngine();
+    private static final EventEngines EventEngine = new EventEngines();
 
     private static MinecraftServer ManagedServer = null;
 
@@ -80,7 +80,7 @@ public final class E418 {
         return EventManager;
     }
 
-    public static EventEngine getEventEngine() {
+    public static EventEngines getEventEngine() {
         return EventEngine;
     }
 

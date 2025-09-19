@@ -52,8 +52,6 @@ public class SnowOverrideBehaviour extends Behaviour {
     private void setSnow(boolean value) {
         E418Variables.ShouldSnow = value;
 
-        // Todo: if player rejoins server - this won't work.
-        // needs a better sync solution.
         NetworkManager.sendToPlayers(E418.allPlayers(),
                 new S2CSetSnowRender(value));
     }

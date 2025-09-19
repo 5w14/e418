@@ -51,9 +51,6 @@ public class BreakAtlasBehaviour extends Behaviour {
     }
 
     private void setBreakAtlas(ServerPlayer player, boolean value) {
-        // Todo: if player rejoins server - this won't work.
-        // needs a better sync solution.
-
         if (player == null) {
             NetworkManager.sendToPlayers(E418.allPlayers(), new S2CSetBreakAtlas(value));
         } else {
