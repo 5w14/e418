@@ -1,6 +1,5 @@
 package ru.maxthetomas.e418.behaviour.impl;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.event.EventResult;
@@ -27,12 +26,7 @@ import java.util.UUID;
  */
 public class PreventChatUsageBehaviour extends Behaviour {
     public static final ResourceLocation ID = E418.resLoc("prevent_chat_usage");
-    public static final MapCodec<PreventChatUsageBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            // TODO: proposal - rename this to "global" or something, and invert behaviour
-            // or have the same approach as in other behaviours, which will affect player if the context has one
-            // - max
-            Codec.BOOL.optionalFieldOf("use_context", false).forGetter(PreventChatUsageBehaviour::isUsingContext)
-    ).apply(instance, PreventChatUsageBehaviour::new));
+    public static final MapCodec<PreventChatUsageBehaviour> CODEC = MapCodec.unit(PreventChatUsageBehaviour::new);
 
     public static final MapCodec<PreventChatUsageBehaviour> STATE_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             UUIDUtil.CODEC.lenientOptionalFieldOf("player_target").forGetter(v -> Optional.ofNullable(v.playerTarget))
@@ -41,17 +35,14 @@ public class PreventChatUsageBehaviour extends Behaviour {
     private final ChatEvent.Received onChatMessage = this::onChatMessage;
     private final CommandEvent.MsgReceived onMsg = this::onMsg;
 
-    private final boolean usingContext;
     private UUID playerTarget;
 
-    public PreventChatUsageBehaviour(boolean usingContext) {
-        this.usingContext = usingContext;
+    public PreventChatUsageBehaviour() {
         registerEvents();
     }
 
     private PreventChatUsageBehaviour(Optional<UUID> playerTarget) {
         this.playerTarget = playerTarget.orElse(null);
-        this.usingContext = this.playerTarget != null;
         registerEvents();
     }
 
@@ -69,14 +60,9 @@ public class PreventChatUsageBehaviour extends Behaviour {
     public void execute(EventContext context, IBehaviourExecutor executor) {
         super.execute(context, executor);
 
-        if (usingContext) {
-            var contextTarget = context.getPlayer();
-            if (contextTarget != null) {
-                playerTarget = contextTarget.getUUID();
-            } else {
-                setDone(true);
-            }
-        }
+        if (context.hasPlayer()) {
+            playerTarget = context.getPlayerUUID();
+        } else playerTarget = null;
     }
 
 
@@ -110,15 +96,11 @@ public class PreventChatUsageBehaviour extends Behaviour {
 
     }
 
-    public boolean isUsingContext() {
-        return usingContext;
-    }
-
     @Override
     public void restoreState(EventContext context, IBehaviourExecutor executor) {
         super.restoreState(context, executor);
         if (!isDone() && !isDisposed() && isExecuted()) {
-            if (usingContext)
+            if (context.hasPlayer())
                 playerTarget = context.getPlayerUUID();
         }
     }

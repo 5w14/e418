@@ -3,11 +3,22 @@
   "description": "Test prevent chat usage with context",
   "behaviours": [
     {
-      "type": "e418:prevent_chat_usage",
-      "use_context": true
-    },
-    {
-      "type": "e418:debug_print_context"
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_random_player"
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:debug_print_context"
+        },
+        {
+          "type": "e418:prevent_chat_usage"
+        }
+      ],
+      "run_conditions": [
+      ]
     }
   ],
   "run_conditions": [],
