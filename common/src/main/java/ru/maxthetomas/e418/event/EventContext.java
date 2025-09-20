@@ -108,6 +108,11 @@ public class EventContext {
         return this;
     }
 
+    public EventContext withoutPlayer() {
+        this.player = null;
+        return this;
+    }
+
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public EventContext clone() {
