@@ -1,6 +1,7 @@
 package ru.maxthetomas.e418.util;
 
 import net.minecraft.resources.ResourceLocation;
+import ru.maxthetomas.e418.codecs.FogCodecs;
 
 public class E418ClientVariables {
     public static boolean ShouldDisplaySnow;
@@ -9,6 +10,7 @@ public class E418ClientVariables {
     public static boolean ShouldHaveMetaParanoia;
     public static ResourceLocation SunResource;
     public static ResourceLocation MoonResource;
+    public static FogCodecs.FogConfig FogParametersOverride;
 
     static {
         init();
@@ -21,5 +23,6 @@ public class E418ClientVariables {
         ShouldHaveMetaParanoia = false;
         SunResource = ResourceLocation.withDefaultNamespace("empty");
         MoonResource = ResourceLocation.withDefaultNamespace("empty");
+        FogParametersOverride = null;
     }
 }

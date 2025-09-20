@@ -1,0 +1,16 @@
+{
+  "name": "Fog override",
+  "description": "",
+  "behaviours": [
+    {
+      "type": "e418:fog_override",
+      "fog": {
+        "color": "#ff0000"
+      }
+    }
+  ],
+  "run_conditions": [
+  ],
+  "queue_conditions": [
+  ]
+}

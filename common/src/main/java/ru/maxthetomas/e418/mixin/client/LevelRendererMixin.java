@@ -6,6 +6,7 @@ import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import ru.maxthetomas.e418.util.E418ClientVariables;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
@@ -23,6 +24,9 @@ public class LevelRendererMixin {
             ordinal = 0
     )
     public FogParameters modifyTerrainFogSettings(FogParameters fogParameters) {
+        if (E418ClientVariables.FogParametersOverride != null)
+            return E418ClientVariables.FogParametersOverride.convert();
+
         return fogParameters;
     }
 
@@ -32,6 +36,9 @@ public class LevelRendererMixin {
             ordinal = 1
     )
     public FogParameters modifySkyFogSettings(FogParameters fogParameters) {
+        if (E418ClientVariables.FogParametersOverride != null)
+            return E418ClientVariables.FogParametersOverride.convert();
+
         return fogParameters;
     }
 }
