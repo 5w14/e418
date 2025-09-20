@@ -1,6 +1,7 @@
 {
   "name": "Prevent chat usage with context",
   "description": "Test prevent chat usage with context",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:mutate_context",

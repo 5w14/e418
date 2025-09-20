@@ -1,6 +1,7 @@
 {
   "name": "Test Mutation Behaviour",
   "description": "Test mutation behaviour",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:mutate_context",

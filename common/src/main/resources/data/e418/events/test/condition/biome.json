@@ -1,6 +1,7 @@
 {
   "name": "In biome",
   "description": "Debug event that works only in beach",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

@@ -1,6 +1,7 @@
 {
   "name": "Example null joined",
   "description": "null joined because of message event",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:broadcast_message",

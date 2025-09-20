@@ -1,6 +1,7 @@
 {
   "name": "Test time since start condition",
   "description": "10 seconds since start",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:wait_for_conditions",

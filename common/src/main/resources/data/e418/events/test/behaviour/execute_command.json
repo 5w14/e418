@@ -1,6 +1,7 @@
 {
   "name": "Test Execute Command",
   "description": "Test that executes a command",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:mutate_context",

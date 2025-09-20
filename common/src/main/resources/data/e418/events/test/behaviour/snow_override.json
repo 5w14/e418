@@ -1,6 +1,7 @@
 {
   "name": "Test snow override",
   "description": "Snow override test with 1 minute timeout",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:snow_override"

@@ -50,14 +50,14 @@ public class EventRegistries {
      * @param ctx Context of event
      * @return A weighted list of events from registries with specified tag and that can be queued.
      */
-    public static WeightedList<EventResource> getQueueableEventsWithTag(String tag, EventContext ctx) {
+    public static WeightedList<EventResource> getQueueableEventsWithTag(String tag, EventContext ctx, float baseIntrusiveness) {
         var weightedList = new WeightedList<EventResource>();
 
         var regs = getRegistriesWithTag(tag);
 
         for (EventRegistry reg : regs) {
             for (WeightedList.Entry<EventResource> e : reg.events.values) {
-                if (e.element().canQueue(ctx)) {
+                if (e.element().canQueue(ctx) && baseIntrusiveness >= e.element().intrusiveness()) {
                     weightedList.add(e.weight(), e.element());
                 }
             }

@@ -1,6 +1,7 @@
 {
   "name": "Cancel time skip test",
   "description": "Bye bye!",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:cancel_time_skip"

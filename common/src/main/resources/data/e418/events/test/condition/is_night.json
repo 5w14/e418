@@ -1,6 +1,7 @@
 {
   "name": "Is Night",
   "description": "Debug event that works only at night",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

@@ -1,6 +1,7 @@
 {
   "name": "Prevent chat usage",
   "description": "Test prevent chat usage",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:prevent_chat_usage"

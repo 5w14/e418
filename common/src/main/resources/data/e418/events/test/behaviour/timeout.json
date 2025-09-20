@@ -1,6 +1,7 @@
 {
   "name": "Test timeout",
   "description": "Test timeout behaviour with set_shader.",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:set_shader",

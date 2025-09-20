@@ -1,6 +1,7 @@
 {
   "name": "Always Fail Test",
   "description": "Debug event that always fails",
+  "intrusiveness": 0,
   "behaviours": [
   ],
   "run_conditions": [

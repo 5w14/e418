@@ -1,6 +1,7 @@
 {
   "name": "Test meta paranoia",
   "description": "Test meta paranoia behaviour that prevents from exiting the world during events",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:meta_paranoia"

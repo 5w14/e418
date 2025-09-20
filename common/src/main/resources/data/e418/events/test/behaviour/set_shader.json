@@ -1,6 +1,7 @@
 {
   "name": "Test set shader behaviour",
   "description": "Sets `colors` post program",
+  "intrusiveness": 0,
   "behaviours": [
     {
       "type": "e418:set_shader",
