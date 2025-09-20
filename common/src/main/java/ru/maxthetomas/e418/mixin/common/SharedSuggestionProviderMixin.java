@@ -33,7 +33,7 @@ public interface SharedSuggestionProviderMixin {
         for (T object : iterable) {
             ResourceLocation resourceLocation = function.apply(object);
 
-            if (Config.shouldBeHiddenInSuggestions(resourceLocation))
+            if (Config.shouldHideNamespace(resourceLocation))
                 continue;
 
             if (bl) {
@@ -70,7 +70,7 @@ public interface SharedSuggestionProviderMixin {
             iterable.forEach(object -> {
                 ResourceLocation rl = function.apply(object);
 
-                if (Config.shouldBeHiddenInSuggestions(rl))
+                if (Config.shouldHideNamespace(rl))
                     return;
 
                 consumer.accept(object);

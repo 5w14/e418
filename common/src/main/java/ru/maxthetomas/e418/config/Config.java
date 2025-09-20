@@ -52,7 +52,7 @@ public class Config {
         return emptyWorlds.get().contains(location);
     }
 
-    public static boolean shouldBeHiddenInSuggestions(ResourceLocation location) {
+    public static boolean shouldHideNamespace(ResourceLocation location) {
         var ns = location.getNamespace();
         return hiddenNamespaces.get().contains(ns);
     }

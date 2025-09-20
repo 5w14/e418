@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.config.Config;
 
 @Mixin(DebugScreenOverlay.class)
@@ -24,7 +23,7 @@ public class DebugScreenOverlayMixin {
             return value;
 
         var regName = value.getBlock().arch$registryName();
-        if (regName != null && regName.getNamespace().equals(E418.MOD_ID))
+        if (regName != null && Config.shouldHideNamespace(regName))
             return Blocks.AIR.defaultBlockState();
 
         return value;
