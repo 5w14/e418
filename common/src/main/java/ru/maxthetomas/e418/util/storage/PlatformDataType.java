@@ -21,17 +21,17 @@ public abstract class PlatformDataType<O, D> {
     public static class NoopStorage<A, B> extends PlatformDataType<A, B> {
         @Override
         public B ensureData(A object, Supplier<B> defaultData) {
-            throw new IllegalStateException("NonDefined storage was not replaced in mod initialization!");
+            throw new IllegalStateException("NoopStorage storage was not replaced in mod initialization!");
         }
 
         @Override
         public B getData(A object) {
-            throw new IllegalStateException("NonDefined storage was not replaced in mod initialization!");
+            throw new IllegalStateException("NoopStorage storage was not replaced in mod initialization!");
         }
 
         @Override
         public void storeData(A object, B data) {
-            throw new IllegalStateException("NonDefined storage was not replaced in mod initialization!");
+            throw new IllegalStateException("NoopStorage storage was not replaced in mod initialization!");
         }
 
         public static <A, B> NoopStorage<A, B> construct() {
