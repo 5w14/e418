@@ -1,0 +1,21 @@
+{
+  "name": "Test Spawn Entity",
+  "behaviours": [
+    {
+      "type": "e418:mutate_context",
+      "mutators": [
+        {
+          "type": "e418:select_player_location"
+        }
+      ],
+      "behaviours": [
+        {
+          "type": "e418:spawn_entity",
+          "entity": "minecraft:pig"
+        }
+      ]
+    }
+  ],
+  "run_conditions": [],
+  "queue_conditions": []
+}
