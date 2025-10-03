@@ -18,7 +18,15 @@ public record InDimensionCondition(ResourceLocation dimension) implements ICondi
 
     @Override
     public boolean check(EventContext context) {
-        return context.getPlayer().level().dimension().location().equals(dimension);
+        if (context.hasPlayer() && context.getPlayer() != null) { 
+            return context.getPlayer().level().dimension().location().equals(dimension);
+        }
+
+        if (context.getLocation() != null) { 
+            return context.getLocation().level().dimension().location().equals(dimension);
+        }
+
+        return false;
     }
 
     @Override
