@@ -32,9 +32,9 @@ public class TeleportPlayerBehaviour extends Behaviour {
     public static final ResourceLocation ID = E418.resLoc("teleport_player");
 
     public static final MapCodec<TeleportPlayerBehaviour> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            NumberProviders.CODEC.fieldOf("x").forGetter(TeleportPlayerBehaviour::getX),
-            NumberProviders.CODEC.fieldOf("y").forGetter(TeleportPlayerBehaviour::getY),
-            NumberProviders.CODEC.fieldOf("z").forGetter(TeleportPlayerBehaviour::getZ),
+            NumberProviders.codec("x", TeleportPlayerBehaviour::getX),
+            NumberProviders.codec("y", TeleportPlayerBehaviour::getY),
+            NumberProviders.codec("z", TeleportPlayerBehaviour::getZ),
             ResourceLocation.CODEC.lenientOptionalFieldOf("level").forGetter(TeleportPlayerBehaviour::getLevel),
             Codec.BOOL.optionalFieldOf("relative", true).forGetter(TeleportPlayerBehaviour::isRelative)
     ).apply(instance, TeleportPlayerBehaviour::new));

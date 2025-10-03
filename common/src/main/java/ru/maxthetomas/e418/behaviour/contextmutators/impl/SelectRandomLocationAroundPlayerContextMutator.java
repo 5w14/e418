@@ -9,6 +9,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.contextmutators.IContextMutator;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProviders;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.util.E418Random;
 import ru.maxthetomas.e418.util.Location;
@@ -17,8 +19,7 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
     public static final ResourceLocation ID = E418.resLoc("select_random_location_around_player");
     public static final MapCodec<SelectRandomLocationAroundPlayerContextMutator> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Codec.FLOAT.optionalFieldOf("radius", 16.0f)
-                            .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRange),
+                    NumberProviders.codec("radius", 16.0f, SelectRandomLocationAroundPlayerContextMutator::getRange),
                     ResourceLocation.CODEC.optionalFieldOf("random_sequence", E418Random.EVENT_GENERIC_RESOURCE)
                             .forGetter(SelectRandomLocationAroundPlayerContextMutator::getRandomSequence),
                     Codec.BOOL.optionalFieldOf("use_heightmap", false).forGetter(v -> v.useHeightmap),
@@ -26,19 +27,19 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
                             .forGetter(v -> v.heightMapType)
             ).apply(instance, SelectRandomLocationAroundPlayerContextMutator::new));
 
-    private final float range;
+    private final NumberProvider range;
     private final ResourceLocation randomSequence;
     private final boolean useHeightmap;
     private final Heightmap.Types heightMapType;
 
-    public SelectRandomLocationAroundPlayerContextMutator(float range, ResourceLocation randomSequence, boolean useHeightmap, Heightmap.Types heightMapType) {
+    public SelectRandomLocationAroundPlayerContextMutator(NumberProvider range, ResourceLocation randomSequence, boolean useHeightmap, Heightmap.Types heightMapType) {
         this.range = range;
         this.randomSequence = randomSequence;
         this.useHeightmap = useHeightmap;
         this.heightMapType = heightMapType;
     }
 
-    public float getRange() {
+    public NumberProvider getRange() {
         return range;
     }
 
@@ -57,10 +58,12 @@ public class SelectRandomLocationAroundPlayerContextMutator implements IContextM
 
         random = context.getServer().overworld().getRandomSequence(randomSequence);
 
+        var range_value = range.get().floatValue();
+
         var position = location.position().add(
-                (random.nextFloat() - 0.5f) * range * 2,
-                (random.nextFloat() - 0.5f) * range * 2,
-                (random.nextFloat() - 0.5f) * range * 2
+                (random.nextFloat() - 0.5f) * range_value * 2,
+                (random.nextFloat() - 0.5f) * range_value * 2,
+                (random.nextFloat() - 0.5f) * range_value * 2
         );
 
         if (useHeightmap) {

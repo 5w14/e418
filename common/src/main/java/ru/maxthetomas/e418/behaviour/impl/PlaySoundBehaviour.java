@@ -10,6 +10,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.behaviour.Behaviour;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProvider;
+import ru.maxthetomas.e418.codecs.numberprovider.NumberProviders;
 import ru.maxthetomas.e418.event.EventContext;
 import ru.maxthetomas.e418.event.IBehaviourExecutor;
 
@@ -31,7 +33,7 @@ public class PlaySoundBehaviour extends Behaviour {
             instance.group(
                     ResourceLocation.CODEC.fieldOf("sound").forGetter(PlaySoundBehaviour::getSoundEventId),
                     Codec.FLOAT.optionalFieldOf("volume", 1.0F).forGetter(PlaySoundBehaviour::getVolume),
-                    Codec.FLOAT.optionalFieldOf("range", 16.0F).forGetter(PlaySoundBehaviour::getRange),
+                    NumberProviders.codec("range", 16.0f, PlaySoundBehaviour::getRange),
                     Codec.FLOAT.optionalFieldOf("pitch", 1.0F).forGetter(PlaySoundBehaviour::getPitch),
                     Codec.STRING.xmap((string) -> SoundSource.valueOf(string.toUpperCase()), SoundSource::getName)
                             .optionalFieldOf("source", SoundSource.AMBIENT).forGetter(PlaySoundBehaviour::getSoundSource)
@@ -43,10 +45,10 @@ public class PlaySoundBehaviour extends Behaviour {
     private ResourceLocation soundEventId;
     private SoundSource source;
     private float volume;
-    private float range;
+    private NumberProvider range;
     private float pitch;
 
-    public PlaySoundBehaviour(ResourceLocation soundEventId, float volume, float range, float pitch, SoundSource source) {
+    public PlaySoundBehaviour(ResourceLocation soundEventId, float volume, NumberProvider range, float pitch, SoundSource source) {
         this.soundEventId = soundEventId;
         this.source = source;
         this.volume = volume;
@@ -62,8 +64,7 @@ public class PlaySoundBehaviour extends Behaviour {
         super.execute(context, executor);
         setDone(true);
 
-        var soundEvent =
-                new SoundEvent(getSoundEventId(), Optional.of(getRange()));
+        var soundEvent = new SoundEvent(getSoundEventId(), Optional.of(getRange().get().floatValue()));
 
         if (context.getPlayer() == null) {
             if (context.getLocation() == null)
@@ -116,7 +117,7 @@ public class PlaySoundBehaviour extends Behaviour {
         return volume;
     }
 
-    public float getRange() {
+    public NumberProvider getRange() {
         return range;
     }
 

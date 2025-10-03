@@ -21,7 +21,7 @@ import ru.maxthetomas.e418.event.EventContext;
 public record OnSurfaceCondition(NumberProvider maxDistance) implements ICondition {
     public static final ResourceLocation ID = E418.resLoc("on_surface");
     public static final MapCodec<OnSurfaceCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        NumberProviders.CODEC.optionalFieldOf("max_distance", new ConstantNumberProvider(7f)).forGetter(OnSurfaceCondition::maxDistance)
+            NumberProviders.codec("max_distance", 7f, OnSurfaceCondition::maxDistance)
     ).apply(instance, OnSurfaceCondition::new));
 
 

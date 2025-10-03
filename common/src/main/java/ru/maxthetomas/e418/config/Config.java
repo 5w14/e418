@@ -13,6 +13,7 @@ import ru.maxthetomas.e418.codecs.RandomRange;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -88,6 +89,16 @@ public class Config {
         return object;
     }
 
+    public static Optional<Value<?>> getConfigValue(String serializedName) {
+        for (var val : CONFIG_VALUES) {
+            if (val.getSerializedName().equals(serializedName)) {
+                return Optional.of(val);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     public static class Value<T> {
         private final String serializedName;
         private final Codec<T> serializer;
@@ -104,6 +115,10 @@ public class Config {
 
         public Codec<T> getSerializer() {
             return serializer;
+        }
+
+        public String getSerializedName() {
+            return serializedName;
         }
 
         /**
