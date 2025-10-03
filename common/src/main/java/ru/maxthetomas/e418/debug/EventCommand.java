@@ -56,6 +56,10 @@ public class EventCommand {
                                         Commands.literal("force")
                                                 .executes(EventCommand::executeStartSubcommand)
                                 )
+                                .then(
+                                        Commands.literal("check")
+                                                .executes(EventCommand::executeStartSubcommand)
+                                )
                 );
     }
 
@@ -153,6 +157,7 @@ public class EventCommand {
     private static int executeStartSubcommand(CommandContext<CommandSourceStack> context) {
         var eventLoc = ResourceLocationArgument.getId(context, "event");
         var isForced = context.getNodes().getLast().getNode().getName().equals("force");
+        var isDryRun = context.getNodes().getLast().getNode().getName().equals("check");
 
         var manager = E418.getEventManager();
         var event = manager.getEvent(eventLoc);
@@ -170,6 +175,10 @@ public class EventCommand {
                 .withCause(new ConsoleCommandEventCause(context))
                 .withForced(isForced);
 
+        if (isDryRun) { 
+            return executeStartCheck(context, event, eventContext);
+        }
+
         var activeEvent = E418.getEventManager().runEvent(event, eventContext);
 
         if (activeEvent == null) {
@@ -185,6 +194,45 @@ public class EventCommand {
                 () -> Component.translatable("e418.commands.event.start.success" +
                                 (isForced ? ".force" : ""),
                         formatEvent(event)), true);
+
+        return 1;
+    }
+
+    private static int executeStartCheck(CommandContext<CommandSourceStack> context, EventResource eventResource, EventContext eventContext) { 
+        var run = eventResource.runConditions();
+        var queue = eventResource.queueConditions();
+
+        if (queue.size() == 0 && run.size() == 0) { 
+            context.getSource().sendFailure(Component
+                .translatable("e418.commands.event.start.check.no_conditions")
+                .withStyle(ChatFormatting.RED));
+            return 0;
+        }
+
+        if (run.size() > 0) { 
+            var runConditions = ComponentUtils.formatList(run,
+                Component.literal("\n"),
+                (e) -> Component.literal(" - ") .append(
+                        Component.literal(e.getType().toString())
+                        .withStyle(e.check(eventContext) ? ChatFormatting.GREEN : ChatFormatting.RED))
+                );
+
+            context.getSource().sendSuccess(() -> Component.translatable("e418.commands.event.start.check.run")
+                .append(Component.literal("\n")).append(runConditions), false);;
+        }
+
+
+        if (queue.size() > 0) { 
+            var runConditions = ComponentUtils.formatList(queue,
+                Component.literal("\n"),
+                (e) -> Component.literal(" - ") .append(
+                        Component.literal(e.getType().toString())
+                        .withStyle(e.check(eventContext) ? ChatFormatting.GREEN : ChatFormatting.RED))
+                );
+
+            context.getSource().sendSuccess(() -> Component.translatable("e418.commands.event.start.check.queue")
+                .append(Component.literal("\n")).append(runConditions), false);
+        }
 
         return 1;
     }
