@@ -1,0 +1,13 @@
+{
+  "name": "On Surface",
+  "description": "Test whether the player is within 10 blocks of surface",
+  "intrusiveness": 0,
+  "behaviours": [],
+  "run_conditions": [
+    {
+      "type": "e418:on_surface",
+      "max_distance": 10
+    }
+  ],
+  "queue_conditions": []
+}
