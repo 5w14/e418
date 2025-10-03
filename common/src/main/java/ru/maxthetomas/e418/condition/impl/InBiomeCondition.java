@@ -21,10 +21,19 @@ public record InBiomeCondition(ResourceLocation biome) implements ICondition {
 
     @Override
     public boolean check(EventContext context) {
-        var level = context.getPlayer().level();
-        var player = context.getPlayer();
+        if (context.hasPlayer() && context.getPlayer() != null) { 
+            var player = context.getPlayer();
+            var level = player.level();
+            return level.getBiome(player.getOnPos()).is(biome);
+        }
 
-        return level.getBiome(player.getOnPos()).is(biome);
+        if (context.getLocation() != null) { 
+            var location = context.getLocation();
+            var level = location.level();
+            return level.getBiome(location.getBlockPosition()).is(biome);
+        }
+
+        return false;
     }
 
     @Override
