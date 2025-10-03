@@ -1,9 +1,8 @@
 {
   "name": "At Time",
-  "description": "Debug event that works only at exact time",
+  "description": "Test whether the world time is within a specific range",
   "intrusiveness": 0,
-  "behaviours": [
-  ],
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:at_time",
@@ -13,13 +12,5 @@
       }
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:at_time",
-      "range": {
-        "min": 10000,
-        "max": 20000
-      }
-    }
-  ]
+  "queue_conditions": []
 }

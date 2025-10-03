@@ -1,9 +1,8 @@
 {
   "name": "At Height",
-  "description": "Debug event that works only in defined range of height",
+  "description": "Test whether the player is within specific height range",
   "intrusiveness": 0,
-  "behaviours": [
-  ],
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:at_height",
@@ -13,13 +12,5 @@
       }
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:at_height",
-      "range": {
-        "min": -50,
-        "max": 50
-      }
-    }
-  ]
+  "queue_conditions": []
 }

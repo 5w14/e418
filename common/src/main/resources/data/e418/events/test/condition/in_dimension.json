@@ -1,18 +1,12 @@
 {
   "name": "In dimension",
-  "description": "Debug event that works only when player is in specific dimension",
-  "behaviours": [
-  ],
+  "description": "Test whether the player is within a specific dimension",
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:in_dimension",
       "dimension": "minecraft:overworld"
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:in_dimension",
-      "dimension": "minecraft:overworld"
-    }
-  ]
+  "queue_conditions": []
 }

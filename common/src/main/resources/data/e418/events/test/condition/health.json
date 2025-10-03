@@ -1,8 +1,7 @@
 {
   "name": "Health",
-  "description": "Debug event that works only when player is at specific health",
-  "behaviours": [
-  ],
+  "description": "Test whether the player's health is within a specific range",
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:health",
@@ -12,13 +11,5 @@
       }
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:health",
-      "range": {
-        "min": 10,
-        "max": 20
-      }
-    }
-  ]
+  "queue_conditions": []
 }

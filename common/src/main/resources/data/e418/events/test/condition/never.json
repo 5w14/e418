@@ -1,17 +1,12 @@
 {
-  "name": "Always Fail Test",
-  "description": "Debug event that always fails",
+  "name": "Never",
+  "description": "Test that always fails",
   "intrusiveness": 0,
-  "behaviours": [
-  ],
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:never"
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:never"
-    }
-  ]
+  "queue_conditions": []
 }

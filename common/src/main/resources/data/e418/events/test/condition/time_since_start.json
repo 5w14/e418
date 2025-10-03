@@ -1,6 +1,6 @@
 {
   "name": "Test time since start condition",
-  "description": "10 seconds since start",
+  "description": "Wait for condition and test for 10 seconds since start",
   "intrusiveness": 0,
   "behaviours": [
     {

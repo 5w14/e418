@@ -1,9 +1,8 @@
 {
-  "name": "Players Nearby",
-  "description": "Debug event that works only when thereš enough players nearby",
+  "name": "No Players Nearby",
+  "description": "Test that there are no players nearby",
   "intrusiveness": 0,
-  "behaviours": [
-  ],
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:players_nearby",
@@ -14,14 +13,5 @@
       }
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:players_nearby",
-      "radius": 10,
-      "player_range": {
-        "min": 0,
-        "max": 0
-      }
-    }
-  ]
+  "queue_conditions": []
 }

@@ -1,19 +1,13 @@
 {
   "name": "In biome",
-  "description": "Debug event that works only in beach",
+  "description": "Test whether the player/event location is within a biome",
   "intrusiveness": 0,
-  "behaviours": [
-  ],
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:in_biome",
       "biome": "minecraft:beach"
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:in_biome",
-      "biome": "minecraft:beach"
-    }
-  ]
+  "queue_conditions": []
 }

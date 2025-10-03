@@ -1,19 +1,13 @@
 {
   "name": "Weather Condition Test",
-  "description": "Test that checks if it is thundering",
+  "description": "Test that checks whether weather is thunder",
   "intrusiveness": 0,
-  "behaviours": [
-  ],
+  "behaviours": [],
   "run_conditions": [
     {
       "type": "e418:weather",
       "weather": "thunder"
     }
   ],
-  "queue_conditions": [
-    {
-      "type": "e418:weather",
-      "weather": "thunder"
-    }
-  ]
+  "queue_conditions": []
 }
