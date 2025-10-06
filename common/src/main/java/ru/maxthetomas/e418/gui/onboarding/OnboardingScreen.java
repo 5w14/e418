@@ -16,6 +16,8 @@ public class OnboardingScreen extends Screen {
         this.parent = parent;
     }
 
+    private int pickedMode = 1;
+
     @Override
     protected void init() {
         addRenderableWidget(
@@ -23,7 +25,7 @@ public class OnboardingScreen extends Screen {
                         .y(20).centerX(this.width).apply(StringWidget::alignLeft).widget()
         );
 
-        var explanation = addRenderableWidget(
+        addRenderableWidget(
                 WidgetWrapper.create(new MultiLineTextWidget(
                                 Component.translatable("e418.screen.onboarding.description"), font))
                         .apply(s -> s.setMaxWidth(300))
@@ -31,22 +33,31 @@ public class OnboardingScreen extends Screen {
         );
 
         addRenderableWidget(
-                WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.continue"), x -> {
+                WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.mode",
+                                Component.translatable("e418.screen.onboarding.mode." + this.pickedMode)), x -> {
+                            this.pickedMode = (this.pickedMode + 1) % 4;
+                            rebuildWidgets();
                         }).build())
-                        .centerX(this.width).y(explanation.getHeight() + 65).widget()
+                        .centerX(this.width).y(90).widget()
         );
 
         addRenderableWidget(
-                WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.skip"),
-                                x -> this.minecraft.setScreen(parent)).build())
-                        .bottom(this.height, 20).x(this.width / 2 - 104).w(100).widget()
+                WidgetWrapper.create(new MultiLineTextWidget(
+                                Component.translatable("e418.screen.onboarding.mode." + this.pickedMode + ".description"), font))
+                        .apply(s -> s.setMaxWidth(300))
+                        .y(125).w(300).centerX(this.width).widget()
         );
 
         addRenderableWidget(
                 WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.continue"), x -> {
+                            finishSetup();
                         }).build())
-                        .bottom(this.height, 20).x(this.width / 2 + 4).w(100).widget()
+                        .bottom(this.height, 20).centerX(this.width).widget()
         );
+    }
+
+    private void finishSetup() {
+        this.minecraft.setScreen(this.parent);
     }
 
     @Override
