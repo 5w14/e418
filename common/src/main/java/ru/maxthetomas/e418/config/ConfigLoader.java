@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
+import dev.architectury.event.Event;
+import dev.architectury.event.EventFactory;
 import dev.architectury.platform.Platform;
 import org.slf4j.Logger;
 
@@ -16,9 +18,12 @@ public class ConfigLoader {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH = Platform.getConfigFolder().resolve("e418.json");
 
+    public static Event<FirstTimeSetupEvent> FIRST_TIME_SETUP = EventFactory.createLoop();
+
     public static void loadConfig() {
         try {
             if (!Files.exists(CONFIG_PATH)) {
+                FIRST_TIME_SETUP.invoker().firstTimeSetup();
                 return;
             }
 
@@ -46,4 +51,8 @@ public class ConfigLoader {
         }
     }
 
+    @FunctionalInterface
+    public interface FirstTimeSetupEvent {
+        void firstTimeSetup();
+    }
 }
