@@ -30,6 +30,7 @@ public final class E418 {
     private static MinecraftServer ManagedServer = null;
 
     public static void init() {
+        ConfigLoader.FIRST_TIME_SETUP.register(E418Client::waitForOnboarding);
         ConfigLoader.loadConfig();
 
         E418Networking.init();

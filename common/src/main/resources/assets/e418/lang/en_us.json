@@ -24,5 +24,9 @@
   "e418.commands.event.print_event_delays": "Random Event Delays: \n- Global time - Event at %s tick\n%s",
   "e418.commands.event.print_event_delays.line": "- %s - Event at %s tick (Lock until: %s t)",
   "e418.commands.event.print_events_by_tag": "Events found by tag \"%s\": \n%s",
-  "e418.commands.event.print_events_by_tag.line": "- %s (Weight: %s)"
+  "e418.commands.event.print_events_by_tag.line": "- %s (Weight: %s)",
+  "e418.screen.onboarding.title": "Onboarding",
+  "e418.screen.onboarding.description": "Description",
+  "e418.screen.onboarding.continue": "Continue",
+  "e418.screen.onboarding.skip": "Skip"
 }
