@@ -1,14 +1,17 @@
 package ru.maxthetomas.e418.gui.widgets;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.MultiLineTextWidget;
+import net.minecraft.network.chat.Component;
 
 /**
  * Chainable wrapper for adding and configuring widgets.
  */
 public class WidgetWrapper<T extends AbstractWidget> {
-    private final T widget;
+    protected final T widget;
 
-    private WidgetWrapper(T widget) {
+    protected WidgetWrapper(T widget) {
         this.widget = widget;
     }
 
@@ -74,6 +77,11 @@ public class WidgetWrapper<T extends AbstractWidget> {
 
     public static <T extends AbstractWidget> WidgetWrapper<T> create(T widget) {
         return new WidgetWrapper<T>(widget);
+    }
+
+    public static WidgetWrapper<MultiLineTextWidget> string(String translatableKey) {
+        return new MultilineTextWidgetWrapper(
+                new MultiLineTextWidget(Component.literal(translatableKey), Minecraft.getInstance().font));
     }
 
 

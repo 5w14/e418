@@ -2,8 +2,6 @@ package ru.maxthetomas.e418.gui.onboarding;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.MultiLineTextWidget;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import ru.maxthetomas.e418.gui.widgets.WidgetWrapper;
@@ -20,17 +18,8 @@ public class OnboardingScreen extends Screen {
 
     @Override
     protected void init() {
-        addRenderableWidget(
-                WidgetWrapper.create(new StringWidget(Component.translatable("e418.screen.onboarding.title"), font))
-                        .y(20).centerX(this.width).apply(StringWidget::alignLeft).widget()
-        );
-
-        addRenderableWidget(
-                WidgetWrapper.create(new MultiLineTextWidget(
-                                Component.translatable("e418.screen.onboarding.description"), font))
-                        .apply(s -> s.setMaxWidth(300))
-                        .y(50).w(300).centerX(this.width).widget()
-        );
+        addRenderableWidget(WidgetWrapper.string("e418.screen.onboarding.title").y(20).centerX(this.width).widget());
+        addRenderableWidget(WidgetWrapper.string("e418.screen.onboarding.description").y(50).w(300).centerX(this.width).widget());
 
         addRenderableWidget(
                 WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.mode",
@@ -41,12 +30,8 @@ public class OnboardingScreen extends Screen {
                         .centerX(this.width).y(90).widget()
         );
 
-        addRenderableWidget(
-                WidgetWrapper.create(new MultiLineTextWidget(
-                                Component.translatable("e418.screen.onboarding.mode." + this.pickedMode + ".description"), font))
-                        .apply(s -> s.setMaxWidth(300))
-                        .y(125).w(300).centerX(this.width).widget()
-        );
+        addRenderableWidget(WidgetWrapper.string("e418.screen.onboarding.mode." + this.pickedMode + ".description").y(125)
+                .w(300).centerX(this.width).widget());
 
         addRenderableWidget(
                 WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.continue"), x -> {
