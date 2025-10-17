@@ -6,6 +6,8 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.event.events.common.TickEvent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import ru.maxthetomas.e418.E418;
+import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
 import ru.maxthetomas.e418.event.registry.EventRegistry;
 import ru.maxthetomas.e418.util.storage.InGameStorage;
@@ -31,6 +34,7 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
     private Map<ResourceLocation, EventResource> registeredEvents;
 
     public static boolean IsActive = false;
+    private static boolean hasErrored = false;
 
     public EventManager() {
         TickEvent.SERVER_POST.register(this::tick);
@@ -100,6 +104,10 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     public void init() {
         IsActive = true;
+    }
+
+    public static boolean isErrored() {
+        return hasErrored;
     }
 
     // Getters
@@ -266,41 +274,61 @@ public class EventManager extends SimplePreparableReloadListener<EventManager.Ev
 
     @Override
     protected @NotNull EventManagerData prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        HashMap<ResourceLocation, EventResource> eventMap = new HashMap<>();
-        SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("events"),
-                JsonOps.INSTANCE, EventResource.CODEC.codec(), eventMap);
+        try {
+            profilerFiller.push("eventManagerPrepare");
 
-        HashMap<ResourceLocation, AddToRegistryData> addToRegistry = new HashMap<>();
-        SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("event_registries"),
-                JsonOps.INSTANCE, AddToRegistryData.CODEC.codec(), addToRegistry);
+            HashMap<ResourceLocation, EventResource> eventMap = new HashMap<>();
+            SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("events"),
+                    JsonOps.INSTANCE, EventResource.CODEC.codec(), eventMap);
 
-        return new EventManagerData(eventMap, addToRegistry);
+            HashMap<ResourceLocation, AddToRegistryData> addToRegistry = new HashMap<>();
+            SimpleJsonResourceReloadListener.scanDirectory(resourceManager, FileToIdConverter.json("event_registries"),
+                    JsonOps.INSTANCE, AddToRegistryData.CODEC.codec(), addToRegistry);
+
+            profilerFiller.pop();
+
+            return new EventManagerData(eventMap, addToRegistry, false);
+        } catch (Exception e) {
+            LOGGER.error("Could not prepare event manager data", e);
+            return new EventManagerData(Map.of(), Map.of(), true);
+        }
     }
 
     @Override
     protected void apply(EventManagerData object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        this.registeredEvents = object.events();
+        hasErrored = object.hasErrored;
+        try {
+            this.registeredEvents = object.events();
 
-        // Following code adds events to event registry by the resource path.
+            EventRegistries.clearAll();
 
-        EventRegistries.clearAll();
+            for (Map.Entry<ResourceLocation, AddToRegistryData> entry : object.registryUpdate().entrySet()) {
+                ResourceLocation key = entry.getKey();
+                AddToRegistryData value = entry.getValue();
+                var registry = EventRegistries.addRegistry(key);
 
-        // Due to limitations of file names on Windows, a file
-        // cannot be named votvevents:global_random.json, so to avoid that we use folder structure:
-        // event_registries/votvevents/global_random.json links to votvevents:random registry.
-        object.registryUpdate().forEach((key, value) -> {
-            var registry = EventRegistries.addRegistry(key);
+                value.storedWeightedEvents().forEach(stored ->
+                        registry.addEvent(E418.getEventManager().getEvent(stored.id)));
 
-            value.storedWeightedEvents().forEach(stored -> registry.addEvent(E418.getEventManager().getEvent(stored.id)));
+                value.storedTags().forEach(registry::addTag);
+            }
 
-            value.storedTags().forEach(registry::addTag);
-        });
+            LOGGER.info("Successfully reloaded events");
+        } catch (Exception e) {
+            LOGGER.error("Could not reload events", e);
+        }
 
-        LOGGER.info("Successfully reloaded events!");
+        if (hasErrored && Config.isDebug()) {
+            E418.getCurrentServer().ifPresent(server -> {
+                server.getPlayerList().broadcastSystemMessage(Component.translatable("e418.notice.error.loading_error")
+                        .withStyle(ChatFormatting.RED), false);
+            });
+        }
     }
 
+
     public record EventManagerData(Map<ResourceLocation, EventResource> events,
-                                   Map<ResourceLocation, AddToRegistryData> registryUpdate) {
+                                   Map<ResourceLocation, AddToRegistryData> registryUpdate, boolean hasErrored) {
     }
 
     public record AddToRegistryData(List<StoredWeightedEvent> storedWeightedEvents, List<String> storedTags) {

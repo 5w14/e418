@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import ru.maxthetomas.e418.E418;
 import ru.maxthetomas.e418.event.ActiveEvent;
 import ru.maxthetomas.e418.event.EventContext;
+import ru.maxthetomas.e418.event.EventManager;
 import ru.maxthetomas.e418.event.EventResource;
 import ru.maxthetomas.e418.event.cause.impl.ConsoleCommandEventCause;
 import ru.maxthetomas.e418.event.registry.EventRegistries;
@@ -175,7 +176,7 @@ public class EventCommand {
                 .withCause(new ConsoleCommandEventCause(context))
                 .withForced(isForced);
 
-        if (isDryRun) { 
+        if (isDryRun) {
             return executeStartCheck(context, event, eventContext);
         }
 
@@ -198,40 +199,41 @@ public class EventCommand {
         return 1;
     }
 
-    private static int executeStartCheck(CommandContext<CommandSourceStack> context, EventResource eventResource, EventContext eventContext) { 
+    private static int executeStartCheck(CommandContext<CommandSourceStack> context, EventResource eventResource, EventContext eventContext) {
         var run = eventResource.runConditions();
         var queue = eventResource.queueConditions();
 
-        if (queue.size() == 0 && run.size() == 0) { 
+        if (queue.size() == 0 && run.size() == 0) {
             context.getSource().sendFailure(Component
-                .translatable("e418.commands.event.start.check.no_conditions")
-                .withStyle(ChatFormatting.RED));
+                    .translatable("e418.commands.event.start.check.no_conditions")
+                    .withStyle(ChatFormatting.RED));
             return 0;
         }
 
-        if (run.size() > 0) { 
+        if (run.size() > 0) {
             var runConditions = ComponentUtils.formatList(run,
-                Component.literal("\n"),
-                (e) -> Component.literal(" - ") .append(
-                        Component.literal(e.getType().toString())
-                        .withStyle(e.check(eventContext) ? ChatFormatting.GREEN : ChatFormatting.RED))
-                );
+                    Component.literal("\n"),
+                    (e) -> Component.literal(" - ").append(
+                            Component.literal(e.getType().toString())
+                                    .withStyle(e.check(eventContext) ? ChatFormatting.GREEN : ChatFormatting.RED))
+            );
 
             context.getSource().sendSuccess(() -> Component.translatable("e418.commands.event.start.check.run")
-                .append(Component.literal("\n")).append(runConditions), false);;
+                    .append(Component.literal("\n")).append(runConditions), false);
+            ;
         }
 
 
-        if (queue.size() > 0) { 
+        if (queue.size() > 0) {
             var runConditions = ComponentUtils.formatList(queue,
-                Component.literal("\n"),
-                (e) -> Component.literal(" - ") .append(
-                        Component.literal(e.getType().toString())
-                        .withStyle(e.check(eventContext) ? ChatFormatting.GREEN : ChatFormatting.RED))
-                );
+                    Component.literal("\n"),
+                    (e) -> Component.literal(" - ").append(
+                            Component.literal(e.getType().toString())
+                                    .withStyle(e.check(eventContext) ? ChatFormatting.GREEN : ChatFormatting.RED))
+            );
 
             context.getSource().sendSuccess(() -> Component.translatable("e418.commands.event.start.check.queue")
-                .append(Component.literal("\n")).append(runConditions), false);
+                    .append(Component.literal("\n")).append(runConditions), false);
         }
 
         return 1;
@@ -324,10 +326,22 @@ public class EventCommand {
         return 1;
     }
 
+
+    private static void warnErrors(CommandContext<CommandSourceStack> context) {
+        if (!EventManager.isErrored())
+            return;
+
+        context.getSource().sendSystemMessage(Component
+                .translatable("e418.commands.event.error.event_manager_error")
+                .withStyle(ChatFormatting.RED));
+    }
+
+
     /**
      * Prints registered events
      */
     private static int executePrintRegisteredEvents(CommandContext<CommandSourceStack> context) {
+        warnErrors(context);
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print",
                         ComponentUtils.formatList(E418.getEventManager().getRegisteredEvents(),
@@ -343,6 +357,7 @@ public class EventCommand {
      */
     private static int executePrintQueuedEvents(CommandContext<CommandSourceStack> context) {
         // TODO: make it also show timeout
+        warnErrors(context);
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_queued",
                         ComponentUtils.formatList(E418.getEventManager().getQueuedEvents(),
@@ -358,6 +373,7 @@ public class EventCommand {
      */
     private static int executePrintActiveEvents(CommandContext<CommandSourceStack> context) {
         // TODO: make it also show timeout
+        warnErrors(context);
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_active",
                         ComponentUtils.formatList(E418.getEventManager().getActiveEvents(),
@@ -372,6 +388,7 @@ public class EventCommand {
      * Prints events from an event registry
      */
     private static int executePrintEventRegistriesSummary(CommandContext<CommandSourceStack> context) {
+        warnErrors(context);
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_registries_summary",
                         ComponentUtils.formatList(EventRegistries.getRegistries(),
@@ -388,6 +405,7 @@ public class EventCommand {
      * Prints events from an event registry
      */
     private static int executePrintEventRegistryEvents(CommandContext<CommandSourceStack> context) {
+        warnErrors(context);
         var registryKey = ResourceLocationArgument.getId(context, "registry");
         var registry = EventRegistries.get(registryKey);
 
@@ -415,6 +433,7 @@ public class EventCommand {
      * Prints events from registries with tag
      */
     private static int executePrintEventsByTagInRegistry(CommandContext<CommandSourceStack> context) {
+        warnErrors(context);
         var tag = StringArgumentType.getString(context, "tag");
         var events = EventRegistries.getEventsWithTag(tag);
 
@@ -433,6 +452,7 @@ public class EventCommand {
      * Prints event delays from random event manager
      */
     private static int executePrintRandomEventDelays(CommandContext<CommandSourceStack> context) {
+        warnErrors(context);
         context.getSource().sendSuccess(
                 () -> Component.translatable("e418.commands.event.print_event_delays",
                         E418.getEventEngine().RandomEventManager.GlobalEventTick,

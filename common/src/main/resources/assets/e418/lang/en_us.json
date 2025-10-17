@@ -24,5 +24,7 @@
   "e418.commands.event.print_event_delays": "Random Event Delays: \n- Global time - Event at %s tick\n%s",
   "e418.commands.event.print_event_delays.line": "- %s - Event at %s tick (Lock until: %s t)",
   "e418.commands.event.print_events_by_tag": "Events found by tag \"%s\": \n%s",
-  "e418.commands.event.print_events_by_tag.line": "- %s (Weight: %s)"
+  "e418.commands.event.print_events_by_tag.line": "- %s (Weight: %s)",
+  "e418.commands.event.error.event_manager_error": "Event manager has errored while loading events! See logs for details!",
+  "e418.notice.error.loading_error": "There was an error while reloading events. See logs for details!"
 }

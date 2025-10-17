@@ -42,9 +42,11 @@ public record EventResource(String name, String description, int intrusiveness, 
         // Check if all behaviours can run
         for (PreActiveBehaviour preActiveBehaviour : behaviourList) {
             // todo find a better way to check if behaviour can run
-            if (!preActiveBehaviour.create().canRun(context)) {
+            var behaviour = preActiveBehaviour.create();
+            if (!behaviour.canRun(context)) {
                 return false;
             }
+            behaviour.dispose();
         }
 
         return true;

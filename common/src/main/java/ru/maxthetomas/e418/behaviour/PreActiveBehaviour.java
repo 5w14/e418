@@ -61,13 +61,18 @@ public record PreActiveBehaviour(ResourceLocation type, Dynamic<?> data) {
         this.data = data;
 
         // Ensure that the type is registered
-        Behaviours.get(type).getOrThrow();
+        Behaviours.get(type).getOrThrow((e) ->
+                new RuntimeException("Cannot get behaviour type `" + type + "`: " + e));
     }
 
     /**
      * Creates a new instance of {@link Behaviour}, after parsing the stored data.
      */
     public Behaviour create() {
-        return Behaviours.get(type).getOrThrow().decoder().decode(data).result().orElseThrow().getFirst();
+        var behaviourCodec = Behaviours.get(type).getOrThrow();
+        var result = behaviourCodec.decoder().decode(data);
+        var behaviour = result.map(Pair::getFirst).mapError(e ->
+                "Could not create behaviour of type `" + type + "`: " + e);
+        return behaviour.getOrThrow(RuntimeException::new);
     }
 }
