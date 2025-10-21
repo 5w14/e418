@@ -4,6 +4,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import ru.maxthetomas.e418.config.Config;
+import ru.maxthetomas.e418.config.ConfigLoader;
 import ru.maxthetomas.e418.gui.widgets.WidgetWrapper;
 
 public class OnboardingScreen extends Screen {
@@ -42,6 +44,8 @@ public class OnboardingScreen extends Screen {
     }
 
     private void finishSetup() {
+        Config.baseIntrusiveness.set((float) this.pickedMode);
+        ConfigLoader.saveConfig(); // todo make this call async
         this.minecraft.setScreen(this.parent);
     }
 

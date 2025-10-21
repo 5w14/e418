@@ -23,6 +23,8 @@ public class ConfigLoader {
     public static void loadConfig() {
         try {
             if (!Files.exists(CONFIG_PATH)) {
+                // todo: move this call into a place after init()
+                // this should be an external thing
                 FIRST_TIME_SETUP.invoker().firstTimeSetup();
                 return;
             }

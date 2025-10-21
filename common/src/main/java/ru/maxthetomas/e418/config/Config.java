@@ -139,7 +139,6 @@ public class Config {
 
             result.ifError((err) -> LOGGER.error("Error while loading value {} from configuration file: {}", this.serializedName, err.toString()));
 
-
             return result.isSuccess();
         }
 
