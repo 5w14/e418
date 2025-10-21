@@ -28,5 +28,13 @@
   "e418.screen.onboarding.title": "Onboarding",
   "e418.screen.onboarding.description": "Description",
   "e418.screen.onboarding.continue": "Continue",
-  "e418.screen.onboarding.skip": "Skip"
+  "e418.screen.onboarding.mode": "Mode: %s",
+  "e418.screen.onboarding.mode.0": "Relaxed",
+  "e418.screen.onboarding.mode.0.description": "Relaxed description",
+  "e418.screen.onboarding.mode.1": "Normal",
+  "e418.screen.onboarding.mode.1.description": "Normal description",
+  "e418.screen.onboarding.mode.2": "Intensive",
+  "e418.screen.onboarding.mode.2.description": "Intensive description",
+  "e418.screen.onboarding.mode.3": "Chaos",
+  "e418.screen.onboarding.mode.3.description": "Chaos description"
 }

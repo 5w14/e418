@@ -81,7 +81,7 @@ public class WidgetWrapper<T extends AbstractWidget> {
 
     public static WidgetWrapper<MultiLineTextWidget> string(String translatableKey) {
         return new MultilineTextWidgetWrapper(
-                new MultiLineTextWidget(Component.literal(translatableKey), Minecraft.getInstance().font));
+                new MultiLineTextWidget(Component.translatable(translatableKey), Minecraft.getInstance().font));
     }
 
 
