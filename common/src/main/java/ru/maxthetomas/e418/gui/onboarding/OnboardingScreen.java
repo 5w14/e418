@@ -8,6 +8,8 @@ import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.config.ConfigLoader;
 import ru.maxthetomas.e418.gui.widgets.WidgetWrapper;
 
+import java.util.concurrent.CompletableFuture;
+
 public class OnboardingScreen extends Screen {
     private final Screen parent;
 
@@ -36,16 +38,19 @@ public class OnboardingScreen extends Screen {
                 .w(300).centerX(this.width).widget());
 
         addRenderableWidget(
-                WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.continue"), x -> {
-                            finishSetup();
-                        }).build())
+                WidgetWrapper.button(Component.translatable("e418.screen.onboarding.continue"), this::finishSetup)
                         .bottom(this.height, 20).centerX(this.width).widget()
+        );
+
+        addRenderableWidget(
+                WidgetWrapper.button(Component.translatable("e418.screen.onboarding.configure"), this::finishSetup)
+                        .w(100).bottom(this.height, 20).right(this.width, 20).widget()
         );
     }
 
     private void finishSetup() {
         Config.baseIntrusiveness.set((float) this.pickedMode);
-        ConfigLoader.saveConfig(); // todo make this call async
+        CompletableFuture.runAsync(ConfigLoader::saveConfig);
         this.minecraft.setScreen(this.parent);
     }
 

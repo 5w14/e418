@@ -2,6 +2,7 @@ package ru.maxthetomas.e418.gui.widgets;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineTextWidget;
 import net.minecraft.network.chat.Component;
 
@@ -82,6 +83,10 @@ public class WidgetWrapper<T extends AbstractWidget> {
     public static WidgetWrapper<MultiLineTextWidget> string(String translatableKey) {
         return new MultilineTextWidgetWrapper(
                 new MultiLineTextWidget(Component.translatable(translatableKey), Minecraft.getInstance().font));
+    }
+
+    public static WidgetWrapper<Button> button(Component component, Runnable runnable) {
+        return create(Button.builder(component, x -> runnable.run()).build());
     }
 
 
