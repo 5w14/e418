@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import dev.architectury.platform.Platform;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class Config {
     private static final List<Value<?>> CONFIG_VALUES = new ArrayList<>();
 
     public static final Value<Boolean> forceDebug = field("force_debug", Codec.BOOL, false);
-    public static final Value<Boolean> shouldSkipDebugScreen = field("skip_debug_screen", Codec.BOOL, true);
+    public static final Value<Boolean> shouldSkipBackupScreen = field("skip_debug_screen", Codec.BOOL, true);
     public static final Value<Boolean> allowGameCrashes = field("allow_game_crashes", Codec.BOOL, true);
     public static final Value<Set<ResourceLocation>> emptyWorlds = field("empty_worlds", ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf), Set.of());
     public static final Value<Set<String>> hiddenNamespaces = field("command_hidden_namespaces", Codec.STRING.listOf().xmap(Set::copyOf, List::copyOf), Set.of("e418"));
@@ -31,16 +32,16 @@ public class Config {
 
     public static final Value<Float> wakeUpEventChance = field("wake_up_event_chance", Codec.floatRange(0f, 1f), 0.1f);
 
-    public static final Value<RandomRange> globalRandomEventDelay = field("global_random_event_delay", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
-    public static final Value<RandomRange> globalRandomEventDelayFailure = field("global_random_event_delay_failure", RandomRange.CODEC.codec(), new RandomRange(600, 1200));
-    public static final Value<RandomRange> globalRandomEventGracePeriod = field("player_random_event_grace_period", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
+    public static final Value<RandomRange> globalRandomEventDelay = field("global_random_event_delay", RandomRange.CODEC, new RandomRange(1200, 2400));
+    public static final Value<RandomRange> globalRandomEventDelayFailure = field("global_random_event_delay_failure", RandomRange.CODEC, new RandomRange(600, 1200));
+    public static final Value<RandomRange> globalRandomEventGracePeriod = field("player_random_event_grace_period", RandomRange.CODEC, new RandomRange(1200, 2400));
 
     public static final Value<Float> playerRandomEventGroupDistance = field("player_random_event_group_distance", Codec.floatRange(0f, 50f), 50f);
-    public static final Value<RandomRange> playerRandomEventDelay = field("player_random_event_delay", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
-    public static final Value<RandomRange> playerRandomEventDelayFailure = field("player_random_event_delay", RandomRange.CODEC.codec(), new RandomRange(600, 1200));
-    public static final Value<RandomRange> playerRandomEventOffset = field("player_random_event_offset", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
-    public static final Value<RandomRange> playerRandomEventLock = field("player_random_event_lock", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
-    public static final Value<RandomRange> playerRandomEventGracePeriod = field("player_random_event_grace_period", RandomRange.CODEC.codec(), new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventDelay = field("player_random_event_delay", RandomRange.CODEC, new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventDelayFailure = field("player_random_event_delay", RandomRange.CODEC, new RandomRange(600, 1200));
+    public static final Value<RandomRange> playerRandomEventOffset = field("player_random_event_offset", RandomRange.CODEC, new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventLock = field("player_random_event_lock", RandomRange.CODEC, new RandomRange(1200, 2400));
+    public static final Value<RandomRange> playerRandomEventGracePeriod = field("player_random_event_grace_period", RandomRange.CODEC, new RandomRange(1200, 2400));
 
 
     public static boolean isDebug() {
@@ -48,7 +49,7 @@ public class Config {
     }
 
     public static boolean shouldSkipBackupScreen() {
-        return shouldSkipDebugScreen.get();
+        return shouldSkipBackupScreen.get();
     }
 
     public static boolean isEmptyWorld(ResourceLocation location) {
@@ -65,6 +66,10 @@ public class Config {
         var value = new Value<>(name, defaultValue, codec);
         CONFIG_VALUES.add(value);
         return value;
+    }
+
+    private static <T> Value<T> field(String name, MapCodec<T> codec, T defaultValue) {
+        return field(name, codec.codec(), defaultValue);
     }
 
     /**
@@ -89,6 +94,9 @@ public class Config {
         return object;
     }
 
+    /**
+     * Gets a config option by its JSON-serialized name, i.e. `force_debug`.
+     */
     public static Optional<Value<?>> getConfigValue(String serializedName) {
         for (var val : CONFIG_VALUES) {
             if (val.getSerializedName().equals(serializedName)) {
@@ -97,6 +105,13 @@ public class Config {
         }
 
         return Optional.empty();
+    }
+
+    /**
+     * Gets all configuration values.
+     */
+    public static List<Value<?>> getConfigurationValues() {
+        return CONFIG_VALUES;
     }
 
     public static class Value<T> {
@@ -170,6 +185,10 @@ public class Config {
 
         public T get() {
             return supplier.get();
+        }
+
+        public T getDefaultValue() {
+            return defaultValue;
         }
     }
 }

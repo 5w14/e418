@@ -25,7 +25,7 @@
   "e418.commands.event.print_event_delays.line": "- %s - Event at %s tick (Lock until: %s t)",
   "e418.commands.event.print_events_by_tag": "Events found by tag \"%s\": \n%s",
   "e418.commands.event.print_events_by_tag.line": "- %s (Weight: %s)",
-  "e418.screen.onboarding.title": "Onboarding",
+  "e418.screen.onboarding.title": "Configure e418",
   "e418.screen.onboarding.description": "Description",
   "e418.screen.onboarding.configure": "Advanced",
   "e418.screen.onboarding.continue": "Continue",
@@ -37,5 +37,6 @@
   "e418.screen.onboarding.mode.2": "Intensive",
   "e418.screen.onboarding.mode.2.description": "Intensive description",
   "e418.screen.onboarding.mode.3": "Chaos",
-  "e418.screen.onboarding.mode.3.description": "Chaos description"
+  "e418.screen.onboarding.mode.3.description": "Chaos description",
+  "e418.screen.config.title": "e418 configuration"
 }

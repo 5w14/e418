@@ -1,16 +1,16 @@
-package ru.maxthetomas.e418.gui.onboarding;
+package ru.maxthetomas.e418.gui;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import ru.maxthetomas.e418.config.Config;
 import ru.maxthetomas.e418.config.ConfigLoader;
+import ru.maxthetomas.e418.gui.config.ConfigurationScreen;
 import ru.maxthetomas.e418.gui.widgets.WidgetWrapper;
 
 import java.util.concurrent.CompletableFuture;
 
 public class OnboardingScreen extends Screen {
+    private static final int MODE_COUNT = 4;
     private final Screen parent;
 
     public OnboardingScreen(Screen parent) {
@@ -26,11 +26,8 @@ public class OnboardingScreen extends Screen {
         addRenderableWidget(WidgetWrapper.string("e418.screen.onboarding.description").y(50).w(300).centerX(this.width).widget());
 
         addRenderableWidget(
-                WidgetWrapper.create(new Button.Builder(Component.translatable("e418.screen.onboarding.mode",
-                                Component.translatable("e418.screen.onboarding.mode." + this.pickedMode)), x -> {
-                            this.pickedMode = (this.pickedMode + 1) % 4;
-                            rebuildWidgets();
-                        }).build())
+                WidgetWrapper.button(Component.translatable("e418.screen.onboarding.mode",
+                                Component.translatable("e418.screen.onboarding.mode." + this.pickedMode)), this::advanceOption)
                         .centerX(this.width).y(90).widget()
         );
 
@@ -43,20 +40,32 @@ public class OnboardingScreen extends Screen {
         );
 
         addRenderableWidget(
-                WidgetWrapper.button(Component.translatable("e418.screen.onboarding.configure"), this::finishSetup)
+                WidgetWrapper.button(Component.translatable("e418.screen.onboarding.configure"), this::advancedConfig)
                         .w(100).bottom(this.height, 20).right(this.width, 20).widget()
         );
     }
 
     private void finishSetup() {
-        Config.baseIntrusiveness.set((float) this.pickedMode);
-        CompletableFuture.runAsync(ConfigLoader::saveConfig);
+        saveConfig();
         this.minecraft.setScreen(this.parent);
     }
 
-    @Override
-    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
-        super.render(guiGraphics, i, j, f);
+    private void saveConfig() {
+        Config.baseIntrusiveness.set((float) this.pickedMode);
+        CompletableFuture.runAsync(ConfigLoader::saveConfig);
+    }
+
+    private void advancedConfig() {
+        saveConfig();
+        this.minecraft.setScreen(new ConfigurationScreen(this.parent));
+    }
+
+    private void advanceOption() {
+        var adv = hasShiftDown() ? -1 : 1;
+        this.pickedMode = (this.pickedMode + adv) % MODE_COUNT;
+        if (this.pickedMode < 0)
+            this.pickedMode = MODE_COUNT - 1;
+        rebuildWidgets();
     }
 
     @Override
